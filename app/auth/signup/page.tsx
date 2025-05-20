@@ -3,7 +3,7 @@ import styles from './signup.module.css';
 
 const SignupPage = () => {
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${styles.fadeIn}`}>
       {/* Left Section: Image Panel */}
       <div className={styles.leftSection} style={{ backgroundImage: 'url("/images/image.png")' }}>
         {/* Text overlay on image */}

@@ -36,7 +36,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${styles.fadeIn}`}>
       {/* Left Section: Login Form */}
       <div className={styles.leftSection}>
         <div className={styles.formContainer}>
