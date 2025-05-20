@@ -202,5 +202,5 @@
 .signUpText,
 .textOverlay,
 .highlightText {
-    /* display: none; or adjust as needed */
+    display: none; 
 }
