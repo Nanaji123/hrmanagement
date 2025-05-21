@@ -11,7 +11,7 @@ const SignupPage = () => {
            <h1 className={styles.imageMainText}>HR Management Platform</h1>
            <p className={styles.imageDescription}>Manage all employees, payrolls, and other human resource operations.</p>
            <div className={styles.imageButtons}>
-             <button className={styles.learnMoreButton}>Learn More</button>
+             <button className={styles.learnMoreButton}>Learn More.</button>
              <button className={styles.ourFeaturesButton}>Our Features</button>
            </div>
         </div>
