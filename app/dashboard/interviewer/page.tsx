@@ -77,16 +77,16 @@ export default function InterviewerDashboard() {
 
   if (isLoading) {
     return (
-      <div className={styles.loadingContainer}>
+      <main className={styles.loadingContainer}>
         <div className={styles.loadingSpinner}></div>
         <p>Loading candidates...</p>
-      </div>
+      </main>
     );
   }
 
   if (error) {
     return (
-      <div className={styles.errorContainer}>
+      <main className={styles.errorContainer}>
         <p className={styles.errorMessage}>{error}</p>
         <button 
           className={styles.retryButton}
@@ -94,30 +94,26 @@ export default function InterviewerDashboard() {
         >
           Retry
         </button>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <main className={styles.container}>
+      <header className={styles.header}>
         <h1>Interviewer Dashboard</h1>
-        <div className={styles.searchContainer}>
-          <input
-            type="text"
-            placeholder="Search candidates..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className={styles.searchInput}
-          />
-        </div>
-      </div>
+        <input
+          type="text"
+          placeholder="Search candidates..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className={styles.searchInput}
+        />
+      </header>
 
-      <div className={styles.candidatesGrid}>
+      <section className={styles.candidatesGrid}>
         {filteredCandidates.length === 0 ? (
-          <div className={styles.noResults}>
-            <p>No candidates found</p>
-          </div>
+          <p className={styles.noResults}>No candidates found</p>
         ) : (
           filteredCandidates.map((candidate) => (
             <CandidateCard
@@ -127,7 +123,7 @@ export default function InterviewerDashboard() {
             />
           ))
         )}
-      </div>
+      </section>
 
       {selectedCandidate && (
         <CandidateDetailModal
@@ -138,6 +134,6 @@ export default function InterviewerDashboard() {
           isSubmitting={isSubmitting}
         />
       )}
-    </div>
+    </main>
   );
 } 

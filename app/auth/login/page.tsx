@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import styles from './login.module.css';
 import { useRouter } from 'next/navigation';
+import styles from './login.module.css';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -14,7 +14,7 @@ const LoginPage = () => {
   const validCredentials = {
     hr_manager: { email: 'manager@example.com', password: 'managerpass', path: '/dashboard/hiring_manager' },
     hr_recruiter: { email: 'recruiter@example.com', password: 'recruiterpass', path: '/dashboard/HR_RECRUiTER' },
-    interviewer: { email: 'interviewer@example.com', password: 'interviewerpass', path: '/dashboard/interviewer' },
+    interviewer: { email: 'interviewer@example.com', password: 'interviewerpass', path: '/dashboard/interviewer' }
   };
 
   const handleLogin = () => {
