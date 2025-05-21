@@ -193,12 +193,19 @@
 
 .candidateInfo {
   font-size: 1.1rem;
-  color: var(--text-main); /* Matching suggestion */
+  color: var(--text-main);
   line-height: 1.6;
 }
 
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
 .meetingLink, .resumeLink {
-  color: var(--accent-color); /* Using accent color for links */
+  color: var(--accent-color);
   text-decoration: none;
   font-weight: 500;
   display: inline-flex;
@@ -208,26 +215,22 @@
 }
 
 .meetingLink:hover, .resumeLink:hover {
-  color: var(--primary-color); /* Hover color */
+  color: var(--primary-color);
   text-decoration: underline;
 }
 
 .detailsBtn {
   padding: 8px 18px;
   border-radius: 6px;
-  background: var(--primary-color); /* Matching suggestion */
+  background: var(--primary-color);
   color: white;
   border: none;
+  margin-top: 130px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: capitalize;
   letter-spacing: 0.3px;
-}
-
-.detailsBtn:hover {
-  background: var(--primary-dark); /* Matching suggestion */
-  transform: translateY(-1px);
 }
 
 .detailsBtn:focus-visible {
