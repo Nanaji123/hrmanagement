@@ -7,21 +7,25 @@ export interface Candidate {
   interviewType: string;
   meetingLink: string;
   resumeLink: string;
+  feedbackSubmitted?: boolean;
   history: InterviewHistoryItem[];
 }
 
 export interface InterviewHistoryItem {
   date: string;
   feedback: string;
-  rating?: number;
+  rating: number | undefined;
 }
 
 export interface InterviewFeedbackData {
-  technicalRating: number;
-  communicationRating: number;
-  problemSolvingRating: number;
-  recommendation: string;
-  comments: string;
+  technicalSkills: number;
+  problemSolving: number;
+  communication: number;
+  cultureFit: number;
+  strengths: string;
+  weaknesses: string;
+  notes: string;
+  recommendation: 'Strong Hire' | 'Hire' | 'Hold' | 'No Hire';
 }
 
 export interface FeedbackFormData {
