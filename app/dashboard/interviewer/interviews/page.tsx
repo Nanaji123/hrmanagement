@@ -38,6 +38,9 @@ export default function InterviewsPage() {
   const handleDateChange = (value: any) => {
     if (value instanceof Date) {
       setSelectedDate(value);
+    } else if (Array.isArray(value) && value[0] instanceof Date) {
+       // Handle range selection if necessary, or just take the first date
+       setSelectedDate(value[0]);
     }
   };
 
@@ -45,15 +48,18 @@ export default function InterviewsPage() {
     if (!selectedInterview) return;
 
     try {
+      // Assuming feedback submission logic is handled within FeedbackForm
+      // No action needed here other than closing the modal and updating state if necessary
       setInterviews(interviews.map(interview =>
         interview.id === selectedInterview.id
-          ? { ...interview, feedbackSubmitted: true }
+          ? { ...interview, feedbackSubmitted: true } // Example: Mark as submitted locally
           : interview
       ));
       setShowFeedbackForm(false);
       setSelectedInterview(null);
     } catch (err) {
       console.error(err);
+      // Handle error submitting feedback if needed
     }
   };
 
@@ -63,7 +69,7 @@ export default function InterviewsPage() {
 
     const interviewDate = new Date(interview.interviewDate).toDateString();
     const selected = selectedDate?.toDateString();
-    const matchesDate = interviewDate === selected;
+    const matchesDate = selected ? interviewDate === selected : true; // Match all if no date selected
 
     const matchesType = filterType === '' || interview.interviewType === filterType;
 
@@ -83,7 +89,7 @@ export default function InterviewsPage() {
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-center text-red-500">
           <p className="text-lg">{error}</p>
-          <button onClick={fetchInterviews} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
+          <button onClick={fetchInterviews} className="mt-4 px-4 py-2 bg-primary text-white rounded focus:outline-none focus:ring-2 focus:ring-primary">
             Retry
           </button>
         </div>
@@ -98,22 +104,6 @@ export default function InterviewsPage() {
         <p className="text-base text-gray-700">Manage interviews and submit feedback</p>
       </div>
 
-<<<<<<< HEAD
-      {/* Search Bar */}
-      <div className="mb-6">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search candidates..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 pl-10 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
-          />
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-=======
       <div className="grid md:grid-cols-2 gap-8 mb-8">
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Select Date</h2>
@@ -220,7 +210,7 @@ export default function InterviewsPage() {
             </label>
             <select
               id="interviewType"
-              className="w-full border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
               onChange={(e) => setFilterType(e.target.value)}
               value={filterType}
             >
@@ -240,9 +230,8 @@ export default function InterviewsPage() {
               placeholder="Search by name or role"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
             />
->>>>>>> 4546eed (Implement interviewer page enhancements)
           </div>
         </div>
       </div>
@@ -272,7 +261,7 @@ export default function InterviewsPage() {
                   href={interview.meetingLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-4 py-2 bg-blue-600 text-white text-base font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="px-4 py-2 bg-primary text-white text-base font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
                   Join Meeting
                 </a>
@@ -280,7 +269,7 @@ export default function InterviewsPage() {
                   href={interview.resumeLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-4 py-2 border border-gray-300 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="px-4 py-2 border border-gray-300 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
                   View Resume
                 </a>
@@ -289,7 +278,7 @@ export default function InterviewsPage() {
                     setSelectedInterview(interview);
                     setShowFeedbackForm(true);
                   }}
-                  className="px-4 py-2 border border-gray-300 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="px-4 py-2 border border-gray-300 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
                   View Details
                 </button>
