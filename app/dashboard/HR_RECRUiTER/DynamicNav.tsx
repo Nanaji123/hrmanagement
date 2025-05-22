@@ -3,36 +3,132 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { 
+  LayoutDashboard, 
+  Briefcase, 
+  Users, 
+  Calendar, 
+  FileText, 
+  UserCircle, 
+  BarChart2,
+  LogOut
+} from 'lucide-react';
 
 interface NavItem {
   name: string;
   href: string;
-  icon: string;
+  icon: React.ElementType;
+  role: 'hr_manager' | 'hr_recruiter' | 'interviewer';
 }
 
 const navItems: NavItem[] = [
+  // HR Manager items
+  {
+    name: 'Dashboard',
+    href: '/dashboard/hiring_manager',
+    icon: LayoutDashboard,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Job Postings',
+    href: '/dashboard/hiring_manager/jobs',
+    icon: Briefcase,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Candidates',
+    href: '/dashboard/hiring_manager/candidates',
+    icon: Users,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Interviews',
+    href: '/dashboard/hiring_manager/interviews',
+    icon: Calendar,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Feedback',
+    href: '/dashboard/hiring_manager/feedback',
+    icon: FileText,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Team',
+    href: '/dashboard/hiring_manager/team',
+    icon: UserCircle,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Analytics',
+    href: '/dashboard/hiring_manager/analytics',
+    icon: BarChart2,
+    role: 'hr_manager'
+  },
+  // HR Recruiter items
   {
     name: 'Dashboard',
     href: '/dashboard/HR_RECRUiTER',
-    icon: '📊'
+    icon: LayoutDashboard,
+    role: 'hr_recruiter'
   },
   {
     name: 'Candidate Management',
     href: '/dashboard/HR_RECRUiTER/Candidate_Management',
-    icon: '👥'
+    icon: Users,
+    role: 'hr_recruiter'
   },
   {
     name: 'Interview Schedule',
     href: '/dashboard/HR_RECRUiTER/interview_sch',
-    icon: '📅'
+    icon: Calendar,
+    role: 'hr_recruiter'
+  },
+  // Interviewer items
+  {
+    name: 'Dashboard',
+    href: '/dashboard/interviewer',
+    icon: LayoutDashboard,
+    role: 'interviewer'
+  },
+  {
+    name: 'My Interviews',
+    href: '/dashboard/interviewer/interviews',
+    icon: Calendar,
+    role: 'interviewer'
+  },
+  {
+    name: 'Feedback',
+    href: '/dashboard/interviewer/feedback',
+    icon: FileText,
+    role: 'interviewer'
+  },
+  {
+    name: 'Candidates',
+    href: '/dashboard/interviewer/candidates',
+    icon: Users,
+    role: 'interviewer'
+  },
+  {
+    name: 'Schedule',
+    href: '/dashboard/interviewer/schedule',
+    icon: Calendar,
+    role: 'interviewer'
+  },
+  {
+    name: 'Profile',
+    href: '/dashboard/interviewer/profile',
+    icon: UserCircle,
+    role: 'interviewer'
   }
 ];
 
 interface DynamicNavProps {
   onExpandChange?: (isExpanded: boolean) => void;
+  userRole?: 'hr_manager' | 'hr_recruiter' | 'interviewer';
 }
 
-const DynamicNav = ({ onExpandChange }: DynamicNavProps) => {
+const DynamicNav = ({ onExpandChange, userRole = 'hr_manager' }: DynamicNavProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -49,9 +145,24 @@ const DynamicNav = ({ onExpandChange }: DynamicNavProps) => {
     setIsExpanded(false);
   };
 
+  const filteredNavItems = navItems.filter(item => item.role === userRole);
+
+  const getRoleTitle = () => {
+    switch (userRole) {
+      case 'hr_manager':
+        return 'HR Manager';
+      case 'hr_recruiter':
+        return 'HR Recruiter';
+      case 'interviewer':
+        return 'Interviewer';
+      default:
+        return 'HR Portal';
+    }
+  };
+
   return (
     <div
-      className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-blue-50 to-blue-100 transition-all duration-300 ease-in-out z-50 shadow-md ${
+      className={`fixed left-0 top-0 h-screen bg-white border-r border-gray-100 transition-all duration-300 ease-in-out z-50 shadow-sm ${
         isExpanded ? 'w-64' : 'w-20'
       }`}
       onMouseEnter={handleMouseEnter}
@@ -60,27 +171,27 @@ const DynamicNav = ({ onExpandChange }: DynamicNavProps) => {
     >
       <div className="p-4 h-full overflow-y-auto">
         <div className="flex items-center justify-center mb-8 pt-4">
-          <span className="text-3xl bg-white p-2 rounded-lg shadow-sm">👥</span>
+          <Briefcase className="h-6 w-6 text-emerald-600" />
           {isExpanded && (
-            <span className="ml-3 text-xl font-semibold text-blue-700">HR Recruiter</span>
+            <span className="ml-3 text-xl font-semibold text-gray-900">{getRoleTitle()}</span>
           )}
         </div>
         <nav className="space-y-2">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
+          {filteredNavItems.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={`flex items-center p-3 rounded-lg transition-all duration-200 ${
                   isActive
-                    ? 'bg-blue-100 text-blue-700 shadow-sm'
-                    : 'text-blue-600 hover:bg-blue-50 hover:shadow-sm'
-                }`}
+                    ? 'bg-emerald-50 text-emerald-600 border-l-4 border-emerald-500'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-emerald-600'
+                } ${isExpanded ? 'space-x-3' : 'justify-center'}`}
               >
-                <span className="text-xl">{item.icon}</span>
+                <item.icon className="h-5 w-5" />
                 {isExpanded && (
-                  <span className="ml-3 font-medium">{item.name}</span>
+                  <span className="font-medium">{item.name}</span>
                 )}
               </Link>
             );
@@ -88,16 +199,18 @@ const DynamicNav = ({ onExpandChange }: DynamicNavProps) => {
         </nav>
         <div className="mt-8">
           <button
-            className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full text-red-600 hover:bg-red-50 hover:shadow-sm`}
+            className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full text-gray-600 hover:bg-gray-50 hover:text-red-600 ${
+              isExpanded ? 'space-x-3' : 'justify-center'
+            }`}
             onClick={() => {
-              // TODO: Implement more robust logout logic if needed (e.g., server-side invalidation)
-              localStorage.removeItem('authToken'); // Remove the authentication token from localStorage
-              router.push('/login'); // Redirect to the login page
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              router.push('/auth/login');
             }}
           >
-            <span className="text-xl">➡️</span>
+            <LogOut className="h-5 w-5" />
             {isExpanded && (
-              <span className="ml-3 font-medium">Logout</span>
+              <span className="font-medium">Logout</span>
             )}
           </button>
         </div>
