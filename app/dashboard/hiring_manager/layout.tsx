@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -22,17 +22,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
   ];
 
   return (
-    <div className={`h-screen bg-gradient-to-b from-[#6C7A89] via-[#7C83FD] to-[#E0E7FF] border-r border-[#E0E7FF] fixed left-0 top-0 shadow-xl transition-all duration-300 ${
+    <div className={`h-screen bg-white border-r border-gray-100 fixed left-0 top-0 shadow-sm transition-all duration-300 ${
       isCollapsed ? 'w-20' : 'w-64'
     }`}>
       <div className={`p-4 flex items-center ${
         isCollapsed ? 'justify-center' : 'space-x-2'
       }`}>
         {!isCollapsed && (
-          <h1 className="text-2xl font-bold text-[#2D3748] tracking-wide">HR Manager</h1>
+          <h1 className="text-xl font-bold text-gray-900">HR Manager</h1>
         )}
          {isCollapsed && (
-          <span className="text-2xl text-[#2D3748]">💼</span>
+          <span className="text-xl text-emerald-600">💼</span>
          )}
       </div>
       <nav className="mt-8">
@@ -40,8 +40,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed }) => {
           <Link
             key={item.path}
             href={item.path}
-            className={`flex items-center px-4 py-3 text-[#2D3748] hover:bg-[#B8E1DD]/40 rounded-lg transition-all duration-200 ${
-              pathname === item.path ? 'bg-[#FFD6C0]/60 border-l-4 border-[#7C83FD]' : ''
+            className={`flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-emerald-600 rounded-lg transition-all duration-200 ${
+              pathname === item.path ? 'bg-emerald-50 text-emerald-600 border-l-4 border-emerald-500' : ''
             } ${
               isCollapsed ? 'justify-center' : 'space-x-3'
             }`}
@@ -60,21 +60,47 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    // Clear authentication data
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    // Redirect to login page
+    router.push('/login');
+  };
+
   return (
-    <header className="h-16 bg-gradient-to-r from-[#E0E7FF] via-[#F0F4FF] to-[#B8E1DD] border-b border-[#E0E7FF] fixed top-0 right-0 left-64 z-10 shadow-md backdrop-blur-md">
+    <header className="h-16 bg-white border-b border-gray-100 fixed top-0 right-0 left-64 z-10 shadow-sm">
       <div className="flex items-center justify-between h-full px-6">
         <div className="flex items-center">
-          <button onClick={toggleSidebar} className="p-2 mr-4 text-[#2D3748] hover:text-[#7C83FD]">
+          <button 
+            onClick={toggleSidebar} 
+            className="p-2 mr-4 text-gray-600 hover:text-emerald-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+          >
             ☰
           </button>
-          <h2 className="text-xl font-semibold text-[#2D3748] drop-shadow">Hiring Manager Dashboard</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Hiring Manager Dashboard</h2>
         </div>
         <div className="flex items-center space-x-4">
-          <button className="p-2 text-[#2D3748] hover:text-[#7C83FD]">
+          <button className="p-2 text-gray-600 hover:text-emerald-600 hover:bg-gray-50 rounded-lg transition-colors duration-200">
             🔔
           </button>
-          <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-[#2D3748]">John Doe</span>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-8 rounded-full bg-emerald-50 flex items-center justify-center">
+                <span className="text-emerald-600 font-medium">JD</span>
+              </div>
+              <span className="text-sm font-medium text-gray-900">John Doe</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-emerald-600 hover:bg-gray-50 rounded-lg transition-colors duration-200 flex items-center space-x-2"
+            >
+              <span>🚪</span>
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </div>
@@ -94,14 +120,7 @@ export default function HiringManagerLayout({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F0F4FF] via-[#E0E7FF] to-[#B8E1DD] relative overflow-hidden">
-      {/* Translucent Logo Watermark - Removed as per previous instruction */}
-      {/* <img
-        src="/logo.png"
-        alt="Logo Watermark"
-        className="fixed inset-0 m-auto w-[70vw] max-w-3xl opacity-80 pointer-events-none select-none z-0"
-        style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
-      /> */}
+    <div className="min-h-screen bg-gray-50">
       <Sidebar isCollapsed={isSidebarCollapsed} />
       <Header toggleSidebar={toggleSidebar} />
       <main className={`pt-16 relative z-10 transition-all duration-300 ${
