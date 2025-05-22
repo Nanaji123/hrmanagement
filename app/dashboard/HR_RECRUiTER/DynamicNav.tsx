@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface NavItem {
   name: string;
@@ -35,6 +35,7 @@ interface DynamicNavProps {
 const DynamicNav = ({ onExpandChange }: DynamicNavProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     onExpandChange?.(isExpanded);
@@ -85,6 +86,21 @@ const DynamicNav = ({ onExpandChange }: DynamicNavProps) => {
             );
           })}
         </nav>
+        <div className="mt-8">
+          <button
+            className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full text-red-600 hover:bg-red-50 hover:shadow-sm`}
+            onClick={() => {
+              // TODO: Implement more robust logout logic if needed (e.g., server-side invalidation)
+              localStorage.removeItem('authToken'); // Remove the authentication token from localStorage
+              router.push('/login'); // Redirect to the login page
+            }}
+          >
+            <span className="text-xl">➡️</span>
+            {isExpanded && (
+              <span className="ml-3 font-medium">Logout</span>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

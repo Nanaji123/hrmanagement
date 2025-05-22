@@ -66,9 +66,9 @@ export default function CandidateManagement() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Candidate Management</h1>
+        <h1 className="text-2xl font-bold text-blue-600">Candidate Management</h1>
         <Link
           href="/dashboard/HR_RECRUiTER/Candidate_Management/new"
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -77,27 +77,35 @@ export default function CandidateManagement() {
         </Link>
       </div>
 
-      <div className="mb-6 flex gap-4">
-        <input
-          type="text"
-          placeholder="Search candidates..."
-          className="px-4 py-2 border rounded flex-grow"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <select
-          className="px-4 py-2 border rounded"
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="all">All Status</option>
-          <option value="New">New</option>
-          <option value="Screening">Screening</option>
-          <option value="Interview">Interview</option>
-          <option value="Offered">Offered</option>
-          <option value="Hired">Hired</option>
-          <option value="Rejected">Rejected</option>
-        </select>
+      <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="search" className="block text-sm font-medium text-black">Search Candidates</label>
+          <input
+            type="text"
+            id="search"
+            placeholder="Search candidates..."
+            className="mt-1 px-4 py-2 border rounded w-full text-black"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="statusFilter" className="block text-sm font-medium text-black">Filter by Status</label>
+          <select
+            id="statusFilter"
+            className="mt-1 px-4 py-2 border rounded w-full text-blue-300"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All Status</option>
+            <option value="New">New</option>
+            <option value="Screening">Screening</option>
+            <option value="Interview">Interview</option>
+            <option value="Offered">Offered</option>
+            <option value="Hired">Hired</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
