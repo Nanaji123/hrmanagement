@@ -40,4 +40,55 @@ export const candidates: Candidate[] = [
       },
     ],
   },
+  {
+    id: '3',
+    name: 'Peter Jones',
+    role: 'Data Scientist',
+    interviewDate: '2024-06-15',
+    interviewTime: '11:30 AM',
+    interviewType: 'Technical',
+    meetingLink: '#',
+    resumeLink: '#',
+    history: [
+      {
+        date: '2024-02-10',
+        feedback: 'Very good understanding of algorithms.',
+        rating: 5,
+      },
+    ],
+  },
+  {
+    id: '4',
+    name: 'Mary Brown',
+    role: 'UX Designer',
+    interviewDate: '2024-06-16',
+    interviewTime: '3:00 PM',
+    interviewType: 'Design',
+    meetingLink: '#',
+    resumeLink: '#',
+    history: [
+      {
+        date: '2024-03-01',
+        feedback: 'Excellent portfolio and user-centered approach.',
+        rating: 5,
+      },
+    ],
+  },
+  {
+    id: '5',
+    name: 'David Green',
+    role: 'Project Manager',
+    interviewDate: '2024-06-18',
+    interviewTime: '10:00 AM',
+    interviewType: 'Behavioral',
+    meetingLink: '#',
+    resumeLink: '#',
+    history: [
+      {
+        date: '2024-04-05',
+        feedback: 'Strong leadership skills and experience.',
+        rating: 4,
+      },
+    ],
+  },
 ]; 
