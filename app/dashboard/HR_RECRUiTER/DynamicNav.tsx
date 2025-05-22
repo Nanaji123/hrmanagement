@@ -109,24 +109,6 @@ const navItems: NavItem[] = [
     href: '/dashboard/interviewer/feedback',
     icon: FileText,
     role: 'interviewer'
-  },
-  {
-    name: 'Candidates',
-    href: '/dashboard/interviewer/candidates',
-    icon: Users,
-    role: 'interviewer'
-  },
-  {
-    name: 'Schedule',
-    href: '/dashboard/interviewer/schedule',
-    icon: Calendar,
-    role: 'interviewer'
-  },
-  {
-    name: 'Profile',
-    href: '/dashboard/interviewer/profile',
-    icon: UserCircle,
-    role: 'interviewer'
   }
 ];
 

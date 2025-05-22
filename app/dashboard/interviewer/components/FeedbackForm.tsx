@@ -1,164 +1,206 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { InterviewFeedbackData } from '../types';
+import React, { useState } from 'react';
+import { Star } from 'lucide-react';
 
 interface FeedbackFormProps {
-  initialFeedback: InterviewFeedbackData;
+  interviewId: string;
+  candidateName: string;
   onSubmit: () => void;
-  onFeedbackChange: (feedback: InterviewFeedbackData) => void;
-  isSubmitting?: boolean;
+  onCancel: () => void;
 }
 
-export const FeedbackForm: React.FC<FeedbackFormProps> = ({
-  initialFeedback,
-  onSubmit,
-  onFeedbackChange,
-  isSubmitting = false,
-}) => {
-  const [formData, setFormData] = useState<InterviewFeedbackData>(initialFeedback);
+interface FeedbackData {
+  technicalSkills: number;
+  communication: number;
+  problemSolving: number;
+  culturalFit: number;
+  overallRating: number;
+  strengths: string;
+  weaknesses: string;
+  comments: string;
+  recommendation: 'Strong Hire' | 'Hire' | 'No Hire' | 'Strong No Hire';
+}
 
-  useEffect(() => {
-    setFormData(initialFeedback);
-  }, [initialFeedback]);
+type RatingCategory = 'technicalSkills' | 'communication' | 'problemSolving' | 'culturalFit' | 'overallRating';
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { id, value } = e.target;
-    let newValue: string | number = value;
+export default function FeedbackForm({ interviewId, candidateName, onSubmit, onCancel }: FeedbackFormProps) {
+  const [feedback, setFeedback] = useState<FeedbackData>({
+    technicalSkills: 0,
+    communication: 0,
+    problemSolving: 0,
+    culturalFit: 0,
+    overallRating: 0,
+    strengths: '',
+    weaknesses: '',
+    comments: '',
+    recommendation: 'Hire'
+  });
 
-    if (id === 'technicalRating' || id === 'communicationRating' || id === 'problemSolvingRating') {
-      newValue = parseInt(value, 10) || 0;
-    }
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    const updatedFormData = { ...formData, [id]: newValue };
-    setFormData(updatedFormData);
-    onFeedbackChange(updatedFormData);
+  const handleRatingChange = (category: RatingCategory, value: number) => {
+    setFeedback(prev => ({ ...prev, [category]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFeedback(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit();
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/interviewer/interviews/${interviewId}/feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(feedback),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit feedback');
+      }
+
+      onSubmit();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const RatingInput = ({ category, label }: { category: RatingCategory; label: string }) => (
+    <div className="space-y-2">
+      <label className="block text-sm font-medium text-gray-700">{label}</label>
+      <div className="flex space-x-1">
+        {[1, 2, 3, 4, 5].map((rating) => (
+          <button
+            key={rating}
+            type="button"
+            onClick={() => handleRatingChange(category, rating)}
+            className="focus:outline-none"
+          >
+            <Star
+              className={`w-6 h-6 ${
+                feedback[category] >= rating
+                  ? 'text-yellow-400 fill-current'
+                  : 'text-gray-300'
+              }`}
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
-      <h3 className="text-xl font-semibold text-gray-900">Submit Feedback</h3>
-      
-      <div className="space-y-4">
-        <div>
-          <label htmlFor="technicalRating" className="block text-sm font-medium text-gray-700">
-            Technical Skills
-          </label>
-          <div className="mt-2 flex space-x-2">
-            {[1, 2, 3, 4, 5].map(rating => (
-              <button
-                key={rating}
-                type="button"
-                onClick={() => handleInputChange({ target: { id: 'technicalRating', value: rating.toString() } } as React.ChangeEvent<HTMLInputElement>)}
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                  formData.technicalRating === rating
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-                aria-label={`Rate technical skills ${rating} out of 5`}
-              >
-                {rating}
-              </button>
-            ))}
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="bg-white p-6 rounded-lg shadow-sm">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Feedback for {candidateName}
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <RatingInput category="technicalSkills" label="Technical Skills" />
+          <RatingInput category="communication" label="Communication" />
+          <RatingInput category="problemSolving" label="Problem Solving" />
+          <RatingInput category="culturalFit" label="Cultural Fit" />
+          <RatingInput category="overallRating" label="Overall Rating" />
+        </div>
+
+        <div className="mt-6 space-y-4">
+          <div>
+            <label htmlFor="strengths" className="block text-sm font-medium text-gray-700">
+              Strengths
+            </label>
+            <textarea
+              id="strengths"
+              name="strengths"
+              rows={3}
+              value={feedback.strengths}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="weaknesses" className="block text-sm font-medium text-gray-700">
+              Areas for Improvement
+            </label>
+            <textarea
+              id="weaknesses"
+              name="weaknesses"
+              rows={3}
+              value={feedback.weaknesses}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="comments" className="block text-sm font-medium text-gray-700">
+              Additional Comments
+            </label>
+            <textarea
+              id="comments"
+              name="comments"
+              rows={4}
+              value={feedback.comments}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="recommendation" className="block text-sm font-medium text-gray-700">
+              Recommendation
+            </label>
+            <select
+              id="recommendation"
+              name="recommendation"
+              value={feedback.recommendation}
+              onChange={handleInputChange}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              required
+            >
+              <option value="Strong Hire">Strong Hire</option>
+              <option value="Hire">Hire</option>
+              <option value="No Hire">No Hire</option>
+              <option value="Strong No Hire">Strong No Hire</option>
+            </select>
           </div>
         </div>
 
-        <div>
-          <label htmlFor="communicationRating" className="block text-sm font-medium text-gray-700">
-            Communication
-          </label>
-          <div className="mt-2 flex space-x-2">
-            {[1, 2, 3, 4, 5].map(rating => (
-              <button
-                key={rating}
-                type="button"
-                onClick={() => handleInputChange({ target: { id: 'communicationRating', value: rating.toString() } } as React.ChangeEvent<HTMLInputElement>)}
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                  formData.communicationRating === rating
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-                aria-label={`Rate communication ${rating} out of 5`}
-              >
-                {rating}
-              </button>
-            ))}
+        {error && (
+          <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-md">
+            {error}
           </div>
-        </div>
+        )}
 
-        <div>
-          <label htmlFor="problemSolvingRating" className="block text-sm font-medium text-gray-700">
-            Problem Solving
-          </label>
-          <div className="mt-2 flex space-x-2">
-            {[1, 2, 3, 4, 5].map(rating => (
-              <button
-                key={rating}
-                type="button"
-                onClick={() => handleInputChange({ target: { id: 'problemSolvingRating', value: rating.toString() } } as React.ChangeEvent<HTMLInputElement>)}
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                  formData.problemSolvingRating === rating
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-                aria-label={`Rate problem solving ${rating} out of 5`}
-              >
-                {rating}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="recommendation" className="block text-sm font-medium text-gray-700">
-            Recommendation
-          </label>
-          <select
-            id="recommendation"
-            value={formData.recommendation}
-            onChange={handleInputChange}
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+        <div className="mt-6 flex justify-end space-x-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
-            <option value="Strongly Recommend">Strongly Recommend</option>
-            <option value="Recommend">Recommend</option>
-            <option value="Consider">Consider</option>
-            <option value="Not Recommended">Not Recommended</option>
-          </select>
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
+          </button>
         </div>
-
-        <div>
-          <label htmlFor="comments" className="block text-sm font-medium text-gray-700">
-            Detailed Feedback
-          </label>
-          <textarea
-            id="comments"
-            value={formData.comments}
-            onChange={handleInputChange}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            placeholder="Enter your detailed feedback here..."
-            rows={4}
-            required
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isSubmitting || !formData.comments.trim()}
-          className={`px-4 py-2 rounded-md text-sm font-medium text-white ${
-            isSubmitting || !formData.comments.trim()
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
-          }`}
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
-        </button>
       </div>
     </form>
   );
-}; 
+} 
