@@ -108,6 +108,34 @@ export default function CandidateManagement() {
         </div>
       </div>
 
+      {/* Recruitment Funnel Overview */}
+      <div className="mb-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="bg-blue-100 p-4 rounded-lg shadow-sm text-center">
+          <div className="text-xl font-bold text-blue-800">{candidates.filter(c => c.status === 'New').length}</div>
+          <div className="text-sm text-blue-600">New</div>
+        </div>
+        <div className="bg-yellow-100 p-4 rounded-lg shadow-sm text-center">
+          <div className="text-xl font-bold text-yellow-800">{candidates.filter(c => c.status === 'Screening').length}</div>
+          <div className="text-sm text-yellow-600">Screening</div>
+        </div>
+        <div className="bg-purple-100 p-4 rounded-lg shadow-sm text-center">
+          <div className="text-xl font-bold text-purple-800">{candidates.filter(c => c.status === 'Interview').length}</div>
+          <div className="text-sm text-purple-600">Interview</div>
+        </div>
+        <div className="bg-green-100 p-4 rounded-lg shadow-sm text-center">
+          <div className="text-xl font-bold text-green-800">{candidates.filter(c => c.status === 'Offered').length}</div>
+          <div className="text-sm text-green-600">Offered</div>
+        </div>
+        <div className="bg-teal-100 p-4 rounded-lg shadow-sm text-center">
+          <div className="text-xl font-bold text-teal-800">{candidates.filter(c => c.status === 'Hired').length}</div>
+          <div className="text-sm text-teal-600">Hired</div>
+        </div>
+        <div className="bg-red-100 p-4 rounded-lg shadow-sm text-center">
+          <div className="text-xl font-bold text-red-800">{candidates.filter(c => c.status === 'Rejected').length}</div>
+          <div className="text-sm text-red-600">Rejected</div>
+        </div>
+      </div>
+
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <table className="min-w-full">
           <thead className="bg-gray-50">
