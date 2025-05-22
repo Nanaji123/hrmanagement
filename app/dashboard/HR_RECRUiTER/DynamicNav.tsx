@@ -11,7 +11,8 @@ import {
   FileText, 
   UserCircle, 
   BarChart2,
-  LogOut
+  LogOut,
+  Users2
 } from 'lucide-react';
 
 interface NavItem {
@@ -27,6 +28,12 @@ const navItems: NavItem[] = [
     name: 'Dashboard',
     href: '/dashboard/hiring_manager',
     icon: LayoutDashboard,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Profile',
+    href: '/dashboard/hiring_manager/profile',
+    icon: UserCircle,
     role: 'hr_manager'
   },
   {
@@ -56,7 +63,7 @@ const navItems: NavItem[] = [
   {
     name: 'Team',
     href: '/dashboard/hiring_manager/team',
-    icon: UserCircle,
+    icon: Users2,
     role: 'hr_manager'
   },
   {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Job {
   id: string;
@@ -75,6 +75,18 @@ export default function JobsPage() {
 
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [lastDeletedJob, setLastDeletedJob] = useState<Job | null>(null);
+  const undoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [showUndo, setShowUndo] = useState(false);
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Filter jobs based on search query
+  const filteredJobs = jobs.filter(job =>
+    job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    job.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    job.location.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleCreateJob = () => {
     if (newJob.title && newJob.department && newJob.location) {
@@ -103,8 +115,24 @@ export default function JobsPage() {
   const handleDeleteJob = () => {
     if (selectedJob) {
       setJobs(jobs.filter(job => job.id !== selectedJob.id));
+      setLastDeletedJob(selectedJob);
       setShowDeleteModal(false);
       setSelectedJob(null);
+      setShowUndo(true);
+      if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
+      undoTimeoutRef.current = setTimeout(() => {
+        setLastDeletedJob(null);
+        setShowUndo(false);
+      }, 5000);
+    }
+  };
+
+  const handleUndoDelete = () => {
+    if (lastDeletedJob) {
+      setJobs([lastDeletedJob, ...jobs]);
+      setLastDeletedJob(null);
+      setShowUndo(false);
+      if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
     }
   };
 
@@ -129,51 +157,60 @@ export default function JobsPage() {
     <div className="space-y-8 p-6 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-900">Job Postings</h1>
-        <button
-          onClick={() => setShowNewJobForm(true)}
-          className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 font-medium"
-        >
-          Create New Job
-        </button>
+        <div className="flex space-x-4">
+          <input
+            type="text"
+            placeholder="Search jobs..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-black"
+          />
+          <button
+            onClick={() => setShowNewJobForm(true)}
+            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 font-medium"
+          >
+            Create New Job
+          </button>
+        </div>
       </div>
 
       {showNewJobForm && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Create New Job</h2>
+          <h2 className="text-xl font-semibold text-black mb-6">Create New Job</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Job Title</label>
+              <label className="block text-sm font-medium text-black mb-2">Job Title</label>
               <input
                 type="text"
                 value={newJob.title}
                 onChange={(e) => setNewJob({ ...newJob, title: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
+              <label className="block text-sm font-medium text-black mb-2">Department</label>
               <input
                 type="text"
                 value={newJob.department}
                 onChange={(e) => setNewJob({ ...newJob, department: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+              <label className="block text-sm font-medium text-black mb-2">Location</label>
               <input
                 type="text"
                 value={newJob.location}
                 onChange={(e) => setNewJob({ ...newJob, location: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Job Type</label>
+              <label className="block text-sm font-medium text-black mb-2">Job Type</label>
               <select
                 value={newJob.type}
                 onChange={(e) => setNewJob({ ...newJob, type: e.target.value as 'Full-time' | 'Part-time' | 'Contract' })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
               >
                 <option value="Full-time">Full-time</option>
                 <option value="Part-time">Part-time</option>
@@ -184,7 +221,7 @@ export default function JobsPage() {
           <div className="mt-6 flex justify-end space-x-3">
             <button
               onClick={() => setShowNewJobForm(false)}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 font-medium"
+              className="px-4 py-2 border border-gray-200 rounded-lg text-black hover:bg-gray-50 transition-colors duration-200 font-medium"
             >
               Cancel
             </button>
@@ -213,7 +250,7 @@ export default function JobsPage() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {jobs.map((job) => (
+            {filteredJobs.map((job) => (
               <tr key={job.id} className="hover:bg-gray-50 transition-colors duration-150">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-semibold text-gray-900">{job.title}</div>
@@ -281,6 +318,19 @@ export default function JobsPage() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Undo Snackbar */}
+      {showUndo && lastDeletedJob && (
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-4 z-50">
+          <span>Job "{lastDeletedJob.title}" deleted.</span>
+          <button
+            onClick={handleUndoDelete}
+            className="underline text-emerald-400 hover:text-emerald-200 font-semibold"
+          >
+            Undo
+          </button>
         </div>
       )}
     </div>

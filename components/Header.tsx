@@ -39,9 +39,9 @@ const Header: React.FC<HeaderProps> = ({ isNavExpanded }) => {
             <input
               type="text"
               placeholder="Search..."
-              className="w-64 pl-4 pr-10 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-emerald-500"
+              className="w-64 pl-4 pr-10 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-emerald-500 text-black"
             />
-            <Search className="absolute right-4 top-2.5 h-5 w-5 text-gray-400" />
+            <Search className="absolute right-4 top-2.5 h-5 w-5 text-black-400" />
           </div>
 
           {/* Notifications */}
@@ -57,13 +57,13 @@ const Header: React.FC<HeaderProps> = ({ isNavExpanded }) => {
             {showNotifications && (
               <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-100 py-2">
                 <div className="px-4 py-2 border-b border-gray-100">
-                  <h3 className="font-semibold">Notifications</h3>
+                  <h3 className="font-semibold text-black">Notifications</h3>
                 </div>
                 <div className="max-h-96 overflow-y-auto">
                   {/* Notification items */}
                   <div className="px-4 py-3 hover:bg-gray-50 cursor-pointer">
-                    <p className="text-sm font-medium">New interview scheduled</p>
-                    <p className="text-xs text-gray-500">2 minutes ago</p>
+                    <p className="text-sm font-medium text-black">New interview scheduled</p>
+                    <p className="text-xs text-black">2 minutes ago</p>
                   </div>
                   {/* Add more notification items */}
                 </div>
@@ -86,17 +86,17 @@ const Header: React.FC<HeaderProps> = ({ isNavExpanded }) => {
 
             {showProfileMenu && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-2">
-                <Link href="/dashboard/interviewer/profile" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                <Link href="/dashboard/interviewer/profile" className="flex items-center px-4 py-2 text-sm text-black hover:bg-gray-50">
                   <UserCircle className="h-4 w-4 mr-2" />
                   Profile
                 </Link>
-                <Link href="/dashboard/interviewer/settings" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                <Link href="/dashboard/interviewer/settings" className="flex items-center px-4 py-2 text-sm text-black hover:bg-gray-50">
                   <Settings className="h-4 w-4 mr-2" />
                   Settings
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  className="flex items-center w-full px-4 py-2 text-sm text-black hover:bg-gray-50"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Logout

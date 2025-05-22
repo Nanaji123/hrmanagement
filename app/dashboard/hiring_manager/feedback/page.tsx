@@ -195,6 +195,7 @@ export default function FeedbackPage() {
     </div>
   );
 
+  // Filter candidates based on search query
   const filteredCandidates = candidates.filter(candidate =>
     candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     candidate.position.toLowerCase().includes(searchQuery.toLowerCase())
@@ -214,7 +215,7 @@ export default function FeedbackPage() {
             placeholder="Search candidates..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-black"
           />
         </div>
       </div>
@@ -380,6 +381,95 @@ export default function FeedbackPage() {
           )}
         </div>
       </div>
+
+      {showFeedbackForm && selectedCandidate && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-lg w-full">
+            <h2 className="text-xl font-semibold text-black mb-4">Give Feedback for {selectedCandidate.name}</h2>
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Interviewer Name</label>
+                <input
+                  type="text"
+                  value={newFeedback.interviewer}
+                  onChange={(e) => setNewFeedback({ ...newFeedback, interviewer: e.target.value })}
+                  className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Date</label>
+                <input
+                  type="date"
+                  value={newFeedback.date}
+                  onChange={(e) => setNewFeedback({ ...newFeedback, date: e.target.value })}
+                  className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Rating</label>
+                <select
+                  value={newFeedback.rating}
+                  onChange={(e) => setNewFeedback({ ...newFeedback, rating: Number(e.target.value) })}
+                  className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
+                >
+                  <option value={0}>Select rating</option>
+                  <option value={1}>1 - Poor</option>
+                  <option value={2}>2 - Fair</option>
+                  <option value={3}>3 - Good</option>
+                  <option value={4}>4 - Very Good</option>
+                  <option value={5}>5 - Excellent</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Strengths</label>
+                <input
+                  type="text"
+                  value={newFeedback.strengths?.join(', ') || ''}
+                  onChange={(e) => setNewFeedback({ ...newFeedback, strengths: e.target.value.split(',').map(s => s.trim()) })}
+                  className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
+                  placeholder="Comma separated strengths"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Weaknesses</label>
+                <input
+                  type="text"
+                  value={newFeedback.weaknesses?.join(', ') || ''}
+                  onChange={(e) => setNewFeedback({ ...newFeedback, weaknesses: e.target.value.split(',').map(s => s.trim()) })}
+                  className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
+                  placeholder="Comma separated weaknesses"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Notes</label>
+                <textarea
+                  value={newFeedback.notes}
+                  onChange={(e) => setNewFeedback({ ...newFeedback, notes: e.target.value })}
+                  className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
+                  rows={3}
+                />
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setShowFeedbackForm(false);
+                  setSelectedCandidate(null);
+                }}
+                className="px-4 py-2 border border-gray-200 rounded-lg text-black hover:bg-gray-50 transition-colors duration-200 font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateFeedback}
+                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 font-medium"
+              >
+                Save Feedback
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
