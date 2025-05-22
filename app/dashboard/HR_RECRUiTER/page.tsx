@@ -6,11 +6,9 @@ import Link from 'next/link';
 interface Candidate {
   id: string;
   name: string;
-  email: string;
-  position: string;
-  status: 'New' | 'Screening' | 'Interview' | 'Offered' | 'Hired' | 'Rejected';
-  appliedDate: string;
-  department?: string; // Department field
+  department: string;
+  status: string;
+  // Add other fields as needed
 }
 
 const HRRecruiterDashboard = () => {
@@ -18,6 +16,7 @@ const HRRecruiterDashboard = () => {
   const [selectedDepartment, setSelectedDepartment] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedMetric, setSelectedMetric] = useState<string>('applications');
 
   useEffect(() => {
     // Read from local storage
@@ -40,15 +39,14 @@ const HRRecruiterDashboard = () => {
   const hiredCandidates = filteredCandidates.filter(candidate => candidate.status === 'Hired').length;
   const rejectedCandidates = filteredCandidates.filter(candidate => candidate.status === 'Rejected').length;
 
-  // Placeholders for other metrics (will need more data/logic to calculate accurately)
-  const openPositions = 15; // Static placeholder
-  const timeToFill = 26; // Static placeholder
-  const offerAcceptanceRatio = '72.73%'; // Static placeholder
-  const offerAccepted = 8; // Static placeholder
-  const offerProvided = 11; // Static placeholder
-  const costPerHire = '$17K'; // Static placeholder
-  const timeToHire = 15; // Static placeholder
-
+  // Placeholder metrics
+  const openPositions = 15;
+  const timeToFill = 26;
+  const offerAcceptanceRatio = '72.73%';
+  const offerAccepted = 8;
+  const offerProvided = 11;
+  const costPerHire = '$17K';
+  const timeToHire = 15;
 
   if (loading) {
     return (
@@ -76,136 +74,106 @@ const HRRecruiterDashboard = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      {/* Header */}
-      <div className="mb-6">
-        <div className="text-sm text-gray-600 mb-2">
-          <Link href="/" className="hover:underline">Home</Link> &gt; Hr &gt; HR Recruitment Dashboard
-        </div>
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-800">HR Recruitment Dashboard</h1>
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-blue-700">HR Recruiter Dashboard</h1>
+        <div className="flex space-x-4">
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-sm">
+            Add New Candidate
+          </button>
+          <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors shadow-sm">
+            Schedule Interview
+          </button>
         </div>
       </div>
 
-      {/* Filters and Top Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
-        {/* Department Filter */}
-        <div className="bg-white p-4 rounded-lg shadow flex items-center">
-           <label htmlFor="department" className="mr-2 text-gray-700">Department:</label>
-           <select
-              id="department"
-              className="flex-grow rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              value={selectedDepartment}
-              onChange={(e) => setSelectedDepartment(e.target.value)}
-           >
-              <option value="all">All</option>
-              <option value="engineering">Engineering</option>
-              <option value="marketing">Marketing</option>
-              <option value="sales">Sales</option>
-              <option value="hr">Human Resources</option>
-           </select>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl shadow-sm border border-blue-100">
+          <h3 className="text-lg font-semibold text-blue-700 mb-2">Total Candidates</h3>
+          <p className="text-3xl font-bold text-blue-600">{totalCandidates}</p>
+          <p className="text-sm text-blue-500 mt-2">+12% from last month</p>
         </div>
 
-        {/* Metrics - Row 1 */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold text-gray-700">Time to Fill (Days)</h2>
-          <p className="text-4xl font-bold text-blue-600 mt-2">{timeToFill}</p>
+        <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl shadow-sm border border-green-100">
+          <h3 className="text-lg font-semibold text-green-700 mb-2">Active Interviews</h3>
+          <p className="text-3xl font-bold text-green-600">{candidatesInScreening}</p>
+          <p className="text-sm text-green-500 mt-2">8 scheduled for today</p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow col-span-1 md:col-span-2">
-          <h2 className="text-lg font-semibold text-gray-700">Offer Acceptance Ratio</h2>
-          <p className="text-4xl font-bold text-green-600 mt-2">{offerAcceptanceRatio}</p>
-          <div className="flex justify-around mt-4">
-            <div className="text-center">
-              <p className="text-xl font-bold">{offerAccepted}</p>
-              <p className="text-sm text-gray-500">Offer Accepted</p>
-            </div>
-            <div className="text-center">
-              <p className="text-xl font-bold">{offerProvided}</p>
-              <p className="text-sm text-gray-500">Offer Provided</p>
-            </div>
+
+        <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl shadow-sm border border-purple-100">
+          <h3 className="text-lg font-semibold text-purple-700 mb-2">Hired This Month</h3>
+          <p className="text-3xl font-bold text-purple-600">{hiredCandidates}</p>
+          <p className="text-sm text-purple-500 mt-2">+3 from last month</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl shadow-sm border border-orange-100">
+          <h3 className="text-lg font-semibold text-orange-700 mb-2">Pending Reviews</h3>
+          <p className="text-3xl font-bold text-orange-600">{rejectedCandidates}</p>
+          <p className="text-sm text-orange-500 mt-2">5 urgent</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-50">
+          <h2 className="text-xl font-semibold text-blue-700 mb-4">Recent Candidates</h2>
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center justify-between p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center text-blue-600 font-semibold">
+                    {i}
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-blue-700">Candidate Name {i}</h4>
+                    <p className="text-sm text-blue-500">Applied for Software Engineer</p>
+                  </div>
+                </div>
+                <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm">New</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-50">
+          <h2 className="text-xl font-semibold text-blue-700 mb-4">Upcoming Interviews</h2>
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center justify-between p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center text-green-600 font-semibold">
+                    {i}
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-green-700">Interview with Candidate {i}</h4>
+                    <p className="text-sm text-green-500">Today at 2:00 PM</p>
+                  </div>
+                </div>
+                <span className="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm">Scheduled</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Metrics - Row 2 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
-         <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-700">Shortlisted Candidates</h2>
-            <p className="text-4xl font-bold text-purple-600 mt-2">{/* Calculate based on status if available */ totalCandidates}</p>
-         </div>
-         <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-700">Total Applicants</h2>
-            <p className="text-4xl font-bold text-blue-600 mt-2">{totalCandidates}</p>
-         </div>
-         <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-700">Rejected Candidates</h2>
-            <p className="text-4xl font-bold text-red-600 mt-2">{rejectedCandidates}</p>
-         </div>
-         <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-700">Cost per Hire</h2>
-            <p className="text-4xl font-bold text-green-600 mt-2">{costPerHire}</p>
-         </div>
-      </div>
-
-       {/* Metrics - Row 3 */}
-       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
-         <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-700">Hired Candidates</h2>
-            <p className="text-4xl font-bold text-green-600 mt-2">{hiredCandidates}</p>
-         </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-700">Time to Hire (Days)</h2>
-            <p className="text-4xl font-bold text-orange-600 mt-2">{timeToHire}</p>
-         </div>
-       </div>
-
-      {/* Charts/Visualizations Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow h-80 flex items-center justify-center text-gray-500">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">Recruitment Funnel</h2>
-          Placeholder for Recruitment Funnel Chart
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow h-80 flex items-center justify-center text-gray-500">
-          <h2 className="text-lg font-semibold text-gray-700 mb-4">Applications Received by Source</h2>
-          Placeholder for Applications Received by Source Chart
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow h-80 flex items-center justify-center text-gray-500">
-           <h2 className="text-lg font-semibold text-gray-700 mb-4">Open Positions by Department</h2>
-          Placeholder for Open Positions by Department Chart
-        </div>
-         <div className="bg-white p-6 rounded-lg shadow h-80 flex items-center justify-center text-gray-500">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">Client Decline vs. Candidate Decline</h2>
-          Placeholder for Client Decline vs. Candidate Decline Chart
-        </div>
-      </div>
-
-       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow h-80 flex items-center justify-center text-gray-500">
-           <h2 className="text-lg font-semibold text-gray-700 mb-4">Reasons for Client Decline</h2>
-          Placeholder for Reasons for Client Decline Chart
-        </div>
-         <div className="bg-white p-6 rounded-lg shadow h-80 flex items-center justify-center text-gray-500">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">Reason for Candidate Decline</h2>
-          Placeholder for Reason for Candidate Decline Chart
-        </div>
-      </div>
-
-      {/* Quick Links Section */}
-      <div className="bg-white p-6 rounded-lg shadow mb-8">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4">Quick Actions</h2>
-        <div className="flex flex-wrap gap-4">
-          <Link href="/dashboard/HR_RECRUiTER/Candidate_Management"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Manage Candidates
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-50">
+        <h2 className="text-xl font-semibold text-blue-700 mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Link href="/dashboard/HR_RECRUiTER/Candidate_Management" 
+                className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg hover:from-blue-100 hover:to-blue-200 transition-all shadow-sm">
+            <h3 className="font-medium text-blue-700">View All Candidates</h3>
+            <p className="text-sm text-blue-500 mt-1">Manage candidate profiles</p>
           </Link>
-          {/* Add other quick action links as needed */}
+          <Link href="/dashboard/HR_RECRUiTER/interview_sch"
+                className="p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg hover:from-green-100 hover:to-green-200 transition-all shadow-sm">
+            <h3 className="font-medium text-green-700">Interview Schedule</h3>
+            <p className="text-sm text-green-500 mt-1">View and manage interviews</p>
+          </Link>
+          <div className="p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg hover:from-purple-100 hover:to-purple-200 transition-all shadow-sm">
+            <h3 className="font-medium text-purple-700">Reports</h3>
+            <p className="text-sm text-purple-500 mt-1">View hiring analytics</p>
+          </div>
         </div>
       </div>
-
     </div>
   );
 };
