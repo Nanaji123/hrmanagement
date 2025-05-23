@@ -66,34 +66,34 @@ export default function CandidateManagement() {
   }
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-blue-600">Candidate Management</h1>
+    <div className="p-8 bg-gray-50">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-blue-700">Candidate Management</h1>
         <Link
           href="/dashboard/HR_RECRUiTER/Candidate_Management/new"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200"
         >
           Add New Candidate
         </Link>
       </div>
 
-      <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label htmlFor="search" className="block text-sm font-medium text-black">Search Candidates</label>
+          <label htmlFor="search" className="block text-sm font-medium text-gray-700">Search Candidates</label>
           <input
             type="text"
             id="search"
             placeholder="Search candidates..."
-            className="mt-1 px-4 py-2 border rounded w-full text-black"
+            className="mt-1 px-4 py-2 border border-gray-400 rounded-lg w-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <div>
-          <label htmlFor="statusFilter" className="block text-sm font-medium text-black">Filter by Status</label>
+          <label htmlFor="statusFilter" className="block text-sm font-medium text-gray-700">Filter by Status</label>
           <select
             id="statusFilter"
-            className="mt-1 px-4 py-2 border rounded w-full text-blue-300"
+            className="mt-1 px-4 py-2 border border-gray-400 rounded-lg w-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -109,36 +109,36 @@ export default function CandidateManagement() {
       </div>
 
       {/* Recruitment Funnel Overview */}
-      <div className="mb-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div className="bg-blue-100 p-4 rounded-lg shadow-sm text-center">
+      <div className="mb-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="bg-white p-4 rounded-lg shadow-md text-center">
           <div className="text-xl font-bold text-blue-800">{candidates.filter(c => c.status === 'New').length}</div>
           <div className="text-sm text-blue-600">New</div>
         </div>
-        <div className="bg-yellow-100 p-4 rounded-lg shadow-sm text-center">
+        <div className="bg-white p-4 rounded-lg shadow-md text-center">
           <div className="text-xl font-bold text-yellow-800">{candidates.filter(c => c.status === 'Screening').length}</div>
           <div className="text-sm text-yellow-600">Screening</div>
         </div>
-        <div className="bg-purple-100 p-4 rounded-lg shadow-sm text-center">
+        <div className="bg-white p-4 rounded-lg shadow-md text-center">
           <div className="text-xl font-bold text-purple-800">{candidates.filter(c => c.status === 'Interview').length}</div>
           <div className="text-sm text-purple-600">Interview</div>
         </div>
-        <div className="bg-green-100 p-4 rounded-lg shadow-sm text-center">
+        <div className="bg-white p-4 rounded-lg shadow-md text-center">
           <div className="text-xl font-bold text-green-800">{candidates.filter(c => c.status === 'Offered').length}</div>
           <div className="text-sm text-green-600">Offered</div>
         </div>
-        <div className="bg-teal-100 p-4 rounded-lg shadow-sm text-center">
+        <div className="bg-white p-4 rounded-lg shadow-md text-center">
           <div className="text-xl font-bold text-teal-800">{candidates.filter(c => c.status === 'Hired').length}</div>
           <div className="text-sm text-teal-600">Hired</div>
         </div>
-        <div className="bg-red-100 p-4 rounded-lg shadow-sm text-center">
+        <div className="bg-white p-4 rounded-lg shadow-md text-center">
           <div className="text-xl font-bold text-red-800">{candidates.filter(c => c.status === 'Rejected').length}</div>
           <div className="text-sm text-red-600">Rejected</div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <table className="min-w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-100">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
@@ -149,7 +149,7 @@ export default function CandidateManagement() {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredCandidates.map((candidate) => (
-              <tr key={candidate.id}>
+              <tr key={candidate.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">{candidate.name}</div>
                   <div className="text-sm text-gray-500">{candidate.email}</div>

@@ -199,8 +199,8 @@ export default function EditInterview({ params }: { params: { id: string } }) {
                 id="candidateId"
                 name="candidateId"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.candidateId ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.candidateId ? 'border-red-300' : ''
                 }`}
                 value={formData.candidateId}
                 onChange={handleInputChange}
@@ -222,8 +222,8 @@ export default function EditInterview({ params }: { params: { id: string } }) {
                 id="interviewer"
                 name="interviewer"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.interviewer ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.interviewer ? 'border-red-300' : ''
                 }`}
                 value={formData.interviewer}
                 onChange={handleInputChange}
@@ -240,8 +240,8 @@ export default function EditInterview({ params }: { params: { id: string } }) {
                 id="date"
                 name="date"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.date ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.date ? 'border-red-300' : ''
                 }`}
                 value={formData.date}
                 onChange={handleInputChange}
@@ -258,8 +258,8 @@ export default function EditInterview({ params }: { params: { id: string } }) {
                 id="time"
                 name="time"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.time ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.time ? 'border-red-300' : ''
                 }`}
                 value={formData.time}
                 onChange={handleInputChange}
@@ -276,8 +276,8 @@ export default function EditInterview({ params }: { params: { id: string } }) {
                 id="location"
                 name="location"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.location ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.location ? 'border-red-300' : ''
                 }`}
                 value={formData.location}
                 onChange={handleInputChange}
@@ -293,8 +293,8 @@ export default function EditInterview({ params }: { params: { id: string } }) {
                 id="status"
                 name="status"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.status ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.status ? 'border-red-300' : ''
                 }`}
                 value={formData.status}
                 onChange={handleInputChange}

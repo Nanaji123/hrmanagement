@@ -72,9 +72,9 @@ export default function InterviewSchedulingPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-8 bg-gray-50">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Interview Scheduling</h1>
+        <h1 className="text-3xl font-bold text-blue-700">Interview Scheduling</h1>
         <Link
           href="/dashboard/HR_RECRUiTER/interview_sch/new"
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -83,9 +83,9 @@ export default function InterviewSchedulingPage() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <table className="min-w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-100">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Candidate</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interviewer</th>
@@ -100,15 +100,14 @@ export default function InterviewSchedulingPage() {
             {interviews.map((interview) => (
               <tr key={interview.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {/* Display candidate name if available, otherwise just ID */}
                   {interview.candidateName || interview.candidateId}
-                  </td>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{interview.interviewer}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(interview.date).toLocaleDateString()}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{interview.time}</td>
-                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{interview.location}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{interview.location}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                     ${interview.status === 'Scheduled' ? 'bg-blue-100 text-blue-800' :
                       interview.status === 'Completed' ? 'bg-green-100 text-green-800' :
                       'bg-red-100 text-red-800'}`}>
@@ -122,7 +121,7 @@ export default function InterviewSchedulingPage() {
                   >
                     View
                   </Link>
-                   <Link
+                  <Link
                     href={`/dashboard/HR_RECRUiTER/interview_sch/edit/${interview.id}`}
                     className="text-indigo-600 hover:text-indigo-900 mr-4"
                   >

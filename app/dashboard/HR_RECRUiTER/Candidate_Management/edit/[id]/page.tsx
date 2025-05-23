@@ -195,8 +195,8 @@ export default function EditCandidate({ params }: { params: { id: string } }) {
                 type="text"
                 name="name"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.name ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.name ? 'border-red-300' : ''
                 }`}
                 value={formData.name}
                 onChange={handleInputChange}
@@ -212,8 +212,8 @@ export default function EditCandidate({ params }: { params: { id: string } }) {
                 type="email"
                 name="email"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.email ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.email ? 'border-red-300' : ''
                 }`}
                 value={formData.email}
                 onChange={handleInputChange}
@@ -229,8 +229,8 @@ export default function EditCandidate({ params }: { params: { id: string } }) {
                 type="tel"
                 name="phone"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.phone ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.phone ? 'border-red-300' : ''
                 }`}
                 value={formData.phone}
                 onChange={handleInputChange}
@@ -246,8 +246,8 @@ export default function EditCandidate({ params }: { params: { id: string } }) {
                 type="text"
                 name="position"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.position ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.position ? 'border-red-300' : ''
                 }`}
                 value={formData.position}
                 onChange={handleInputChange}
@@ -263,8 +263,8 @@ export default function EditCandidate({ params }: { params: { id: string } }) {
                 type="number"
                 name="experience"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.experience ? 'border-red-300' : 'border-gray-300'
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${
+                  errors.experience ? 'border-red-300' : ''
                 }`}
                 value={formData.experience}
                 onChange={handleInputChange}
@@ -279,7 +279,8 @@ export default function EditCandidate({ params }: { params: { id: string } }) {
               <input
                 type="text"
                 name="currentCompany"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${errors.currentCompany ? 'border-red-300' : ''}`}
                 value={formData.currentCompany}
                 onChange={handleInputChange}
               />
@@ -290,7 +291,8 @@ export default function EditCandidate({ params }: { params: { id: string } }) {
               <input
                 type="number"
                 name="expectedSalary"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${errors.expectedSalary ? 'border-red-300' : ''}`}
                 value={formData.expectedSalary}
                 onChange={handleInputChange}
               />
@@ -301,7 +303,8 @@ export default function EditCandidate({ params }: { params: { id: string } }) {
               <input
                 type="number"
                 name="noticePeriod"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${errors.noticePeriod ? 'border-red-300' : ''}`}
                 value={formData.noticePeriod}
                 onChange={handleInputChange}
               />
@@ -313,9 +316,7 @@ export default function EditCandidate({ params }: { params: { id: string } }) {
                 id="department"
                 name="department"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.department ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${errors.department ? 'border-red-300' : ''}`}
                 value={formData.department}
                 onChange={handleInputChange}
               >
@@ -336,9 +337,7 @@ export default function EditCandidate({ params }: { params: { id: string } }) {
                 id="status"
                 name="status"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.status ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`mt-1 block w-full rounded-md border border-gray-400 shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-900 ${errors.status ? 'border-red-300' : ''}`}
                 value={formData.status}
                 onChange={handleInputChange}
               >

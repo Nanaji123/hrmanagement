@@ -74,40 +74,39 @@ const HRRecruiterDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="p-8 bg-gray-50">
+      <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-blue-700">HR Recruiter Dashboard</h1>
-        
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl shadow-sm border border-blue-100">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-xl shadow-md border border-blue-100">
           <h3 className="text-lg font-semibold text-blue-700 mb-2">Total Candidates</h3>
           <p className="text-3xl font-bold text-blue-600">{totalCandidates}</p>
           <p className="text-sm text-blue-500 mt-2">+12% from last month</p>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl shadow-sm border border-green-100">
+        <div className="bg-white p-6 rounded-xl shadow-md border border-green-100">
           <h3 className="text-lg font-semibold text-green-700 mb-2">Active Interviews</h3>
           <p className="text-3xl font-bold text-green-600">{candidatesInScreening}</p>
           <p className="text-sm text-green-500 mt-2">8 scheduled for today</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl shadow-sm border border-purple-100">
+        <div className="bg-white p-6 rounded-xl shadow-md border border-purple-100">
           <h3 className="text-lg font-semibold text-purple-700 mb-2">Hired This Month</h3>
           <p className="text-3xl font-bold text-purple-600">{hiredCandidates}</p>
           <p className="text-sm text-purple-500 mt-2">+3 from last month</p>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl shadow-sm border border-orange-100">
+        <div className="bg-white p-6 rounded-xl shadow-md border border-orange-100">
           <h3 className="text-lg font-semibold text-orange-700 mb-2">Pending Reviews</h3>
           <p className="text-3xl font-bold text-orange-600">{rejectedCandidates}</p>
           <p className="text-sm text-orange-500 mt-2">5 urgent</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-50">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-xl shadow-md border border-blue-50">
           <h2 className="text-xl font-semibold text-blue-700 mb-4">Recent Candidates</h2>
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
@@ -127,7 +126,7 @@ const HRRecruiterDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-50">
+        <div className="bg-white p-6 rounded-xl shadow-md border border-blue-50">
           <h2 className="text-xl font-semibold text-blue-700 mb-4">Upcoming Interviews</h2>
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
@@ -148,7 +147,7 @@ const HRRecruiterDashboard = () => {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-50">
+      <div className="bg-white p-6 rounded-xl shadow-md border border-blue-50">
         <h2 className="text-xl font-semibold text-blue-700 mb-4">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link href="/dashboard/HR_RECRUiTER/Candidate_Management" 
