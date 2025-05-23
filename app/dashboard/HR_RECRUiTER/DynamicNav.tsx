@@ -11,60 +11,20 @@ import {
   FileText, 
   UserCircle, 
   BarChart2,
-  LogOut
+  LogOut,
+  Users as UserGroupIcon
 } from 'lucide-react';
+
+type UserRole = 'hr_manager' | 'hr_recruiter' | 'interviewer';
 
 interface NavItem {
   name: string;
   href: string;
   icon: React.ElementType;
-  role: 'hr_manager' | 'hr_recruiter' | 'interviewer';
+  role: UserRole;
 }
 
 const navItems: NavItem[] = [
-  // HR Manager items
-  {
-    name: 'Dashboard',
-    href: '/dashboard/hiring_manager',
-    icon: LayoutDashboard,
-    role: 'hr_manager'
-  },
-  {
-    name: 'Job Postings',
-    href: '/dashboard/hiring_manager/jobs',
-    icon: Briefcase,
-    role: 'hr_manager'
-  },
-  {
-    name: 'Candidates',
-    href: '/dashboard/hiring_manager/candidates',
-    icon: Users,
-    role: 'hr_manager'
-  },
-  {
-    name: 'Interviews',
-    href: '/dashboard/hiring_manager/interviews',
-    icon: Calendar,
-    role: 'hr_manager'
-  },
-  {
-    name: 'Feedback',
-    href: '/dashboard/hiring_manager/feedback',
-    icon: FileText,
-    role: 'hr_manager'
-  },
-  {
-    name: 'Team',
-    href: '/dashboard/hiring_manager/team',
-    icon: UserCircle,
-    role: 'hr_manager'
-  },
-  {
-    name: 'Analytics',
-    href: '/dashboard/hiring_manager/analytics',
-    icon: BarChart2,
-    role: 'hr_manager'
-  },
   // HR Recruiter items
   {
     name: 'Dashboard',
@@ -79,75 +39,56 @@ const navItems: NavItem[] = [
     role: 'hr_recruiter'
   },
   {
-    name: 'Interview Schedule',
-    href: '/dashboard/HR_RECRUiTER/interview_sch',
-    icon: Calendar,
+    name: 'Interview Panel',
+    href: '/dashboard/HR_RECRUiTER/interview_panel',
+    icon: UserGroupIcon,
     role: 'hr_recruiter'
   },
   // Interviewer items
   {
-    name: 'Dashboard',
-    href: '/dashboard/interviewer',
-    icon: LayoutDashboard,
-    role: 'interviewer'
-  },
-  {
-    name: 'My Interviews',
-    href: '/dashboard/interviewer/interviews',
+    name: 'Calendar',
+    href: '/dashboard/HR_RECRUiTER/calendar',
     icon: Calendar,
     role: 'interviewer'
   },
   {
-    name: 'Feedback',
-    href: '/dashboard/interviewer/feedback',
+    name: 'Interview Management',
+    href: '/dashboard/HR_RECRUiTER/interview_management',
     icon: FileText,
-    role: 'interviewer'
-  },
-  {
-    name: 'Candidates',
-    href: '/dashboard/interviewer/candidates',
-    icon: Users,
-    role: 'interviewer'
-  },
-  {
-    name: 'Schedule',
-    href: '/dashboard/interviewer/schedule',
-    icon: Calendar,
-    role: 'interviewer'
-  },
-  {
-    name: 'Profile',
-    href: '/dashboard/interviewer/profile',
-    icon: UserCircle,
     role: 'interviewer'
   }
 ];
 
 interface DynamicNavProps {
   onExpandChange?: (isExpanded: boolean) => void;
-  userRole?: 'hr_manager' | 'hr_recruiter' | 'interviewer';
+  userRole?: UserRole;
 }
 
-const DynamicNav = ({ onExpandChange, userRole = 'hr_manager' }: DynamicNavProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const DynamicNav: React.FC<DynamicNavProps> = ({ 
+  onExpandChange, 
+  userRole = 'hr_manager' 
+}) => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    onExpandChange?.(isExpanded);
+    if (onExpandChange) {
+      onExpandChange(isExpanded);
+    }
   }, [isExpanded, onExpandChange]);
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (): void => {
     setIsExpanded(true);
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = (): void => {
     setIsExpanded(false);
   };
 
   const filteredNavItems = navItems.filter(item => item.role === userRole);
 
-  const getRoleTitle = () => {
+  const getRoleTitle = (): string => {
     switch (userRole) {
       case 'hr_manager':
         return 'HR Manager';
@@ -158,6 +99,12 @@ const DynamicNav = ({ onExpandChange, userRole = 'hr_manager' }: DynamicNavProps
       default:
         return 'HR Portal';
     }
+  };
+
+  const handleLogout = (): void => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    router.push('/auth/login');
   };
 
   return (
@@ -199,14 +146,11 @@ const DynamicNav = ({ onExpandChange, userRole = 'hr_manager' }: DynamicNavProps
         </nav>
         <div className="mt-8">
           <button
+            type="button"
             className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full text-gray-600 hover:bg-gray-50 hover:text-red-600 ${
               isExpanded ? 'space-x-3' : 'justify-center'
             }`}
-            onClick={() => {
-              localStorage.removeItem('token');
-              localStorage.removeItem('user');
-              router.push('/auth/login');
-            }}
+            onClick={handleLogout}
           >
             <LogOut className="h-5 w-5" />
             {isExpanded && (

@@ -1,16 +1,3 @@
-:root {
-  /* Base Background */
-  --background-dark: #0e0e10;         /* Near-black */
-  --primary-color: #a855f7;           /* Violet 500 */
-  --primary-dark: #7e22ce;            /* Violet 700 */
-  --text-main: #f3f4f6;               /* Very light gray */
-  --text-secondary: #d1d5db;
-  --border-color: #3f3f46;            /* Zinc 700 */
-  --card-bg: rgba(63, 63, 70, 0.85);  /* Subtle dark surface */
-  --error-color: #ef4444;            /* Red 500 */
-  --font-main: 'Segoe UI', Arial, sans-serif;
-}
-
 .container {
   display: flex;
   height: 100vh;
