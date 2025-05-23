@@ -77,7 +77,7 @@ const LoginPage = () => {
           <button className={styles.signInButton} onClick={handleLogin}>Sign In</button>
 
           <p className={styles.signUpText}>
-            Don't have an account yet? <a href="/auth/signup" className={styles.signUpText}>Sign Up.</a>
+            Please contact your administrator to create an account.
           </p>
         </div>
       </div>
