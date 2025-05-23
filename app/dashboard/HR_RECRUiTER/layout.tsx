@@ -27,7 +27,7 @@ export default function HrRecruiterLayout({
       <DynamicNav onExpandChange={handleNavExpandChange} userRole="hr_recruiter" />
       <div className={`flex-1 pt-16 ${isNavExpanded ? 'ml-64' : 'ml-20'} transition-all duration-300 ease-in-out overflow-y-auto h-screen`}>
         <Header isNavExpanded={isNavExpanded} />
-        <main className="p-6">
+        <main className="px-6">
           {children}
         </main>
       </div>

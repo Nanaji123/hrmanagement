@@ -1,15 +1,20 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Base Background */
+  --background-dark: #0e0e10;         /* Near-black */
+  --primary-color: #a855f7;           /* Violet 500 */
+  --primary-dark: #7e22ce;            /* Violet 700 */
+  --text-main: #f3f4f6;               /* Very light gray */
+  --text-secondary: #d1d5db;
+  --border-color: #3f3f46;            /* Zinc 700 */
+  --card-bg: rgba(63, 63, 70, 0.85);  /* Subtle dark surface */
+  --error-color: #ef4444;            /* Red 500 */
+  --font-main: 'Segoe UI', Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +25,7 @@
 }
 
 body {
-  background:#1a237e;
+  background-color: #f3f4f6; /* Light gray background for the body */
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
