@@ -12,6 +12,7 @@ import {
   UserCircle, 
   BarChart2,
   LogOut,
+  Users2,
   Users as UserGroupIcon
 } from 'lucide-react';
 
@@ -20,11 +21,60 @@ type UserRole = 'hr_manager' | 'hr_recruiter' | 'interviewer';
 interface NavItem {
   name: string;
   href: string;
-  icon: React.ElementType;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;//ElementType;
   role: UserRole;
 }
 
 const navItems: NavItem[] = [
+    // HR Manager items
+  {
+    name: 'Dashboard',
+    href: '/dashboard/hiring_manager',
+    icon: LayoutDashboard,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Profile',
+    href: '/dashboard/hiring_manager/profile',
+    icon: UserCircle,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Job Postings',
+    href: '/dashboard/hiring_manager/jobs',
+    icon: Briefcase,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Candidates',
+    href: '/dashboard/hiring_manager/candidates',
+    icon: Users,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Interviews',
+    href: '/dashboard/hiring_manager/interviews',
+    icon: Calendar,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Feedback',
+    href: '/dashboard/hiring_manager/feedback',
+    icon: FileText,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Team',
+    href: '/dashboard/hiring_manager/team',
+    icon: Users2,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Analytics',
+    href: '/dashboard/hiring_manager/analytics',
+    icon: BarChart2,
+    role: 'hr_manager'
+  },
   // HR Recruiter items
   {
     name: 'Dashboard',
@@ -39,6 +89,12 @@ const navItems: NavItem[] = [
     role: 'hr_recruiter'
   },
   {
+    name: 'Interview Schedule',
+    href: '/dashboard/HR_RECRUiTER/interview_sch',
+    icon: Calendar,
+    role: 'hr_recruiter'
+  },
+  {
     name: 'Interview Panel',
     href: '/dashboard/HR_RECRUiTER/interview_panel',
     icon: UserGroupIcon,
@@ -46,14 +102,20 @@ const navItems: NavItem[] = [
   },
   // Interviewer items
   {
-    name: 'Calendar',
-    href: '/dashboard/HR_RECRUiTER/calendar',
+    name: 'Dashboard',
+    href: '/dashboard/interviewer',
+    icon: LayoutDashboard,
+    role: 'interviewer'
+  },
+  {
+    name: 'My Interviews',
+    href: '/dashboard/interviewer/interviews',
     icon: Calendar,
     role: 'interviewer'
   },
   {
-    name: 'Interview Management',
-    href: '/dashboard/HR_RECRUiTER/interview_management',
+    name: 'Feedback',
+    href: '/dashboard/interviewer/feedback',
     icon: FileText,
     role: 'interviewer'
   }

@@ -43,38 +43,45 @@ const LoginPage = () => {
           <h1 className={styles.title}>Login</h1>
           <p className={styles.subtitle}>Login to your account.</p>
 
-          <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.label}>E-mail Address</label>
-            <input type="email" id="email" className={styles.input} value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>Password</label>
-            <input type="password" id="password" className={styles.input} value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-
-          {/* Role Dropdown */}
-          <div className={styles.inputGroup}>
-            <label htmlFor="role" className={styles.label}>Role</label>
-            <select id="role" className={styles.select} value={role} onChange={(e) => setRole(e.target.value as 'hr_manager' | 'hr_recruiter' | 'interviewer' | '')}>
-              <option value="">Select Role</option>
-              <option value="hr_manager">HR Manager</option>
-              <option value="hr_recruiter">HR Recruiter</option>
-              <option value="interviewer">Interviewer</option>
-            </select>
-          </div>
-
-          {loginError && <p style={{ color: 'red', marginBottom: '1em' }}>Invalid email, password, or role.</p>}
-
-          <div className={styles.optionsContainer}>
-            <div className={styles.rememberMe}>
-              <input type="checkbox" id="remember" />
-              <label htmlFor="remember">Remember me</label>
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              handleLogin();
+            }}
+          >
+            <div className={styles.inputGroup}>
+              <label htmlFor="email" className={styles.label}>E-mail Address</label>
+              <input type="email" id="email" name="email" className={styles.input} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" required />
             </div>
-            <a href="#" className={styles.resetPasswordLink}>Reset Password?</a>
-          </div>
 
-          <button className={styles.signInButton} onClick={handleLogin}>Sign In</button>
+            <div className={styles.inputGroup}>
+              <label htmlFor="password" className={styles.label}>Password</label>
+              <input type="password" id="password" name="password" className={styles.input} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
+            </div>
+
+            {/* Role Dropdown */}
+            <div className={styles.inputGroup}>
+              <label htmlFor="role" className={styles.label}>Role</label>
+              <select id="role" className={styles.select} value={role} onChange={(e) => setRole(e.target.value as 'hr_manager' | 'hr_recruiter' | 'interviewer' | '')}>
+                <option value="">Select Role</option>
+                <option value="hr_manager">HR Manager</option>
+                <option value="hr_recruiter">HR Recruiter</option>
+                <option value="interviewer">Interviewer</option>
+              </select>
+            </div>
+
+            {loginError && <p style={{ color: 'red', marginBottom: '1em' }}>Invalid email, password, or role.</p>}
+
+            <div className={styles.optionsContainer}>
+              <div className={styles.rememberMe}>
+                <input type="checkbox" id="remember" />
+                <label htmlFor="remember">Remember me</label>
+              </div>
+              <a href="#" className={styles.resetPasswordLink}>Reset Password?</a>
+            </div>
+
+            <button className={styles.signInButton} type="submit">Sign In</button>
+          </form>
 
           <p className={styles.signUpText}>
             Please contact your administrator to create an account.

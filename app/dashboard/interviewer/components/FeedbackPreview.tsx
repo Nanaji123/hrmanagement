@@ -1,10 +1,10 @@
 "use client";
 
-import { InterviewFeedbackData } from '../types'; // Use the new type
+import { InterviewFeedbackData } from '../types/index';
 import styles from '../InterviewerPage.module.css';
 
 interface FeedbackPreviewProps {
-  feedback: InterviewFeedbackData; // Use the new type
+  feedback: InterviewFeedbackData;
   onConfirm: () => void;
   onCancel: () => void;
   isSubmitting?: boolean;
@@ -21,23 +21,51 @@ export const FeedbackPreview: React.FC<FeedbackPreviewProps> = ({
       <h3 className={styles.previewTitle}>Preview Feedback</h3>
       
       <div className={styles.previewSection}>
-        <h4 className={styles.previewSectionTitle}>Technical Rating</h4>
+        <h4 className={styles.previewSectionTitle}>Technical Skills</h4>
         <div className={styles.previewRating}>
-          {feedback.technicalRating}/5
+          {feedback.technicalSkills}/5
         </div>
       </div>
 
       <div className={styles.previewSection}>
-        <h4 className={styles.previewSectionTitle}>Communication Rating</h4>
+        <h4 className={styles.previewSectionTitle}>Communication</h4>
         <div className={styles.previewRating}>
-          {feedback.communicationRating}/5
+          {feedback.communication}/5
         </div>
       </div>
 
       <div className={styles.previewSection}>
-        <h4 className={styles.previewSectionTitle}>Problem Solving Rating</h4>
+        <h4 className={styles.previewSectionTitle}>Problem Solving</h4>
         <div className={styles.previewRating}>
-          {feedback.problemSolvingRating}/5
+          {feedback.problemSolving}/5
+        </div>
+      </div>
+
+      <div className={styles.previewSection}>
+        <h4 className={styles.previewSectionTitle}>Cultural Fit</h4>
+        <div className={styles.previewRating}>
+          {feedback.cultureFit}/5
+        </div>
+      </div>
+
+      <div className={styles.previewSection}>
+        <h4 className={styles.previewSectionTitle}>Strengths</h4>
+        <div className={styles.previewComments}>
+          {feedback.strengths}
+        </div>
+      </div>
+
+      <div className={styles.previewSection}>
+        <h4 className={styles.previewSectionTitle}>Areas for Improvement</h4>
+        <div className={styles.previewComments}>
+          {feedback.weaknesses}
+        </div>
+      </div>
+
+      <div className={styles.previewSection}>
+        <h4 className={styles.previewSectionTitle}>Additional Notes</h4>
+        <div className={styles.previewComments}>
+          {feedback.notes}
         </div>
       </div>
 
@@ -45,13 +73,6 @@ export const FeedbackPreview: React.FC<FeedbackPreviewProps> = ({
         <h4 className={styles.previewSectionTitle}>Recommendation</h4>
         <div className={styles.previewRecommendation}>
           {feedback.recommendation}
-        </div>
-      </div>
-
-      <div className={styles.previewSection}>
-        <h4 className={styles.previewSectionTitle}>Comments</h4>
-        <div className={styles.previewComments}>
-          {feedback.comments}
         </div>
       </div>
 
@@ -75,5 +96,4 @@ export const FeedbackPreview: React.FC<FeedbackPreviewProps> = ({
   );
 };
 
-// Add a default export to ensure it's recognized as a module
 export default FeedbackPreview; 

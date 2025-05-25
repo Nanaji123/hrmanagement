@@ -1,7 +1,14 @@
 export interface Candidate {
   id: string;
   name: string;
-  role: string;
+  role:string;
+  position: string;
+  email: string;
+  phone: string;
+  experience: string;
+  skills: string[];
+  status: string;
+  interviewer: string;
   interviewDate: string;
   interviewTime: string;
   interviewType: string;
