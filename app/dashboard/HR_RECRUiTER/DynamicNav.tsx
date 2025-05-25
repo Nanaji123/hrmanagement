@@ -151,7 +151,7 @@ const DynamicNav = ({ onExpandChange, userRole = 'hr_manager' }: DynamicNavProps
 
   return (
     <div
-      className={`fixed left-0 top-0 h-screen bg-white border-r border-gray-100 transition-all duration-300 ease-in-out z-50 shadow-sm ${
+      className={`fixed left-0 top-0 h-screen bg-white border-r border-gray-100 transition-all duration-300 ease-in-out z-50  ${
         isExpanded ? 'w-64' : 'w-20'
       }`}
       onMouseEnter={handleMouseEnter}
@@ -172,11 +172,13 @@ const DynamicNav = ({ onExpandChange, userRole = 'hr_manager' }: DynamicNavProps
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center p-3 rounded-lg transition-all duration-200 ${
-                  isActive
-                    ? 'bg-emerald-50 text-emerald-600 border-l-4 border-emerald-500'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-emerald-600'
-                } ${isExpanded ? 'space-x-3' : 'justify-center'}`}
+                className={`flex items-center p-2 rounded-lg group ${
+                  isActive 
+                    ? 'bg-emerald-50 text-emerald-600 font-semibold' 
+                    : 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-600'
+                } transition-colors duration-200 ${
+                  isExpanded ? 'space-x-3' : 'justify-center'
+                }`}
               >
                 <item.icon className="h-5 w-5" />
                 {isExpanded && (
@@ -188,7 +190,7 @@ const DynamicNav = ({ onExpandChange, userRole = 'hr_manager' }: DynamicNavProps
         </nav>
         <div className="mt-8">
           <button
-            className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full text-gray-600 hover:bg-gray-50 hover:text-red-600 ${
+            className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full font-semibold text-gray-600 hover:bg-emerald-50 hover:text-red-600 ${
               isExpanded ? 'space-x-3' : 'justify-center'
             }`}
             onClick={() => {
@@ -197,7 +199,7 @@ const DynamicNav = ({ onExpandChange, userRole = 'hr_manager' }: DynamicNavProps
               router.push('/auth/login');
             }}
           >
-            <LogOut className="h-5 w-5" />
+            <LogOut className="h-5 w-5 text-gray-600" />
             {isExpanded && (
               <span className="font-medium">Logout</span>
             )}

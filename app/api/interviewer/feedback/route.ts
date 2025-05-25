@@ -1,4 +1,8 @@
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { prisma } from '@/lib/prisma';
+import { validateFeedback } from '@/lib/validations';
+import { authOptions } from '@/lib/auth';
 
 // Mock data for demonstration
 const mockFeedback = [
@@ -59,6 +63,58 @@ export async function GET() {
     console.error('Error fetching feedback:', error);
     return NextResponse.json(
       { error: 'Failed to fetch feedback' },
+      { status: 500 }
+    );
+  }
+}
+
+// Extend the session type to include our custom fields
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+      role?: string;
+    }
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    const validation = validateFeedback(body);
+
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: 'Invalid feedback data', details: validation.errors },
+        { status: 400 }
+      );
+    }
+
+    // At this point, validation.data is guaranteed to exist
+    const feedback = await prisma.feedback.create({
+      data: {
+        ...validation.data,
+        interviewerId: session.user.id,
+      },
+    });
+
+    return NextResponse.json(feedback);
+  } catch (error) {
+    console.error('Error submitting feedback:', error);
+    return NextResponse.json(
+      { error: 'Failed to submit feedback' },
       { status: 500 }
     );
   }

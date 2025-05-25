@@ -4,15 +4,26 @@ import React from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
-interface InterviewCalendarProps {
-  value: Date;
-  onChange: (date: Date) => void;
+interface Interview {
+  id: string;
+  candidate: string;
+  position: string;
+  time: string;
+  type: string;
+  status: 'Scheduled' | 'Completed' | 'Cancelled';
+  date: string;
 }
 
-export function InterviewCalendar({ value, onChange }: InterviewCalendarProps) {
+interface InterviewCalendarProps {
+  date: Date;
+  onDateChange: (date: Date) => void;
+  interviews: Interview[];
+}
+
+export function InterviewCalendar({ date, onDateChange, interviews }: InterviewCalendarProps) {
   const handleChange = (newValue: any) => {
     if (newValue instanceof Date) {
-      onChange(newValue);
+      onDateChange(newValue);
     }
   };
 
@@ -89,7 +100,7 @@ export function InterviewCalendar({ value, onChange }: InterviewCalendarProps) {
       `}</style>
       <Calendar
         onChange={handleChange}
-        value={value}
+        value={date}
         className="w-full border-none"
         minDetail="month"
         next2Label={null}

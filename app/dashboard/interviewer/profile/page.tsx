@@ -109,7 +109,7 @@ export default function ProfilePage() {
         <div>
           {isEditing ? (
             <input
-              className="text-4xl font-bold text-gray-900 border-b border-gray-400 focus:outline-none focus:border-primary"
+              className="text-4xl font-bold text-gray-900 border-b border-gray-400 focus:outline-none focus:border-gray-400"
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
             />
@@ -136,7 +136,7 @@ export default function ProfilePage() {
             <strong>Bio:</strong>{" "}
             {isEditing ? (
               <textarea
-                className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:border-primary"
+                className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:border-gray-300"
                 rows={4}
                 value={editBio}
                 onChange={(e) => setEditBio(e.target.value)}
@@ -167,7 +167,7 @@ export default function ProfilePage() {
           <>
             <button
               onClick={handleSave}
-              className="px-6 py-3 bg-primary text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               Save
             </button>
@@ -185,7 +185,7 @@ export default function ProfilePage() {
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="px-6 py-3 bg-primary text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-primary"
+            className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Edit Profile
           </button>

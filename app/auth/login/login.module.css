@@ -14,7 +14,7 @@
 .container {
   display: flex;
   height: 100vh;
-  font-family: 'Times New Roman';
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 .leftSection {
@@ -29,19 +29,27 @@
 
 .rightSection {
   flex: 1.7;
+  background-image: url('/images/image1.png');
   background-size: cover;
   background-position: center;
   position: relative;
   background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .formContainer {
   width: 80%;
   max-width: 400px;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .title {
-  color: #1a237e;
+  color: #667eea;
   font-size: 2.5em;
   margin-bottom: 0.5em;
 }
@@ -58,62 +66,141 @@
 .label {
   display: block;
   margin-bottom: 0.5em;
-  color:#1a237e;
+  color: #667eea;
+  font-weight: 500;
 }
 
-.input,
-.select {
+.input {
   width: 100%;
   padding: 0.8em;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  color: black;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 1em;
+  transition: border-color 0.2s;
 }
 
-.optionsContainer {
+.input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.buttonContent {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5em;
+  justify-content: center;
+  gap: 8px;
 }
 
-.rememberMe {
-  display: flex;
-  align-items: center;
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
 }
 
-.rememberMe input[type="checkbox"] {
-  margin-right: 0.5em;
-}
-
-.rememberMe label {
-  color: #666;
-}
-
-.resetPasswordLink {
-  color: #1a237e;
-  text-decoration: none;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .signInButton {
   width: 100%;
   padding: 1em;
-  background-color: #1a237e;
+  background-color: #667eea;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 1.1em;
+  margin-top: 1em;
+  transition: background-color 0.2s;
+}
+
+.signInButton:hover {
+  background-color: #5a67d8;
+}
+
+.signInButton:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.signInButton.loading {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.signInButton.loading:hover {
+  background-color: var(--primary-color);
+}
+
+.errorMessage {
+  color: #e53e3e;
+  background-color: #fff5f5;
+  padding: 0.8em;
+  border-radius: 6px;
+  margin-bottom: 1em;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.backButton {
+  width: 100%;
+  padding: 1em;
+  background-color: transparent;
+  color: #667eea;
+  border: 1px solid #667eea;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 1em;
+  transition: all 0.2s;
+}
+
+.backButton:hover {
+  background-color: #f7fafc;
+}
+
+.forgotPassword {
+  text-align: right;
+  margin: 1em 0;
+}
+
+.forgotPasswordLink {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 0.9em;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.forgotPasswordLink:hover {
+  color: #5a67d8;
+  text-decoration: underline;
 }
 
 .signUpText {
   text-align: center;
   margin-top: 2em;
-  color: #666;
+  color: #4a5568;
 }
 
 .signUpText a {
-  color: #1a237e;
+  color: #667eea;
   text-decoration: none;
+  transition: color 0.2s;
+}
+
+.signUpText a:hover {
+  color: #5a67d8;
 }
 
 .textOverlay {
@@ -127,10 +214,9 @@
 }
 
 .highlightText {
-  color: #ffeb3b;
+  color: #f6e05e;
 }
 
-/* Add a fade-in animation */
 @keyframes fadeIn {
   from {
     opacity: 0;

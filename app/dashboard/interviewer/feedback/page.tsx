@@ -135,9 +135,9 @@ export default function FeedbackPage() {
             </label>
             <select
               id="recommendation"
+              className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-gray-900 font-medium"
               value={filterRecommendation}
               onChange={(e) => setFilterRecommendation(e.target.value)}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-gray-900 font-medium"
             >
               <option value="" className="text-gray-900">All</option>
               <option value="Strong Hire" className="text-gray-900">Strong Hire</option>

@@ -64,11 +64,11 @@ interface StatCardProps {
 }
 
 const StatCard = ({ title, value, change, isPositive }: StatCardProps) => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
-    <h3 className="text-sm font-medium text-gray-600">{title}</h3>
-    <p className="mt-2 text-3xl font-bold text-gray-900">{value}</p>
+  <div className="bg-white rounded-xl shadow-sm border border-hero-border p-6 hover:shadow-md transition-shadow duration-200">
+    <h3 className="text-sm font-medium text-hero-subtext">{title}</h3>
+    <p className="mt-2 text-3xl font-bold text-hero-text">{value}</p>
     <div className="mt-2 flex items-center">
-      <span className={`text-sm font-medium ${isPositive ? 'text-emerald-600' : 'text-rose-600'}`}>
+      <span className={`text-sm font-medium ${isPositive ? 'text-hero-primary' : 'text-rose-600'}`}>
         {change}
       </span>
     </div>
@@ -83,22 +83,22 @@ interface JobCardProps {
 }
 
 const JobCard = ({ title, department, applicants, status }: JobCardProps) => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:shadow-md transition-shadow duration-200">
+  <div className="bg-white rounded-xl shadow-sm border border-hero-border p-4 hover:shadow-md transition-shadow duration-200">
     <div className="flex justify-between items-start">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <p className="text-sm text-gray-600">{department}</p>
+        <h3 className="text-lg font-semibold text-hero-text">{title}</h3>
+        <p className="text-sm text-hero-subtext">{department}</p>
       </div>
       <span className={`px-3 py-1 text-xs font-medium rounded-full ${
-        status === 'Open' ? 'bg-emerald-50 text-emerald-700' :
+        status === 'Open' ? 'bg-hero-primary-light text-hero-primary' :
         status === 'Closed' ? 'bg-rose-50 text-rose-700' :
-        'bg-gray-50 text-gray-700'
+        'bg-hero-muted text-hero-subtext'
       }`}>
         {status}
       </span>
     </div>
     <div className="mt-4">
-      <p className="text-sm font-medium text-gray-600">{applicants} applicants</p>
+      <p className="text-sm font-medium text-hero-subtext">{applicants} applicants</p>
     </div>
   </div>
 );
@@ -195,7 +195,7 @@ export default function DashboardPage() {
   ]);
 
   return (
-    <div className="space-y-8 p-6 bg-gray-50 min-h-screen">
+    <div className="space-y-8 p-6 bg-hero-muted min-h-screen">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Active Job Postings"
@@ -224,8 +224,8 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Job Postings</h2>
+        <div className="bg-white rounded-xl shadow-sm border border-hero-border p-6">
+          <h2 className="text-xl font-semibold text-hero-text mb-6">Recent Job Postings</h2>
           <div className="space-y-4">
             {recentJobs.map((job, index) => (
               <JobCard key={index} {...job} />
@@ -233,27 +233,27 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Upcoming Interviews</h2>
+        <div className="bg-white rounded-xl shadow-sm border border-hero-border p-6">
+          <h2 className="text-xl font-semibold text-hero-text mb-6">Upcoming Interviews</h2>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex items-center justify-between p-4 bg-hero-muted rounded-lg border border-hero-border">
               <div>
-                <h3 className="font-semibold text-gray-900">John Smith</h3>
-                <p className="text-sm text-gray-600">Senior Software Engineer</p>
+                <h3 className="font-semibold text-hero-text">John Smith</h3>
+                <p className="text-sm text-hero-subtext">Senior Software Engineer</p>
               </div>
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">Today, 2:00 PM</p>
-                <p className="text-xs text-gray-600">Technical Round</p>
+                <p className="text-sm font-medium text-hero-text">Today, 2:00 PM</p>
+                <p className="text-xs text-hero-subtext">Technical Round</p>
               </div>
             </div>
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <div className="flex items-center justify-between p-4 bg-hero-muted rounded-lg border border-hero-border">
               <div>
-                <h3 className="font-semibold text-gray-900">Sarah Johnson</h3>
-                <p className="text-sm text-gray-600">Product Manager</p>
+                <h3 className="font-semibold text-hero-text">Sarah Johnson</h3>
+                <p className="text-sm text-hero-subtext">Product Manager</p>
               </div>
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">Tomorrow, 11:00 AM</p>
-                <p className="text-xs text-gray-600">HR Round</p>
+                <p className="text-sm font-medium text-hero-text">Tomorrow, 11:00 AM</p>
+                <p className="text-xs text-hero-subtext">HR Round</p>
               </div>
             </div>
           </div>

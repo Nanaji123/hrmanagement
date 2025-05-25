@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { Star } from 'lucide-react';
+import { InterviewFeedbackData } from '../types/index';
 
 interface FeedbackFormProps {
   interviewId: string;
@@ -9,31 +10,18 @@ interface FeedbackFormProps {
   onCancel: () => void;
 }
 
-interface FeedbackData {
-  technicalSkills: number;
-  communication: number;
-  problemSolving: number;
-  culturalFit: number;
-  overallRating: number;
-  strengths: string;
-  weaknesses: string;
-  comments: string;
-  recommendation: 'Strong Hire' | 'Hire' | 'No Hire' | 'Strong No Hire';
-}
-
-type RatingCategory = 'technicalSkills' | 'communication' | 'problemSolving' | 'culturalFit' | 'overallRating';
+type RatingCategory = 'technicalSkills' | 'communication' | 'problemSolving' | 'cultureFit';
 
 export default function FeedbackForm({ interviewId, candidateName, onSubmit, onCancel }: FeedbackFormProps) {
-  const [feedback, setFeedback] = useState<FeedbackData>({
+  const [feedback, setFeedback] = useState<InterviewFeedbackData>({
     technicalSkills: 0,
     communication: 0,
     problemSolving: 0,
-    culturalFit: 0,
-    overallRating: 0,
+    cultureFit: 0,
     strengths: '',
     weaknesses: '',
-    comments: '',
-    recommendation: 'Hire'
+    notes: '',
+    recommendation: 'Hold'
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -109,8 +97,7 @@ export default function FeedbackForm({ interviewId, candidateName, onSubmit, onC
           <RatingInput category="technicalSkills" label="Technical Skills" />
           <RatingInput category="communication" label="Communication" />
           <RatingInput category="problemSolving" label="Problem Solving" />
-          <RatingInput category="culturalFit" label="Cultural Fit" />
-          <RatingInput category="overallRating" label="Overall Rating" />
+          <RatingInput category="cultureFit" label="Cultural Fit" />
         </div>
 
         <div className="mt-6 space-y-4">
@@ -145,14 +132,14 @@ export default function FeedbackForm({ interviewId, candidateName, onSubmit, onC
           </div>
 
           <div>
-            <label htmlFor="comments" className="block text-sm font-medium text-gray-700">
-              Additional Comments
+            <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+              Additional Notes
             </label>
             <textarea
-              id="comments"
-              name="comments"
+              id="notes"
+              name="notes"
               rows={4}
-              value={feedback.comments}
+              value={feedback.notes}
               onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
@@ -172,8 +159,8 @@ export default function FeedbackForm({ interviewId, candidateName, onSubmit, onC
             >
               <option value="Strong Hire">Strong Hire</option>
               <option value="Hire">Hire</option>
+              <option value="Hold">Hold</option>
               <option value="No Hire">No Hire</option>
-              <option value="Strong No Hire">Strong No Hire</option>
             </select>
           </div>
         </div>
