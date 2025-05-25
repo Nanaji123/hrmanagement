@@ -1,93 +1,141 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import styles from './login.module.css';
 
-const LoginPage = () => {
+interface User {
+  email: string;
+  password: string;
+  role: 'hr_manager' | 'hr_recruiter' | 'interviewer';
+}
+
+export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [role, setRole] = useState<'hr_manager' | 'hr_recruiter' | 'interviewer' | ''>('');
-  const [loginError, setLoginError] = useState<boolean>(false);
+  const searchParams = useSearchParams();
+  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState<User['role']>('interviewer');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const validCredentials = {
-    hr_manager: { email: 'manager@example.com', password: 'managerpass', path: '/dashboard/hiring_manager' },
-    hr_recruiter: { email: 'recruiter@example.com', password: 'recruiterpass', path: '/dashboard/HR_RECRUiTER' },
-    interviewer: { email: 'interviewer@example.com', password: 'interviewerpass', path: '/dashboard/interviewer' }
-  };
+  // Calculate callback URL after role state is initialized
+  const defaultCallbackUrl = role === 'interviewer' ? '/interviewer/dashboard' : '/dashboard';
+  const callbackUrl = searchParams.get('callbackUrl') || defaultCallbackUrl;
 
-  const handleLogin = () => {
-    // Check if a role is selected
-    if (role === '') {
-      setLoginError(true);
-      return;
+  // Update callback URL when role changes
+  useEffect(() => {
+    const newCallbackUrl = role === 'interviewer' ? '/interviewer/dashboard' : '/dashboard';
+    if (searchParams.get('callbackUrl') !== newCallbackUrl) {
+      router.replace(`/auth/login?callbackUrl=${newCallbackUrl}`);
     }
-    
-    // Find the correct role based on the selected value
-    const selectedRoleData = validCredentials[role];
+  }, [role, router, searchParams]);
 
-    if (selectedRoleData && email === selectedRoleData.email && password === selectedRoleData.password) {
-      setLoginError(false);
-      router.push(selectedRoleData.path);
-    } else {
-      setLoginError(true);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        role,
+        redirect: false,
+        callbackUrl,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+      } else if (result?.url) {
+        router.push(result.url);
+      }
+    } catch (err) {
+      setError('An error occurred during login');
+      console.error('Login error:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className={`${styles.container} ${styles.fadeIn}`}>
-      {/* Left Section: Login Form */}
+    <div className={styles.container}>
       <div className={styles.leftSection}>
         <div className={styles.formContainer}>
-          <h1 className={styles.title}>Login</h1>
-          <p className={styles.subtitle}>Login to your account.</p>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.label}>E-mail Address</label>
-            <input type="email" id="email" className={styles.input} value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>Password</label>
-            <input type="password" id="password" className={styles.input} value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-
-          {/* Role Dropdown */}
-          <div className={styles.inputGroup}>
-            <label htmlFor="role" className={styles.label}>Role</label>
-            <select id="role" className={styles.select} value={role} onChange={(e) => setRole(e.target.value as 'hr_manager' | 'hr_recruiter' | 'interviewer' | '')}>
-              <option value="">Select Role</option>
-              <option value="hr_manager">HR Manager</option>
-              <option value="hr_recruiter">HR Recruiter</option>
-              <option value="interviewer">Interviewer</option>
-            </select>
-          </div>
-
-          {loginError && <p style={{ color: 'red', marginBottom: '1em' }}>Invalid email, password, or role.</p>}
-
-          <div className={styles.optionsContainer}>
-            <div className={styles.rememberMe}>
-              <input type="checkbox" id="remember" />
-              <label htmlFor="remember">Remember me</label>
+          <h1 className={styles.title}>HR Portal Login</h1>
+          <p className={styles.subtitle}>Select your role and sign in to continue</p>
+          <form onSubmit={handleLogin}>
+            <div className={styles.inputGroup}>
+              <label className={styles.label} htmlFor="email">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                className={styles.input}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                aria-label="Email address"
+                aria-describedby={error ? "login-error" : undefined}
+              />
             </div>
-            <a href="#" className={styles.resetPasswordLink}>Reset Password?</a>
-          </div>
-
-          <button className={styles.signInButton} onClick={handleLogin}>Sign In</button>
-
-          <p className={styles.signUpText}>
-            Don't have an account yet? <a href="/auth/signup" className={styles.signUpText}>Sign Up.</a>
-          </p>
+            <div className={styles.inputGroup}>
+              <label className={styles.label} htmlFor="password">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                className={styles.input}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                aria-label="Password"
+                aria-describedby={error ? "login-error" : undefined}
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <label className={styles.label} htmlFor="role">
+                Role
+              </label>
+              <select
+                id="role"
+                className={styles.input}
+                value={role}
+                onChange={(e) => setRole(e.target.value as User['role'])}
+                required
+                aria-label="Select your role"
+              >
+                <option value="hr_manager">HR Manager</option>
+                <option value="hr_recruiter">HR Recruiter</option>
+                <option value="interviewer">Interviewer</option>
+              </select>
+            </div>
+            {error && (
+              <div 
+                className={styles.errorMessage} 
+                id="login-error"
+                role="alert"
+                aria-live="polite"
+              >
+                {error}
+              </div>
+            )}
+            <button
+              type="submit"
+              className={styles.signInButton}
+              disabled={isLoading}
+              aria-busy={isLoading}
+            >
+              {isLoading ? 'Signing in...' : 'Sign In'}
+            </button>
+          </form>
         </div>
       </div>
-
-      {/* Right Section: Image */}
-      <div className={styles.rightSection} style={{ backgroundImage: 'url("/images/image1.png")' }}>
-        {/* Text overlay on image */}
-      </div>
+      <div className={styles.rightSection} />
     </div>
   );
-};
-
-export default LoginPage;
+}

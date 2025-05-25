@@ -12,7 +12,11 @@ import {
   UserCircle, 
   BarChart2,
   LogOut,
+<<<<<<< HEAD
   Users as UserGroupIcon
+=======
+  Users2
+>>>>>>> 01724f771f87ec80b4867ac9f1a7c17ca073a3ac
 } from 'lucide-react';
 
 type UserRole = 'hr_manager' | 'hr_recruiter' | 'interviewer';
@@ -25,6 +29,58 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
+<<<<<<< HEAD
+=======
+  // HR Manager items
+  {
+    name: 'Dashboard',
+    href: '/dashboard/hiring_manager',
+    icon: LayoutDashboard,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Profile',
+    href: '/dashboard/hiring_manager/profile',
+    icon: UserCircle,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Job Postings',
+    href: '/dashboard/hiring_manager/jobs',
+    icon: Briefcase,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Candidates',
+    href: '/dashboard/hiring_manager/candidates',
+    icon: Users,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Interviews',
+    href: '/dashboard/hiring_manager/interviews',
+    icon: Calendar,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Feedback',
+    href: '/dashboard/hiring_manager/feedback',
+    icon: FileText,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Team',
+    href: '/dashboard/hiring_manager/team',
+    icon: Users2,
+    role: 'hr_manager'
+  },
+  {
+    name: 'Analytics',
+    href: '/dashboard/hiring_manager/analytics',
+    icon: BarChart2,
+    role: 'hr_manager'
+  },
+>>>>>>> 01724f771f87ec80b4867ac9f1a7c17ca073a3ac
   // HR Recruiter items
   {
     name: 'Dashboard',
@@ -109,7 +165,7 @@ const DynamicNav: React.FC<DynamicNavProps> = ({
 
   return (
     <div
-      className={`fixed left-0 top-0 h-screen bg-white border-r border-gray-100 transition-all duration-300 ease-in-out z-50 shadow-sm ${
+      className={`fixed left-0 top-0 h-screen bg-white border-r border-gray-100 transition-all duration-300 ease-in-out z-50  ${
         isExpanded ? 'w-64' : 'w-20'
       }`}
       onMouseEnter={handleMouseEnter}
@@ -130,11 +186,13 @@ const DynamicNav: React.FC<DynamicNavProps> = ({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center p-3 rounded-lg transition-all duration-200 ${
-                  isActive
-                    ? 'bg-emerald-50 text-emerald-600 border-l-4 border-emerald-500'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-emerald-600'
-                } ${isExpanded ? 'space-x-3' : 'justify-center'}`}
+                className={`flex items-center p-2 rounded-lg group ${
+                  isActive 
+                    ? 'bg-emerald-50 text-emerald-600 font-semibold' 
+                    : 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-600'
+                } transition-colors duration-200 ${
+                  isExpanded ? 'space-x-3' : 'justify-center'
+                }`}
               >
                 <item.icon className="h-5 w-5" />
                 {isExpanded && (
@@ -146,13 +204,17 @@ const DynamicNav: React.FC<DynamicNavProps> = ({
         </nav>
         <div className="mt-8">
           <button
+<<<<<<< HEAD
             type="button"
             className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full text-gray-600 hover:bg-gray-50 hover:text-red-600 ${
+=======
+            className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full font-semibold text-gray-600 hover:bg-emerald-50 hover:text-red-600 ${
+>>>>>>> 01724f771f87ec80b4867ac9f1a7c17ca073a3ac
               isExpanded ? 'space-x-3' : 'justify-center'
             }`}
             onClick={handleLogout}
           >
-            <LogOut className="h-5 w-5" />
+            <LogOut className="h-5 w-5 text-gray-600" />
             {isExpanded && (
               <span className="font-medium">Logout</span>
             )}

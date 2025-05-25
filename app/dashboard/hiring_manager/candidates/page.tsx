@@ -61,20 +61,18 @@ export default function CandidatesPage() {
   }, [candidates]);
 
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showRejected, setShowRejected] = useState(false);
 
-  const filteredCandidates = candidates.filter(candidate => {
-    const matchesStatus = selectedStatus === 'all' || candidate.status === selectedStatus;
-    const matchesSearch = candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         candidate.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         candidate.position.toLowerCase().includes(searchQuery.toLowerCase());
-    const isRejected = candidate.status === 'Rejected';
-    return (showRejected ? isRejected : !isRejected) && matchesStatus && matchesSearch;
-  });
+  // Filter candidates based on search query
+  const filteredCandidates = candidates.filter(candidate =>
+    candidate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    candidate.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    candidate.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const getStatusColor = (status: Candidate['status']) => {
     switch (status) {
@@ -113,6 +111,15 @@ export default function CandidatesPage() {
     }
   };
 
+  const handleAcceptBack = (candidate: Candidate) => {
+    setCandidates(candidates.map(c => 
+      c.id === candidate.id 
+        ? { ...c, status: 'Applied', lastUpdated: new Date().toISOString().split('T')[0] }
+        : c
+    ));
+    setShowRejected(false); // Switch back to active candidates view
+  };
+
   const rejectedCount = candidates.filter(c => c.status === 'Rejected').length;
 
   return (
@@ -125,45 +132,13 @@ export default function CandidatesPage() {
             placeholder="Search candidates..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-black"
           />
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
-          >
-            <option value="all">All Status</option>
-            <option value="Applied">Applied</option>
-            <option value="Screening">Screening</option>
-            <option value="Interview">Interview</option>
-            <option value="Offered">Offered</option>
-            <option value="Hired">Hired</option>
-            <option value="Rejected">Rejected</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="flex justify-between items-center">
-        <div className="flex space-x-4">
           <button
-            onClick={() => setShowRejected(false)}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-              !showRejected 
-                ? 'bg-emerald-600 text-white hover:bg-emerald-700' 
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-            }`}
+            onClick={() => setShowRejected(!showRejected)}
+            className="px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 font-medium"
           >
-            Active Candidates
-          </button>
-          <button
-            onClick={() => setShowRejected(true)}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-              showRejected 
-                ? 'bg-rose-600 text-white hover:bg-rose-700' 
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-            }`}
-          >
-            Rejected Candidates ({rejectedCount})
+            {showRejected ? 'Active Candidates' : 'Rejected Candidates'}
           </button>
         </div>
       </div>
@@ -173,71 +148,81 @@ export default function CandidatesPage() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Email</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Position</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Applied Date</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Last Updated</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredCandidates.map((candidate) => (
-              <tr key={candidate.id} className="hover:bg-gray-50 transition-colors duration-150">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-10 w-10">
-                      <div className="h-10 w-10 rounded-full bg-emerald-50 flex items-center justify-center">
-                        <span className="text-emerald-700 text-sm font-medium">
-                          {candidate.name.split(' ').map(n => n[0]).join('')}
-                        </span>
+            {filteredCandidates
+              .filter(candidate => showRejected ? candidate.status === 'Rejected' : candidate.status !== 'Rejected')
+              .map((candidate) => (
+                <tr key={candidate.id} className="hover:bg-gray-50 transition-colors duration-150">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10">
+                        <div className="h-10 w-10 rounded-full bg-emerald-50 flex items-center justify-center">
+                          <span className="text-emerald-700 text-sm font-medium">
+                            {candidate.name.split(' ').map(n => n[0]).join('')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-semibold text-gray-900">{candidate.name}</div>
+                        <div className="text-sm text-gray-600">{candidate.email}</div>
                       </div>
                     </div>
-                    <div className="ml-4">
-                      <div className="text-sm font-semibold text-gray-900">{candidate.name}</div>
-                      <div className="text-sm text-gray-600">{candidate.email}</div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{candidate.position}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(candidate.status)}`}>
-                    {candidate.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{candidate.appliedDate}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{candidate.lastUpdated}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  {!showRejected && (
-                    <>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{candidate.position}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(candidate.status)}`}>
+                      {candidate.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-600">{candidate.appliedDate}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-600">{candidate.lastUpdated}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {!showRejected && (
+                      <>
+                        <button 
+                          onClick={() => {
+                            setSelectedCandidate(candidate);
+                            setShowStatusModal(true);
+                          }}
+                          className="text-emerald-600 hover:text-emerald-900 font-medium mr-3"
+                        >
+                          Update Status
+                        </button>
+                        <button 
+                          onClick={() => {
+                            setSelectedCandidate(candidate);
+                            setShowRejectModal(true);
+                          }}
+                          className="text-rose-600 hover:text-rose-900 font-medium"
+                        >
+                          Reject
+                        </button>
+                      </>
+                    )}
+                    {showRejected && (
                       <button 
-                        onClick={() => {
-                          setSelectedCandidate(candidate);
-                          setShowStatusModal(true);
-                        }}
-                        className="text-emerald-600 hover:text-emerald-900 font-medium mr-3"
+                        onClick={() => handleAcceptBack(candidate)}
+                        className="text-emerald-600 hover:text-emerald-900 font-medium"
                       >
-                        Update Status
+                        Accept Back
                       </button>
-                      <button 
-                        onClick={() => {
-                          setSelectedCandidate(candidate);
-                          setShowRejectModal(true);
-                        }}
-                        className="text-rose-600 hover:text-rose-900 font-medium"
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
+                    )}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
