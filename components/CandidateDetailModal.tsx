@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { validateFeedback, type FeedbackFormData } from '@/lib/validations';
 
 interface Candidate {
   id: string;
@@ -17,7 +18,7 @@ interface CandidateDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   candidate: Candidate;
-  onSubmitFeedback: (feedback: any) => Promise<void>;
+  onSubmitFeedback: (feedback: FeedbackFormData) => Promise<void>;
 }
 
 export function CandidateDetailModal({
@@ -26,7 +27,7 @@ export function CandidateDetailModal({
   candidate,
   onSubmitFeedback,
 }: CandidateDetailModalProps) {
-  const [feedback, setFeedback] = useState({
+  const [feedback, setFeedback] = useState<FeedbackFormData>({
     technicalSkills: 0,
     problemSolving: 0,
     communication: 0,
@@ -37,26 +38,58 @@ export function CandidateDetailModal({
     recommendation: 'Hold',
   });
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (
-    field: string,
+    field: keyof FeedbackFormData,
     value: string | number
   ) => {
-    setFeedback(prev => ({
+    setFeedback((prev: FeedbackFormData) => ({
       ...prev,
       [field]: value
     }));
+    // Clear error when field is modified
+    if (errors[field as string]) {
+      setErrors((prev: Record<string, string>) => {
+        const newErrors = { ...prev };
+        delete newErrors[field as string];
+        return newErrors;
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrors({});
+
+    const validation = validateFeedback(feedback);
+    if (!validation.success && validation.errors) {
+      const newErrors: Record<string, string> = {};
+      validation.errors.forEach((error: { field: string; message: string }) => {
+        newErrors[error.field] = error.message;
+      });
+      setErrors(newErrors);
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!validation.success || !validation.data) {
+      setErrors({
+        submit: 'Invalid feedback data'
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      await onSubmitFeedback(feedback);
+      await onSubmitFeedback(validation.data);
       onClose();
-    } catch (error) {
-      // Optionally handle error
+    } catch (error: unknown) {
+      setErrors({
+        submit: error instanceof Error ? error.message : 'Failed to submit feedback'
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -94,7 +127,7 @@ export function CandidateDetailModal({
                   value={feedback.technicalSkills}
                   onChange={(e) => handleChange('technicalSkills', Number(e.target.value))}
                   className={`w-full rounded-md border ${
-                    'border-gray-300'
+                    errors.technicalSkills ? 'border-red-500' : 'border-gray-300'
                   } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
                 >
                   <option value={0}>Select rating</option>
@@ -104,6 +137,9 @@ export function CandidateDetailModal({
                     </option>
                   ))}
                 </select>
+                {errors.technicalSkills && (
+                  <p className="mt-1 text-sm text-red-600">{errors.technicalSkills}</p>
+                )}
               </div>
 
               <div>
@@ -114,7 +150,7 @@ export function CandidateDetailModal({
                   value={feedback.problemSolving}
                   onChange={(e) => handleChange('problemSolving', Number(e.target.value))}
                   className={`w-full rounded-md border ${
-                    'border-gray-300'
+                    errors.problemSolving ? 'border-red-500' : 'border-gray-300'
                   } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
                 >
                   <option value={0}>Select rating</option>
@@ -124,6 +160,9 @@ export function CandidateDetailModal({
                     </option>
                   ))}
                 </select>
+                {errors.problemSolving && (
+                  <p className="mt-1 text-sm text-red-600">{errors.problemSolving}</p>
+                )}
               </div>
 
               <div>
@@ -134,7 +173,7 @@ export function CandidateDetailModal({
                   value={feedback.communication}
                   onChange={(e) => handleChange('communication', Number(e.target.value))}
                   className={`w-full rounded-md border ${
-                    'border-gray-300'
+                    errors.communication ? 'border-red-500' : 'border-gray-300'
                   } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
                 >
                   <option value={0}>Select rating</option>
@@ -144,6 +183,9 @@ export function CandidateDetailModal({
                     </option>
                   ))}
                 </select>
+                {errors.communication && (
+                  <p className="mt-1 text-sm text-red-600">{errors.communication}</p>
+                )}
               </div>
 
               <div>
@@ -154,7 +196,7 @@ export function CandidateDetailModal({
                   value={feedback.cultureFit}
                   onChange={(e) => handleChange('cultureFit', Number(e.target.value))}
                   className={`w-full rounded-md border ${
-                    'border-gray-300'
+                    errors.cultureFit ? 'border-red-500' : 'border-gray-300'
                   } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
                 >
                   <option value={0}>Select rating</option>
@@ -164,6 +206,9 @@ export function CandidateDetailModal({
                     </option>
                   ))}
                 </select>
+                {errors.cultureFit && (
+                  <p className="mt-1 text-sm text-red-600">{errors.cultureFit}</p>
+                )}
               </div>
             </div>
 
@@ -174,76 +219,90 @@ export function CandidateDetailModal({
               <textarea
                 value={feedback.strengths}
                 onChange={(e) => handleChange('strengths', e.target.value)}
-                rows={3}
                 className={`w-full rounded-md border ${
-                  'border-gray-300'
+                  errors.strengths ? 'border-red-500' : 'border-gray-300'
                 } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
-                placeholder="List the candidate's key strengths..."
+                rows={3}
               />
+              {errors.strengths && (
+                <p className="mt-1 text-sm text-red-600">{errors.strengths}</p>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Areas for Improvement
+                Weaknesses
               </label>
               <textarea
                 value={feedback.weaknesses}
                 onChange={(e) => handleChange('weaknesses', e.target.value)}
-                rows={3}
                 className={`w-full rounded-md border ${
-                  'border-gray-300'
+                  errors.weaknesses ? 'border-red-500' : 'border-gray-300'
                 } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
-                placeholder="List areas where the candidate can improve..."
+                rows={3}
               />
+              {errors.weaknesses && (
+                <p className="mt-1 text-sm text-red-600">{errors.weaknesses}</p>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Additional Notes
+                Notes
               </label>
               <textarea
                 value={feedback.notes}
                 onChange={(e) => handleChange('notes', e.target.value)}
-                rows={3}
                 className={`w-full rounded-md border ${
-                  'border-gray-300'
+                  errors.notes ? 'border-red-500' : 'border-gray-300'
                 } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
-                placeholder="Any additional observations or comments..."
+                rows={3}
               />
+              {errors.notes && (
+                <p className="mt-1 text-sm text-red-600">{errors.notes}</p>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Final Recommendation
+                Recommendation
               </label>
               <select
                 value={feedback.recommendation}
                 onChange={(e) => handleChange('recommendation', e.target.value)}
                 className={`w-full rounded-md border ${
-                  'border-gray-300'
+                  errors.recommendation ? 'border-red-500' : 'border-gray-300'
                 } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
               >
-                <option value="Hold">Select recommendation</option>
                 <option value="Strong Hire">Strong Hire</option>
                 <option value="Hire">Hire</option>
                 <option value="Hold">Hold</option>
                 <option value="No Hire">No Hire</option>
+                <option value="Strong No Hire">Strong No Hire</option>
               </select>
+              {errors.recommendation && (
+                <p className="mt-1 text-sm text-red-600">{errors.recommendation}</p>
+              )}
             </div>
 
-            <div className="flex justify-end space-x-4">
+            {errors.submit && (
+              <div className="rounded-md bg-red-50 p-4">
+                <p className="text-sm text-red-600">{errors.submit}</p>
+              </div>
+            )}
+
+            <div className="flex justify-end space-x-3">
               <button
                 type="button"
                 onClick={onClose}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
-                disabled={isSubmitting}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isSubmitting}
+                className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
               </button>

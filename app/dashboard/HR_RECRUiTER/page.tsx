@@ -2,168 +2,172 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
+import { Users, CalendarIcon, CheckCircleIcon, ClockIcon, UserPlusIcon, ChartBarIcon, CogIcon } from 'lucide-react';
 
 interface Candidate {
-  id: string;
+  id: number;
   name: string;
-  department: string;
+  position: string;
   status: string;
-  // Add other fields as needed
+}
+
+interface Interview {
+  id: number;
+  candidate: string;
+  position: string;
+  date: string;
+  time: string;
 }
 
 const HRRecruiterDashboard = () => {
-  const [allCandidates, setAllCandidates] = useState<Candidate[]>([]);
-  const [selectedDepartment, setSelectedDepartment] = useState<string>('all');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedMetric, setSelectedMetric] = useState<string>('applications');
+  const [totalCandidates] = useState(156);
+  const [candidatesInScreening] = useState(24);
+  const [hiredCandidates] = useState(12);
+  const [rejectedCandidates] = useState(8);
 
-  useEffect(() => {
-    // Read from local storage
-    const storedCandidatesString = localStorage.getItem('candidates');
-    const storedCandidates: Candidate[] = storedCandidatesString ? JSON.parse(storedCandidatesString) : [];
-    setAllCandidates(storedCandidates);
-    setLoading(false);
-  }, []);
+  const recentCandidates: Candidate[] = [
+    { id: 1, name: 'John Doe', position: 'Software Engineer', status: 'Hired' },
+    { id: 2, name: 'Jane Smith', position: 'Product Manager', status: 'Interview' },
+    { id: 3, name: 'Mike Johnson', position: 'UX Designer', status: 'Rejected' },
+  ];
 
-  const filteredCandidates = useMemo(() => {
-    if (selectedDepartment === 'all') {
-      return allCandidates;
-    }
-    return allCandidates.filter(candidate => candidate.department === selectedDepartment);
-  }, [allCandidates, selectedDepartment]);
-
-  // Calculate metrics based on filtered candidates
-  const totalCandidates = filteredCandidates.length;
-  const candidatesInScreening = filteredCandidates.filter(candidate => candidate.status === 'Screening').length;
-  const hiredCandidates = filteredCandidates.filter(candidate => candidate.status === 'Hired').length;
-  const rejectedCandidates = filteredCandidates.filter(candidate => candidate.status === 'Rejected').length;
-
-  // Placeholder metrics
-  const openPositions = 15;
-  const timeToFill = 26;
-  const offerAcceptanceRatio = '72.73%';
-  const offerAccepted = 8;
-  const offerProvided = 11;
-  const costPerHire = '$17K';
-  const timeToHire = 15;
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
-          <div className="space-y-4">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-6">
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
-      </div>
-    );
-  }
+  const upcomingInterviews: Interview[] = [
+    { id: 1, candidate: 'Alice Brown', position: 'Frontend Developer', date: '2024-03-20', time: '10:00 AM' },
+    { id: 2, candidate: 'Bob Wilson', position: 'Backend Developer', date: '2024-03-20', time: '2:00 PM' },
+    { id: 3, candidate: 'Carol Davis', position: 'DevOps Engineer', date: '2024-03-21', time: '11:00 AM' },
+  ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-blue-700">HR Recruiter Dashboard</h1>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-2xl font-bold text-gray-900">HR Recruiter Dashboard</h1>
         
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl shadow-sm border border-blue-100">
-          <h3 className="text-lg font-semibold text-blue-700 mb-2">Total Candidates</h3>
-          <p className="text-3xl font-bold text-blue-600">{totalCandidates}</p>
-          <p className="text-sm text-blue-500 mt-2">+12% from last month</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl shadow-sm border border-green-100">
-          <h3 className="text-lg font-semibold text-green-700 mb-2">Active Interviews</h3>
-          <p className="text-3xl font-bold text-green-600">{candidatesInScreening}</p>
-          <p className="text-sm text-green-500 mt-2">8 scheduled for today</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl shadow-sm border border-purple-100">
-          <h3 className="text-lg font-semibold text-purple-700 mb-2">Hired This Month</h3>
-          <p className="text-3xl font-bold text-purple-600">{hiredCandidates}</p>
-          <p className="text-sm text-purple-500 mt-2">+3 from last month</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl shadow-sm border border-orange-100">
-          <h3 className="text-lg font-semibold text-orange-700 mb-2">Pending Reviews</h3>
-          <p className="text-3xl font-bold text-orange-600">{rejectedCandidates}</p>
-          <p className="text-sm text-orange-500 mt-2">5 urgent</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-50">
-          <h2 className="text-xl font-semibold text-blue-700 mb-4">Recent Candidates</h2>
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="flex items-center justify-between p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center text-blue-600 font-semibold">
-                    {i}
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-blue-700">Candidate Name {i}</h4>
-                    <p className="text-sm text-blue-500">Applied for Software Engineer</p>
-                  </div>
-                </div>
-                <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm">New</span>
+        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Candidates</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-1">{totalCandidates}</p>
               </div>
-            ))}
+              <div className="p-3 bg-blue-50 rounded-full">
+                <Users className="h-6 w-6 text-blue-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Active Interviews</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-1">{candidatesInScreening}</p>
+              </div>
+              <div className="p-3 bg-green-50 rounded-full">
+                <CalendarIcon className="h-6 w-6 text-green-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Hired This Month</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-1">{hiredCandidates}</p>
+              </div>
+              <div className="p-3 bg-emerald-50 rounded-full">
+                <CheckCircleIcon className="h-6 w-6 text-emerald-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Pending Reviews</p>
+                <p className="text-2xl font-semibold text-gray-900 mt-1">{rejectedCandidates}</p>
+              </div>
+              <div className="p-3 bg-yellow-50 rounded-full">
+                <ClockIcon className="h-6 w-6 text-yellow-600" />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-50">
-          <h2 className="text-xl font-semibold text-blue-700 mb-4">Upcoming Interviews</h2>
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="flex items-center justify-between p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center text-green-600 font-semibold">
-                    {i}
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Candidates</h2>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+              <div className="divide-y divide-gray-100">
+                {recentCandidates.map((candidate) => (
+                  <div key={candidate.id} className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-900">{candidate.name}</h3>
+                        <p className="text-sm text-gray-500">{candidate.position}</p>
+                      </div>
+                      <span className={`px-2 py-1 text-xs rounded-full ${
+                        candidate.status === 'Hired' ? 'bg-green-50 text-green-700' :
+                        candidate.status === 'Interview' ? 'bg-blue-50 text-blue-700' :
+                        'bg-yellow-50 text-yellow-700'
+                      }`}>
+                        {candidate.status}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-medium text-green-700">Interview with Candidate {i}</h4>
-                    <p className="text-sm text-green-500">Today at 2:00 PM</p>
-                  </div>
-                </div>
-                <span className="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm">Scheduled</span>
+                ))}
               </div>
-            ))}
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Interviews</h2>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100">
+              <div className="divide-y divide-gray-100">
+                {upcomingInterviews.map((interview) => (
+                  <div key={interview.id} className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-900">{interview.candidate}</h3>
+                        <p className="text-sm text-gray-500">{interview.position}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-gray-900">{interview.date}</p>
+                        <p className="text-xs text-gray-500">{interview.time}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-50">
-        <h2 className="text-xl font-semibold text-blue-700 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Link href="/dashboard/HR_RECRUiTER/Candidate_Management" 
-                className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg hover:from-blue-100 hover:to-blue-200 transition-all shadow-sm">
-            <h3 className="font-medium text-blue-700">View All Candidates</h3>
-            <p className="text-sm text-blue-500 mt-1">Manage candidate profiles</p>
-          </Link>
-          <Link href="/dashboard/HR_RECRUiTER/interview_sch"
-                className="p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg hover:from-green-100 hover:to-green-200 transition-all shadow-sm">
-            <h3 className="font-medium text-green-700">Interview Schedule</h3>
-            <p className="text-sm text-green-500 mt-1">View and manage interviews</p>
-          </Link>
-          <div className="p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg hover:from-purple-100 hover:to-purple-200 transition-all shadow-sm">
-            <h3 className="font-medium text-purple-700">Reports</h3>
-            <p className="text-sm text-purple-500 mt-1">View hiring analytics</p>
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Link href="/dashboard/HR_RECRUiTER/candidates/new" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
+              <div className="flex items-center">
+                <UserPlusIcon className="h-5 w-5 text-gray-400" />
+                <span className="ml-2 text-sm font-medium text-gray-900">Add New Candidate</span>
+              </div>
+            </Link>
+            <Link href="/dashboard/HR_RECRUiTER/interviews/schedule" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
+              <div className="flex items-center">
+                <CalendarIcon className="h-5 w-5 text-gray-400" />
+                <span className="ml-2 text-sm font-medium text-gray-900">Schedule Interview</span>
+              </div>
+            </Link>
+            <Link href="/dashboard/HR_RECRUiTER/reports" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
+              <div className="flex items-center">
+                <ChartBarIcon className="h-5 w-5 text-gray-400" />
+                <span className="ml-2 text-sm font-medium text-gray-900">View Reports</span>
+              </div>
+            </Link>
+            <Link href="/dashboard/HR_RECRUiTER/settings" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
+              <div className="flex items-center">
+                <CogIcon className="h-5 w-5 text-gray-400" />
+                <span className="ml-2 text-sm font-medium text-gray-900">Settings</span>
+              </div>
+            </Link>
           </div>
         </div>
       </div>
