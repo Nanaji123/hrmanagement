@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { Users, CalendarIcon, CheckCircleIcon, ClockIcon, UserPlusIcon, ChartBarIcon, CogIcon } from 'lucide-react';
+import { Users, CalendarIcon, CheckCircleIcon, ClockIcon, UserPlusIcon, BarChart2, CogIcon } from 'lucide-react';
 
 interface Candidate {
   id: number;
@@ -144,25 +144,25 @@ const HRRecruiterDashboard = () => {
         <div className="mt-8">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Link href="/dashboard/HR_RECRUiTER/candidates/new" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
+            <Link href="/dashboard/HR_RECRUiTER/Candidate_Management" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
               <div className="flex items-center">
                 <UserPlusIcon className="h-5 w-5 text-gray-400" />
                 <span className="ml-2 text-sm font-medium text-gray-900">Add New Candidate</span>
               </div>
             </Link>
-            <Link href="/dashboard/HR_RECRUiTER/interviews/schedule" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
+            <Link href="/dashboard/HR_RECRUiTER/interview_sch" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
               <div className="flex items-center">
                 <CalendarIcon className="h-5 w-5 text-gray-400" />
                 <span className="ml-2 text-sm font-medium text-gray-900">Schedule Interview</span>
               </div>
             </Link>
-            <Link href="/dashboard/HR_RECRUiTER/reports" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
+            <Link href="/dashboard/HR_RECRUiTER/interview_panel" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
               <div className="flex items-center">
-                <ChartBarIcon className="h-5 w-5 text-gray-400" />
+                <BarChart2 className="h-5 w-5 text-gray-400" />
                 <span className="ml-2 text-sm font-medium text-gray-900">View Reports</span>
               </div>
             </Link>
-            <Link href="/dashboard/HR_RECRUiTER/settings" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
+            <Link href="/dashboard/HR_RECRUiTER/profile" className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:bg-gray-50">
               <div className="flex items-center">
                 <CogIcon className="h-5 w-5 text-gray-400" />
                 <span className="ml-2 text-sm font-medium text-gray-900">Settings</span>

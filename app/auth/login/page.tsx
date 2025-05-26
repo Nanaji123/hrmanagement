@@ -18,12 +18,25 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Calculate callback URL after role state is initialized
-  const defaultCallbackUrl = role === 'interviewer' ? '/interviewer/dashboard' : '/dashboard';
+  const getCallbackUrl = (userRole: UserRole) => {
+    switch (userRole) {
+      case 'hr_manager':
+        return '/dashboard/hiring_manager';
+      case 'hr_recruiter':
+        return '/dashboard/HR_RECRUiTER';
+      case 'interviewer':
+        return '/dashboard/interviewer';
+      default:
+        return '/dashboard/hiring_manager';
+    }
+  };
+
+  const defaultCallbackUrl = getCallbackUrl(role);
   const callbackUrl = searchParams.get('callbackUrl') || defaultCallbackUrl;
 
   // Update callback URL when role changes
   useEffect(() => {
-    const newCallbackUrl = role === 'interviewer' ? '/interviewer/dashboard' : '/dashboard';
+    const newCallbackUrl = getCallbackUrl(role);
     if (searchParams.get('callbackUrl') !== newCallbackUrl) {
       router.replace(`/auth/login?callbackUrl=${newCallbackUrl}`);
     }
@@ -77,6 +90,7 @@ export default function LoginPage() {
                 aria-label="Email address"
                 aria-describedby={error ? "login-error" : undefined}
                 autoComplete="username"
+                suppressHydrationWarning
               />
             </div>
             <div className={styles.inputGroup}>
@@ -93,6 +107,7 @@ export default function LoginPage() {
                 aria-label="Password"
                 aria-describedby={error ? "login-error" : undefined}
                 autoComplete="current-password"
+                suppressHydrationWarning
               />
             </div>
             <div className={styles.inputGroup}>
@@ -106,6 +121,7 @@ export default function LoginPage() {
                 onChange={(e) => setRole(e.target.value as UserRole)}
                 required
                 aria-label="Select your role"
+                suppressHydrationWarning
               >
                 <option value="hr_manager">HR Manager</option>
                 <option value="hr_recruiter">HR Recruiter</option>
@@ -127,6 +143,7 @@ export default function LoginPage() {
               className={styles.signInButton}
               disabled={isLoading}
               aria-busy={isLoading}
+              suppressHydrationWarning
             >
               {isLoading ? 'Signing in...' : 'Sign In'}
             </button>
