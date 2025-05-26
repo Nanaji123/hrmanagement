@@ -1,21 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-
-=======
-=======
->>>>>>> 67eeb8a60e574e7d9a864053e421051c464f9f92
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
@@ -98,15 +83,9 @@ module.exports = {
       },
     },
   },
-<<<<<<< HEAD
-  plugins: [],
-} 
->>>>>>> 01724f771f87ec80b4867ac9f1a7c17ca073a3ac
-=======
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/aspect-ratio'),
   ],
 }
->>>>>>> 67eeb8a60e574e7d9a864053e421051c464f9f92

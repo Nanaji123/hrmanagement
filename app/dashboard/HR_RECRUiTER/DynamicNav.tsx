@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { 
   LayoutDashboard, 
   Briefcase, 
@@ -12,16 +13,8 @@ import {
   UserCircle, 
   BarChart2,
   LogOut,
-<<<<<<< HEAD
-<<<<<<< HEAD
-  Users as UserGroupIcon
-=======
-  Users2
->>>>>>> 01724f771f87ec80b4867ac9f1a7c17ca073a3ac
-=======
   Users2,
   Users as UserGroupIcon
->>>>>>> 67eeb8a60e574e7d9a864053e421051c464f9f92
 } from 'lucide-react';
 
 type UserRole = 'hr_manager' | 'hr_recruiter' | 'interviewer';
@@ -29,18 +22,12 @@ type UserRole = 'hr_manager' | 'hr_recruiter' | 'interviewer';
 interface NavItem {
   name: string;
   href: string;
-  icon: React.FC<React.SVGProps<SVGSVGElement>>;//ElementType;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
   role: UserRole;
 }
 
 const navItems: NavItem[] = [
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
   // HR Manager items
-=======
-    // HR Manager items
->>>>>>> 67eeb8a60e574e7d9a864053e421051c464f9f92
   {
     name: 'Dashboard',
     href: '/dashboard/hiring_manager',
@@ -89,10 +76,6 @@ const navItems: NavItem[] = [
     icon: BarChart2,
     role: 'hr_manager'
   },
-<<<<<<< HEAD
->>>>>>> 01724f771f87ec80b4867ac9f1a7c17ca073a3ac
-=======
->>>>>>> 67eeb8a60e574e7d9a864053e421051c464f9f92
   // HR Recruiter items
   {
     name: 'Dashboard',
@@ -181,10 +164,22 @@ const DynamicNav: React.FC<DynamicNavProps> = ({
     }
   };
 
-  const handleLogout = (): void => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    router.push('/auth/login');
+  const handleLogout = async (): Promise<void> => {
+    try {
+      // Clear local storage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      
+      // Sign out from NextAuth
+      await signOut({ 
+        redirect: true,
+        callbackUrl: '/auth/login'
+      });
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Fallback to manual redirect if signOut fails
+      router.push('/auth/login');
+    }
   };
 
   return (
@@ -198,57 +193,40 @@ const DynamicNav: React.FC<DynamicNavProps> = ({
     >
       <div className="p-4 h-full overflow-y-auto">
         <div className="flex items-center justify-center mb-8 pt-4">
-          <Briefcase className="h-6 w-6 text-emerald-600" />
-          {isExpanded && (
-            <span className="ml-3 text-xl font-semibold text-gray-900">{getRoleTitle()}</span>
-          )}
+          <h1 className={`text-xl font-bold ${isExpanded ? 'block' : 'hidden'}`}>
+            {getRoleTitle()}
+          </h1>
         </div>
         <nav className="space-y-2">
           {filteredNavItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+            const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center p-2 rounded-lg group ${
-                  isActive 
-                    ? 'bg-emerald-50 text-emerald-600 font-semibold' 
-                    : 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-600'
-                } transition-colors duration-200 ${
-                  isExpanded ? 'space-x-3' : 'justify-center'
+                className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+                  isActive
+                    ? 'bg-primary-100 text-primary-600'
+                    : 'text-gray-600 hover:bg-gray-50'
                 }`}
               >
-                <item.icon className="h-5 w-5" />
+                <item.icon className="w-6 h-6" />
                 {isExpanded && (
-                  <span className="font-medium">{item.name}</span>
+                  <span className="ml-3">{item.name}</span>
                 )}
               </Link>
             );
           })}
-        </nav>
-        <div className="mt-8">
           <button
-<<<<<<< HEAD
-<<<<<<< HEAD
-            type="button"
-            className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full text-gray-600 hover:bg-gray-50 hover:text-red-600 ${
-=======
-            className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full font-semibold text-gray-600 hover:bg-emerald-50 hover:text-red-600 ${
->>>>>>> 01724f771f87ec80b4867ac9f1a7c17ca073a3ac
-=======
-            type="button"
-            className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full font-semibold text-gray-600 hover:bg-emerald-50 hover:text-red-600 ${
->>>>>>> 67eeb8a60e574e7d9a864053e421051c464f9f92
-              isExpanded ? 'space-x-3' : 'justify-center'
-            }`}
             onClick={handleLogout}
+            className="flex items-center w-full px-4 py-2 mt-4 text-gray-600 rounded-lg hover:bg-gray-50"
           >
-            <LogOut className="h-5 w-5 text-gray-600" />
+            <LogOut className="w-6 h-6" />
             {isExpanded && (
-              <span className="font-medium">Logout</span>
+              <span className="ml-3">Logout</span>
             )}
           </button>
-        </div>
+        </nav>
       </div>
     </div>
   );
