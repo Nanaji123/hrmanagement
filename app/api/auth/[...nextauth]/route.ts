@@ -1,10 +1,15 @@
 import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/lib/prisma';
 import { compare } from 'bcryptjs';
 
 const handler = NextAuth({
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -47,10 +52,32 @@ const handler = NextAuth({
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.role = user.role;
         token.id = user.id;
+      }
+      if (account?.provider === 'google') {
+        // Handle Google sign-in
+        const existingUser = await prisma.user.findUnique({
+          where: { email: token.email! },
+        });
+        if (existingUser) {
+          token.role = existingUser.role;
+          token.id = existingUser.id;
+        } else {
+          // Create new user from Google account
+          const newUser = await prisma.user.create({
+            data: {
+              email: token.email!,
+              name: token.name!,
+              role: 'INTERVIEWER', // Default role for Google sign-ins
+              password: '', // Empty password for Google users
+            },
+          });
+          token.role = newUser.role;
+          token.id = newUser.id;
+        }
       }
       return token;
     },
@@ -70,6 +97,7 @@ const handler = NextAuth({
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === 'development',
 });
 

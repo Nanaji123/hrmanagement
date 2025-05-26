@@ -5,8 +5,10 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { Candidate } from '../types';
 import FeedbackForm from '../components/FeedbackForm';
+import { useRouter } from "next/navigation";
 
 export default function InterviewsPage() {
+  const router = useRouter();
   const [interviews, setInterviews] = useState<Candidate[]>([]);
   const [selectedInterview, setSelectedInterview] = useState<Candidate | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,6 +17,15 @@ export default function InterviewsPage() {
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const role = localStorage.getItem("userRole");
+      if (role !== "interviewer") {
+        router.push("/auth/login");
+      }
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchInterviews();
@@ -79,20 +90,35 @@ export default function InterviewsPage() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <p className="text-gray-500 text-lg">Loading interviews...</p>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading interviews...</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-center text-red-500">
-          <p className="text-lg">{error}</p>
-          <button onClick={fetchInterviews} className="mt-4 px-4 py-2 bg-primary text-white rounded focus:outline-none focus:ring-2 focus:ring-primary">
-            Retry
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center max-w-sm p-4 bg-red-50 rounded-md">
+          <p className="text-red-600 font-semibold mb-2">Error Loading Interviews</p>
+          <p className="text-red-500 mb-4">{error}</p>
+          <button
+            onClick={fetchInterviews}
+            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            Try Again
           </button>
         </div>
+      </div>
+    );
+  }
+
+  if (interviews.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-600 text-lg">No interviews found.</p>
       </div>
     );
   }

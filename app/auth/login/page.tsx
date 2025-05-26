@@ -5,11 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import styles from './login.module.css';
 
-interface User {
-  email: string;
-  password: string;
-  role: 'hr_manager' | 'hr_recruiter' | 'interviewer';
-}
+type UserRole = 'hr_manager' | 'hr_recruiter' | 'interviewer';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,7 +13,7 @@ export default function LoginPage() {
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<User['role']>('interviewer');
+  const [role, setRole] = useState<UserRole>('interviewer');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,7 +29,7 @@ export default function LoginPage() {
     }
   }, [role, router, searchParams]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
@@ -80,6 +76,7 @@ export default function LoginPage() {
                 required
                 aria-label="Email address"
                 aria-describedby={error ? "login-error" : undefined}
+                autoComplete="username"
               />
             </div>
             <div className={styles.inputGroup}>
@@ -95,6 +92,7 @@ export default function LoginPage() {
                 required
                 aria-label="Password"
                 aria-describedby={error ? "login-error" : undefined}
+                autoComplete="current-password"
               />
             </div>
             <div className={styles.inputGroup}>
@@ -105,7 +103,7 @@ export default function LoginPage() {
                 id="role"
                 className={styles.input}
                 value={role}
-                onChange={(e) => setRole(e.target.value as User['role'])}
+                onChange={(e) => setRole(e.target.value as UserRole)}
                 required
                 aria-label="Select your role"
               >

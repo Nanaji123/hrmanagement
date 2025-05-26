@@ -45,15 +45,15 @@ export function CandidateDetailModal({
     field: keyof FeedbackFormData,
     value: string | number
   ) => {
-    setFeedback(prev => ({
+    setFeedback((prev: FeedbackFormData) => ({
       ...prev,
       [field]: value
     }));
     // Clear error when field is modified
-    if (errors[field]) {
-      setErrors(prev => {
+    if (errors[field as string]) {
+      setErrors((prev: Record<string, string>) => {
         const newErrors = { ...prev };
-        delete newErrors[field];
+        delete newErrors[field as string];
         return newErrors;
       });
     }
@@ -67,7 +67,7 @@ export function CandidateDetailModal({
     const validation = validateFeedback(feedback);
     if (!validation.success && validation.errors) {
       const newErrors: Record<string, string> = {};
-      validation.errors.forEach(error => {
+      validation.errors.forEach((error: { field: string; message: string }) => {
         newErrors[error.field] = error.message;
       });
       setErrors(newErrors);
@@ -86,7 +86,7 @@ export function CandidateDetailModal({
     try {
       await onSubmitFeedback(validation.data);
       onClose();
-    } catch (error) {
+    } catch (error: unknown) {
       setErrors({
         submit: error instanceof Error ? error.message : 'Failed to submit feedback'
       });
@@ -219,11 +219,10 @@ export function CandidateDetailModal({
               <textarea
                 value={feedback.strengths}
                 onChange={(e) => handleChange('strengths', e.target.value)}
-                rows={3}
                 className={`w-full rounded-md border ${
                   errors.strengths ? 'border-red-500' : 'border-gray-300'
                 } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
-                placeholder="List the candidate's key strengths..."
+                rows={3}
               />
               {errors.strengths && (
                 <p className="mt-1 text-sm text-red-600">{errors.strengths}</p>
@@ -232,16 +231,15 @@ export function CandidateDetailModal({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Areas for Improvement
+                Weaknesses
               </label>
               <textarea
                 value={feedback.weaknesses}
                 onChange={(e) => handleChange('weaknesses', e.target.value)}
-                rows={3}
                 className={`w-full rounded-md border ${
                   errors.weaknesses ? 'border-red-500' : 'border-gray-300'
                 } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
-                placeholder="List areas where the candidate can improve..."
+                rows={3}
               />
               {errors.weaknesses && (
                 <p className="mt-1 text-sm text-red-600">{errors.weaknesses}</p>
@@ -250,16 +248,15 @@ export function CandidateDetailModal({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Additional Notes
+                Notes
               </label>
               <textarea
                 value={feedback.notes}
                 onChange={(e) => handleChange('notes', e.target.value)}
-                rows={3}
                 className={`w-full rounded-md border ${
                   errors.notes ? 'border-red-500' : 'border-gray-300'
                 } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
-                placeholder="Any additional observations or comments..."
+                rows={3}
               />
               {errors.notes && (
                 <p className="mt-1 text-sm text-red-600">{errors.notes}</p>
@@ -268,7 +265,7 @@ export function CandidateDetailModal({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Final Recommendation
+                Recommendation
               </label>
               <select
                 value={feedback.recommendation}
@@ -277,11 +274,11 @@ export function CandidateDetailModal({
                   errors.recommendation ? 'border-red-500' : 'border-gray-300'
                 } px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500`}
               >
-                <option value="Hold">Select recommendation</option>
                 <option value="Strong Hire">Strong Hire</option>
                 <option value="Hire">Hire</option>
                 <option value="Hold">Hold</option>
                 <option value="No Hire">No Hire</option>
+                <option value="Strong No Hire">Strong No Hire</option>
               </select>
               {errors.recommendation && (
                 <p className="mt-1 text-sm text-red-600">{errors.recommendation}</p>
@@ -294,19 +291,18 @@ export function CandidateDetailModal({
               </div>
             )}
 
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-end space-x-3">
               <button
                 type="button"
                 onClick={onClose}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
-                disabled={isSubmitting}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isSubmitting}
+                className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 border border-transparent rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
               </button>

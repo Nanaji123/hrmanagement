@@ -13,10 +13,15 @@ import {
   BarChart2,
   LogOut,
 <<<<<<< HEAD
+<<<<<<< HEAD
   Users as UserGroupIcon
 =======
   Users2
 >>>>>>> 01724f771f87ec80b4867ac9f1a7c17ca073a3ac
+=======
+  Users2,
+  Users as UserGroupIcon
+>>>>>>> 67eeb8a60e574e7d9a864053e421051c464f9f92
 } from 'lucide-react';
 
 type UserRole = 'hr_manager' | 'hr_recruiter' | 'interviewer';
@@ -24,14 +29,18 @@ type UserRole = 'hr_manager' | 'hr_recruiter' | 'interviewer';
 interface NavItem {
   name: string;
   href: string;
-  icon: React.ElementType;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;//ElementType;
   role: UserRole;
 }
 
 const navItems: NavItem[] = [
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   // HR Manager items
+=======
+    // HR Manager items
+>>>>>>> 67eeb8a60e574e7d9a864053e421051c464f9f92
   {
     name: 'Dashboard',
     href: '/dashboard/hiring_manager',
@@ -80,7 +89,10 @@ const navItems: NavItem[] = [
     icon: BarChart2,
     role: 'hr_manager'
   },
+<<<<<<< HEAD
 >>>>>>> 01724f771f87ec80b4867ac9f1a7c17ca073a3ac
+=======
+>>>>>>> 67eeb8a60e574e7d9a864053e421051c464f9f92
   // HR Recruiter items
   {
     name: 'Dashboard',
@@ -95,6 +107,12 @@ const navItems: NavItem[] = [
     role: 'hr_recruiter'
   },
   {
+    name: 'Interview Schedule',
+    href: '/dashboard/HR_RECRUiTER/interview_sch',
+    icon: Calendar,
+    role: 'hr_recruiter'
+  },
+  {
     name: 'Interview Panel',
     href: '/dashboard/HR_RECRUiTER/interview_panel',
     icon: UserGroupIcon,
@@ -102,14 +120,20 @@ const navItems: NavItem[] = [
   },
   // Interviewer items
   {
-    name: 'Calendar',
-    href: '/dashboard/HR_RECRUiTER/calendar',
+    name: 'Dashboard',
+    href: '/dashboard/interviewer',
+    icon: LayoutDashboard,
+    role: 'interviewer'
+  },
+  {
+    name: 'My Interviews',
+    href: '/dashboard/interviewer/interviews',
     icon: Calendar,
     role: 'interviewer'
   },
   {
-    name: 'Interview Management',
-    href: '/dashboard/HR_RECRUiTER/interview_management',
+    name: 'Feedback',
+    href: '/dashboard/interviewer/feedback',
     icon: FileText,
     role: 'interviewer'
   }
@@ -205,11 +229,16 @@ const DynamicNav: React.FC<DynamicNavProps> = ({
         <div className="mt-8">
           <button
 <<<<<<< HEAD
+<<<<<<< HEAD
             type="button"
             className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full text-gray-600 hover:bg-gray-50 hover:text-red-600 ${
 =======
             className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full font-semibold text-gray-600 hover:bg-emerald-50 hover:text-red-600 ${
 >>>>>>> 01724f771f87ec80b4867ac9f1a7c17ca073a3ac
+=======
+            type="button"
+            className={`flex items-center p-3 rounded-lg transition-all duration-200 w-full font-semibold text-gray-600 hover:bg-emerald-50 hover:text-red-600 ${
+>>>>>>> 67eeb8a60e574e7d9a864053e421051c464f9f92
               isExpanded ? 'space-x-3' : 'justify-center'
             }`}
             onClick={handleLogout}

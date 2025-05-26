@@ -4,7 +4,7 @@ import type { LucideIcon } from 'lucide-react';
 interface StatCardProps {
   title: string;
   value: string | number;
-  icon: LucideIcon; 
+  icon: LucideIcon;
   change: string;
   isPositive: boolean;
 }
@@ -16,11 +16,11 @@ export const StatCard = ({ title, value, icon: Icon, change, isPositive }: StatC
         <p className="text-sm font-medium text-gray-600">{title}</p>
         <p className="text-2xl font-semibold text-gray-900 mt-1">{value}</p>
         <p className={`text-sm mt-1 ${isPositive ? 'text-emerald-600' : 'text-rose-600'}`}>
-          {change}
+          {change ?? '—'}
         </p>
       </div>
       <div className="p-3 bg-emerald-50 rounded-full">
-        <Icon className="h-6 w-6 text-emerald-600" />
+        <Icon className={`h-6 w-6 ${isPositive ? 'text-emerald-600' : 'text-rose-600'}`} />
       </div>
     </div>
   </div>
