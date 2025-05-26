@@ -35,4 +35,34 @@ export async function GET() {
       { status: 500 }
     );
   }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const body = await request.json();
+    const { name, bio } = body;
+
+    // Validate input
+    if (!name || !bio) {
+      return NextResponse.json(
+        { error: 'Name and bio are required' },
+        { status: 400 }
+      );
+    }
+
+    // Update mock profile (in a real app, this would update the database)
+    mockProfile.name = name;
+    mockProfile.bio = bio;
+
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    return NextResponse.json(mockProfile);
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    return NextResponse.json(
+      { error: 'Failed to update profile' },
+      { status: 500 }
+    );
+  }
 } 

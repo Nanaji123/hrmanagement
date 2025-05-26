@@ -7,7 +7,9 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/auth/login');
+    // Redirect to login page with the callback URL
+    const callbackUrl = encodeURIComponent('http://localhost:3000/dashboard/interviewer');
+    router.push(`/auth/login?callbackUrl=${callbackUrl}`);
   }, [router]);
 
   return null;
