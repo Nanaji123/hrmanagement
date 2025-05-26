@@ -11,7 +11,7 @@ interface DashboardStats {
 
 interface RecentActivity {
   id: string;
-  type: 'candidate' | 'job' | 'interview' | 'feedback';
+  type: 'candidate' | 'job' | 'interview' | 'feedback' | 'team';
   action: string;
   details: string;
   timestamp: string;
@@ -35,20 +35,27 @@ const initialActivities: RecentActivity[] = [
   },
   {
     id: '2',
+    type: 'team',
+    action: 'Team Update',
+    details: 'New hiring team member joined - Sarah Wilson',
+    timestamp: '2024-03-20 09:45 AM'
+  },
+  {
+    id: '3',
     type: 'interview',
     action: 'Interview Scheduled',
     details: 'Technical interview with Sarah Johnson for Product Manager',
     timestamp: '2024-03-20 09:15 AM'
   },
   {
-    id: '3',
+    id: '4',
     type: 'job',
     action: 'New Job Posted',
     details: 'UX Designer position opened',
     timestamp: '2024-03-19 02:45 PM'
   },
   {
-    id: '4',
+    id: '5',
     type: 'feedback',
     action: 'Feedback Submitted',
     details: 'Michael Brown\'s interview feedback submitted',
@@ -146,6 +153,14 @@ export default function DashboardPage() {
             </svg>
           </div>
         );
+      case 'team':
+        return (
+          <div className="h-8 w-8 rounded-full bg-indigo-50 flex items-center justify-center">
+            <svg className="h-4 w-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+        );
       case 'job':
         return (
           <div className="h-8 w-8 rounded-full bg-emerald-50 flex items-center justify-center">
@@ -234,28 +249,20 @@ export default function DashboardPage() {
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Upcoming Interviews</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Activities</h2>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
-              <div>
-                <h3 className="font-semibold text-gray-900">John Smith</h3>
-                <p className="text-sm text-gray-600">Senior Software Engineer</p>
+            {activities.map((activity) => (
+              <div key={activity.id} className="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                {getActivityIcon(activity.type)}
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-gray-900">{activity.action}</h3>
+                    <span className="text-sm text-gray-500">{activity.timestamp}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">{activity.details}</p>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">Today, 2:00 PM</p>
-                <p className="text-xs text-gray-600">Technical Round</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
-              <div>
-                <h3 className="font-semibold text-gray-900">Sarah Johnson</h3>
-                <p className="text-sm text-gray-600">Product Manager</p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">Tomorrow, 11:00 AM</p>
-                <p className="text-xs text-gray-600">HR Round</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
