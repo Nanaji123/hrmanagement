@@ -6,7 +6,27 @@ import { VALID_ROLES } from '@/lib/auth';
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request });
   const isAuthPage = request.nextUrl.pathname.startsWith('/auth');
+  const isRootPage = request.nextUrl.pathname === '/';
 
+  // Handle root page redirect
+  if (isRootPage) {
+    if (!token) {
+      return NextResponse.redirect(new URL('/auth/login', request.url));
+    }
+    // If authenticated, redirect to appropriate dashboard
+    const role = token.role?.toLowerCase();
+    if (!role || !VALID_ROLES.includes(role)) {
+      return NextResponse.redirect(new URL('/auth/error?error=Invalid+role', request.url));
+    }
+    const roleToPath: Record<string, string> = {
+      interviewer: '/dashboard/interviewer',
+      hr_recruiter: '/dashboard/HR_RECRUiTER',
+      hr_manager: '/dashboard/hiring_manager'
+    };
+    return NextResponse.redirect(new URL(roleToPath[role] || '/dashboard', request.url));
+  }
+
+  // Handle auth pages
   if (isAuthPage) {
     if (token) {
       // If user is already authenticated, redirect to their dashboard
@@ -15,7 +35,6 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/auth/error?error=Invalid+role', request.url));
       }
 
-      // Map roles to dashboard paths
       const roleToPath: Record<string, string> = {
         interviewer: '/dashboard/interviewer',
         hr_recruiter: '/dashboard/HR_RECRUiTER',
@@ -27,6 +46,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Handle protected routes
   if (!token) {
     const loginUrl = new URL('/auth/login', request.url);
     loginUrl.searchParams.set('callbackUrl', request.url);
