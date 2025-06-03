@@ -123,172 +123,212 @@ export default function CandidatesPage() {
   const rejectedCount = candidates.filter(c => c.status === 'Rejected').length;
 
   return (
-    <div className="space-y-8 p-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Candidates</h1>
-        <div className="flex space-x-4">
-          <input
-            type="text"
-            placeholder="Search candidates..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-black"
-          />
-          <button
-            onClick={() => setShowRejected(!showRejected)}
-            className="px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 font-medium"
-          >
-            {showRejected ? 'Active Candidates' : 'Rejected Candidates'}
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-6 py-10 text-white flex items-center justify-center">
+      <div className="w-full p-8 md:p-12">
+        <div className="space-y-8">
+          <div className="flex justify-between items-center">
+            <h1 className="text-3xl font-bold text-cyan-200 drop-shadow-[0_0_10px_#00f7ff]">Candidates</h1>
+            <div className="flex space-x-4">
+              <input
+                type="text"
+                placeholder="Search candidates..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="px-4 py-2 rounded-xl border border-cyan-400 bg-[#181b2e] text-cyan-100 placeholder-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 shadow-[0_0_10px_#00f7ff30]"
+              />
+              <button
+                onClick={() => setShowRejected(!showRejected)}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-[0_0_10px_#00f7ff80] hover:opacity-90 transition-colors duration-200 font-medium"
+              >
+                {showRejected ? 'Active Candidates' : 'Rejected Candidates'}
+              </button>
+            </div>
+          </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Position</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Last Updated</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredCandidates
-              .filter(candidate => showRejected ? candidate.status === 'Rejected' : candidate.status !== 'Rejected')
-              .map((candidate) => (
-                <tr key={candidate.id} className="hover:bg-gray-50 transition-colors duration-150">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <div className="h-10 w-10 rounded-full bg-emerald-50 flex items-center justify-center">
-                          <span className="text-emerald-700 text-sm font-medium">
-                            {candidate.name.split(' ').map(n => n[0]).join('')}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-semibold text-gray-900">{candidate.name}</div>
-                        <div className="text-sm text-gray-600">{candidate.email}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{candidate.position}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(candidate.status)}`}>
-                      {candidate.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-600">{candidate.appliedDate}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-600">{candidate.lastUpdated}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {!showRejected && (
-                      <>
-                        <button 
-                          onClick={() => {
-                            setSelectedCandidate(candidate);
-                            setShowStatusModal(true);
-                          }}
-                          className="text-emerald-600 hover:text-emerald-900 font-medium mr-3"
-                        >
-                          Update Status
-                        </button>
-                        <button 
-                          onClick={() => {
-                            setSelectedCandidate(candidate);
-                            setShowRejectModal(true);
-                          }}
-                          className="text-rose-600 hover:text-rose-900 font-medium"
-                        >
-                          Reject
-                        </button>
-                      </>
-                    )}
-                    {showRejected && (
-                      <button 
-                        onClick={() => handleAcceptBack(candidate)}
-                        className="text-emerald-600 hover:text-emerald-900 font-medium"
-                      >
-                        Accept Back
-                      </button>
-                    )}
-                  </td>
+          <div className="rounded-2xl bg-[#0e101c] shadow-[0_0_30px_#00f7ff30] border border-[#2e314d] overflow-hidden">
+            <table className="min-w-full divide-y divide-[#23264a]">
+              <thead className="bg-[#181b2e] text-cyan-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Position</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Applied</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Last Updated</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Actions</th>
                 </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody className="bg-[#101325] divide-y divide-[#23264a] text-cyan-100">
+                {filteredCandidates
+                  .filter(candidate => showRejected ? candidate.status === 'Rejected' : candidate.status !== 'Rejected')
+                  .map((candidate) => (
+                    <tr key={candidate.id} className="hover:bg-[#181b2e] transition-colors duration-150">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="flex-shrink-0 h-10 w-10">
+                            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+                              <span className="text-white text-sm font-bold">
+                                {candidate.name.split(' ').map(n => n[0]).join('')}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-semibold text-cyan-100">{candidate.name}</div>
+                            <div className="text-xs text-cyan-300">{candidate.email}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-cyan-200">{candidate.position}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(candidate.status)}`}>
+                          {candidate.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-xs text-cyan-300">{candidate.appliedDate}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-xs text-cyan-300">{candidate.lastUpdated}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-xs text-cyan-300">{candidate.lastUpdated}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-200">
+                        {!showRejected && (
+                          <>
+                            <button 
+                              onClick={() => {
+                                setSelectedCandidate(candidate);
+                                setShowStatusModal(true);
+                              }}
+                              className="text-cyan-400 hover:text-cyan-200 font-medium mr-3 underline"
+                            >
+                              Update Status
+                            </button>
+                            <button 
+                              onClick={() => {
+                                setSelectedCandidate(candidate);
+                                setShowRejectModal(true);
+                              }}
+                              className="text-rose-400 hover:text-rose-300 font-medium underline"
+                            >
+                              Reject
+                            </button>
+                          </>
+                        )}
+                        {showRejected && (
+                          <button 
+                            onClick={() => handleAcceptBack(candidate)}
+                            className="text-cyan-400 hover:text-cyan-200 font-medium underline"
+                          >
+                            Accept Back
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
 
-      {/* Status Update Modal */}
-      {showStatusModal && selectedCandidate && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Update Status</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Update status for {selectedCandidate.name}
-            </p>
-            <div className="grid grid-cols-2 gap-3">
-              {(['Applied', 'Screening', 'Interview', 'Offered', 'Hired'] as Candidate['status'][]).map((status) => (
-                <button
-                  key={status}
-                  onClick={() => handleStatusUpdate(status)}
-                  className="px-4 py-2 text-sm font-medium rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors duration-200"
+          {/* Status Update Modal */}
+          {showStatusModal && selectedCandidate && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+              <div className="bg-[#181b2e] rounded-2xl p-8 w-full max-w-md shadow-[0_0_40px_#00f7ff80] border border-cyan-400">
+                <h3 className="text-2xl font-bold text-cyan-200 mb-6">Update Candidate</h3>
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                    const formData = new FormData(e.currentTarget);
+                    const newStatus = formData.get('status') as Candidate['status'];
+                    handleStatusUpdate(newStatus);
+                  }}
                 >
-                  {status}
-                </button>
-              ))}
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-cyan-100 mb-1">Name</label>
+                    <input
+                      type="text"
+                      value={selectedCandidate.name}
+                      disabled
+                      className="w-full px-3 py-2 border rounded-lg bg-[#23264a] text-cyan-100 border-cyan-400"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-cyan-100 mb-1">Email</label>
+                    <input
+                      type="email"
+                      value={selectedCandidate.email}
+                      disabled
+                      className="w-full px-3 py-2 border rounded-lg bg-[#23264a] text-cyan-100 border-cyan-400"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-cyan-100 mb-1">Status</label>
+                    <select
+                      name="status"
+                      defaultValue={selectedCandidate.status}
+                      className="w-full px-3 py-2 border rounded-lg bg-[#23264a] text-cyan-100 border-cyan-400"
+                    >
+                      {(['Applied', 'Screening', 'Interview', 'Offered', 'Hired'] as Candidate['status'][]).map(status => (
+                        <option key={status} value={status}>{status}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="mt-8 flex justify-end gap-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowStatusModal(false);
+                        setSelectedCandidate(null);
+                      }}
+                      className="px-5 py-2 rounded-lg bg-gray-700 text-white font-semibold hover:bg-gray-600 transition"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-[0_0_10px_#00f7ff80] hover:opacity-90 transition"
+                    >
+                      Update
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => {
-                  setShowStatusModal(false);
-                  setSelectedCandidate(null);
-                }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          )}
 
-      {/* Reject Confirmation Modal */}
-      {showRejectModal && selectedCandidate && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Reject Candidate</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Are you sure you want to reject {selectedCandidate.name}?
-            </p>
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => {
-                  setShowRejectModal(false);
-                  setSelectedCandidate(null);
-                }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleReject}
-                className="px-4 py-2 text-sm font-medium text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors duration-200"
-              >
-                Reject
-              </button>
+          {/* Reject Confirmation Modal */}
+          {showRejectModal && selectedCandidate && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+              <div className="bg-[#181b2e] rounded-2xl p-8 w-full max-w-md shadow-[0_0_40px_#00f7ff80] border border-rose-400">
+                <h3 className="text-2xl font-bold text-rose-200 mb-6">Reject Candidate</h3>
+                <p className="text-cyan-100 mb-6">
+                  Are you sure you want to reject <span className="font-semibold text-rose-300">{selectedCandidate.name}</span>?
+                </p>
+                <div className="flex justify-end gap-4 mt-8">
+                  <button
+                    onClick={() => {
+                      setShowRejectModal(false);
+                      setSelectedCandidate(null);
+                    }}
+                    className="px-5 py-2 rounded-lg bg-gray-700 text-white font-semibold hover:bg-gray-600 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleReject}
+                    className="px-5 py-2 rounded-lg bg-gradient-to-r from-rose-500 to-rose-700 text-white font-semibold shadow-[0_0_10px_#ff005580] hover:opacity-90 transition"
+                  >
+                    Reject
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
-} 
+}

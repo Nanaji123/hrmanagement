@@ -1,43 +1,49 @@
+// /app/api/auth/[...nextauth]/route.ts
 import NextAuth from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { prisma } from '@/lib/prisma';
+import GoogleProvider from 'next-auth/providers/google';
 import { compare } from 'bcryptjs';
+import { prisma } from '@/lib/prisma';
 
 const handler = NextAuth({
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
+        role: { label: 'Role', type: 'text' },
       },
       async authorize(credentials) {
         try {
-          if (!credentials?.email || !credentials?.password) {
-            throw new Error('Please enter both email and password');
+          console.log('DEBUG authorize: credentials', credentials);
+          if (!credentials?.email || !credentials?.password || !credentials?.role) {
+            console.log('DEBUG authorize: missing fields');
+            return null;
           }
-
+          const validRoles = ['interviewer', 'hr_recruiter', 'hr_manager'];
+          if (!validRoles.includes(credentials.role)) {
+            console.log('DEBUG authorize: invalid role', credentials.role);
+            return null;
+          }
           const user = await prisma.user.findUnique({
-            where: {
-              email: credentials.email,
-            },
+            where: { email: credentials.email },
           });
-
+          console.log('DEBUG authorize: user from db', user);
           if (!user) {
-            throw new Error('No user found with this email');
+            console.log('DEBUG authorize: no user found');
+            return null;
           }
-
+          if (user.role !== credentials.role) {
+            console.log('DEBUG authorize: role mismatch', user.role, credentials.role);
+            return null;
+          }
           const isPasswordValid = await compare(credentials.password, user.password);
-
+          console.log('DEBUG authorize: password valid?', isPasswordValid);
           if (!isPasswordValid) {
-            throw new Error('Invalid password');
+            console.log('DEBUG authorize: invalid password');
+            return null;
           }
-
           return {
             id: user.id,
             email: user.email,
@@ -45,12 +51,17 @@ const handler = NextAuth({
             role: user.role,
           };
         } catch (error) {
-          console.error('Auth error:', error);
-          throw error;
+          console.error('Authorize error:', error);
+          return null;
         }
-      }
-    })
+      },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
   ],
+
   callbacks: {
     async jwt({ token, user, account }) {
       if (user) {
@@ -58,7 +69,6 @@ const handler = NextAuth({
         token.id = user.id;
       }
       if (account?.provider === 'google') {
-        // Handle Google sign-in
         const existingUser = await prisma.user.findUnique({
           where: { email: token.email! },
         });
@@ -66,13 +76,12 @@ const handler = NextAuth({
           token.role = existingUser.role;
           token.id = existingUser.id;
         } else {
-          // Create new user from Google account
           const newUser = await prisma.user.create({
             data: {
               email: token.email!,
               name: token.name!,
-              role: 'INTERVIEWER', // Default role for Google sign-ins
-              password: '', // Empty password for Google users
+              role: 'interviewer',
+              password: '',
             },
           });
           token.role = newUser.role;
@@ -81,24 +90,20 @@ const handler = NextAuth({
       }
       return token;
     },
+
     async session({ session, token }) {
       if (token) {
-        session.user.role = token.role;
         session.user.id = token.id;
+        session.user.role = token.role;
       }
       return session;
-    }
+    },
   },
   pages: {
     signIn: '/auth/login',
     error: '/auth/error',
   },
-  session: {
-    strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === 'development',
 });
 
-export { handler as GET, handler as POST }; 
+export { handler as GET, handler as POST };

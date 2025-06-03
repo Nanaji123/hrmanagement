@@ -194,90 +194,94 @@ export default function FeedbackPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-2">Candidate Feedback</h1>
-        <div className="w-full bg-gray-200 rounded-full h-2.5">
-          <div
-            className="bg-emerald-600 h-2.5 rounded-full"
-            style={{ width: `${getProgress()}%` }}
-          ></div>
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-6 py-10 text-white flex items-center justify-center">
+      <div className="max-w-3xl w-full mx-auto bg-gradient-to-br from-cyan-400/40 via-blue-700/30 to-transparent rounded-3xl shadow-[0_0_40px_#00f7ff30] border border-[#2e314d] p-8 md:p-12 relative">
+        <button
+          onClick={() => window.history.back()}
+          className="absolute top-6 right-6 p-2 rounded-full bg-gray-800 hover:bg-gray-700 text-cyan-200 transition"
+          aria-label="Close"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-cyan-200 drop-shadow-[0_0_10px_#00f7ff] mb-2">Candidate Feedback</h1>
+          <div className="w-full bg-[#23264a] rounded-full h-2.5">
+            <div
+              className="bg-emerald-500 h-2.5 rounded-full"
+              style={{ width: `${getProgress()}%` }}
+            ></div>
+          </div>
+          <p className="text-sm text-cyan-300 mt-2">
+            Question {currentQuestionIndex + 1} of {feedbackQuestions.length}
+          </p>
         </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Question {currentQuestionIndex + 1} of {feedbackQuestions.length}
-        </p>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-        <div className="mb-6">
-          <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 text-emerald-800 mb-4">
-            {currentQuestion.category}
-          </span>
-          <h2 className="text-xl font-medium text-gray-900 mb-4">
-            {currentQuestion.question}
-          </h2>
-        </div>
-
-        <div className="flex justify-center space-x-2 mb-8">
-          {[1, 2, 3, 4, 5].map((rating) => (
+        <div className="bg-[#0e101c] rounded-2xl shadow-[0_0_30px_#00f7ff30] border border-[#2e314d] p-8">
+          <div className="mb-6">
+            <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-emerald-900/30 text-emerald-300 mb-4">
+              {currentQuestion.category}
+            </span>
+            <h2 className="text-xl font-medium text-cyan-100 mb-4">
+              {currentQuestion.question}
+            </h2>
+          </div>
+          <div className="flex justify-center space-x-2 mb-8">
+            {[1, 2, 3, 4, 5].map((rating) => (
+              <button
+                key={rating}
+                onClick={() => handleRating(rating)}
+                className="focus:outline-none"
+              >
+                {rating <= getCurrentRating() ? (
+                  <StarIcon className="h-12 w-12 text-yellow-400" />
+                ) : (
+                  <StarOutlineIcon className="h-12 w-12 text-cyan-900" />
+                )}
+              </button>
+            ))}
+          </div>
+          <div className="mb-6">
+            <label htmlFor="comments" className="block text-sm font-medium text-cyan-100 mb-2">
+              Additional Comments
+            </label>
+            <textarea
+              id="comments"
+              rows={4}
+              className="w-full rounded-xl border-cyan-400 bg-[#23264a] text-cyan-100 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500"
+              placeholder="Add your comments here..."
+              value={comments}
+              onChange={handleCommentsChange}
+            />
+          </div>
+          <div className="flex justify-between">
             <button
-              key={rating}
-              onClick={() => handleRating(rating)}
-              className="focus:outline-none"
+              onClick={handlePrevious}
+              disabled={currentQuestionIndex === 0}
+              className={`px-4 py-2 rounded-lg font-semibold transition ${
+                currentQuestionIndex === 0
+                  ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                  : 'bg-gray-700 text-white hover:bg-gray-600'
+              }`}
             >
-              {rating <= getCurrentRating() ? (
-                <StarIcon className="h-12 w-12 text-yellow-400" />
-              ) : (
-                <StarOutlineIcon className="h-12 w-12 text-gray-300" />
-              )}
+              Previous
             </button>
-          ))}
-        </div>
-
-        <div className="mb-6">
-          <label htmlFor="comments" className="block text-sm font-medium text-gray-700 mb-2">
-            Additional Comments
-          </label>
-          <textarea
-            id="comments"
-            rows={4}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
-            placeholder="Add your comments here..."
-            value={comments}
-            onChange={handleCommentsChange}
-          />
-        </div>
-
-        <div className="flex justify-between">
-          <button
-            onClick={handlePrevious}
-            disabled={currentQuestionIndex === 0}
-            className={`px-4 py-2 rounded-md ${
-              currentQuestionIndex === 0
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            Previous
-          </button>
-          
-          {currentQuestionIndex === feedbackQuestions.length - 1 ? (
-            <button
-              onClick={handleSubmit}
-              className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700"
-            >
-              Submit Feedback
-            </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700"
-            >
-              Next
-            </button>
-          )}
+            {currentQuestionIndex === feedbackQuestions.length - 1 ? (
+              <button
+                onClick={handleSubmit}
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-600 text-white font-semibold shadow-[0_0_10px_#00f7ff80] hover:opacity-90 transition"
+              >
+                Submit Feedback
+              </button>
+            ) : (
+              <button
+                onClick={handleNext}
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-600 text-white font-semibold shadow-[0_0_10px_#00f7ff80] hover:opacity-90 transition"
+              >
+                Next
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
-} 
+}

@@ -108,8 +108,8 @@ export default function FeedbackPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-6 py-10 text-white flex items-center justify-center">
+      <div className="max-w-7xl w-full mx-auto bg-[#0e101c] rounded-3xl shadow-[0_0_40px_#00f7ff30] border border-[#2e314d] p-8 md:p-12">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Interview Feedback</h1>
           <p className="mt-2 text-base text-gray-700">View and manage all interview feedback submissions</p>
@@ -222,4 +222,4 @@ export default function FeedbackPage() {
       </div>
     </div>
   );
-} 
+}

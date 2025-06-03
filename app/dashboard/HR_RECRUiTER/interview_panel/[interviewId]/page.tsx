@@ -99,22 +99,30 @@ export default function InterviewDetailsPage() {
 
   // Basic styling for display
   return (
-    <div className={styles.detailsContainer}>
-      <h1 className={styles.detailsTitle}>Interview Details</h1>
-      <div className="space-y-3">
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Candidate:</strong> {interview.candidateName}</p>
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Position:</strong> {interview.position}</p>
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Department:</strong> {interview.department}</p>
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Date:</strong> {interview.interviewDate}</p>
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Time:</strong> {interview.interviewTime}</p>
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Type:</strong> {interview.interviewType}</p>
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Status:</strong> <span className={`${styles.statusBadge} ${interview.status === 'Scheduled' ? styles.statusScheduled : interview.status === 'Completed' ? styles.statusCompleted : styles.statusCancelled}`}>{interview.status}</span></p>
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Panel Members:</strong> {interview.panelMembers.join(', ')}</p>
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Location:</strong> {interview.location}</p>
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Duration:</strong> {interview.duration}</p>
-        <p className={styles.detailItem}><strong className={styles.detailLabel}>Notes:</strong> {interview.notes || 'N/A'}</p>
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-6 py-10 text-white flex items-center justify-center">
+      <div className="max-w-3xl w-full mx-auto bg-gradient-to-br from-cyan-400/40 via-blue-700/30 to-transparent rounded-3xl shadow-[0_0_40px_#00f7ff30] border border-[#2e314d] p-8 md:p-12 relative">
+        <button
+          onClick={() => window.history.back()}
+          className="absolute top-6 right-6 p-2 rounded-full bg-gray-800 hover:bg-gray-700 text-cyan-200 transition"
+          aria-label="Close"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+        <h1 className="text-3xl font-bold text-cyan-200 drop-shadow-[0_0_10px_#00f7ff] mb-8">Interview Details</h1>
+        <div className="space-y-6 text-cyan-100">
+          <p><span className="font-semibold text-cyan-300">Candidate:</span> {interview.candidateName}</p>
+          <p><span className="font-semibold text-cyan-300">Position:</span> {interview.position}</p>
+          <p><span className="font-semibold text-cyan-300">Department:</span> {interview.department}</p>
+          <p><span className="font-semibold text-cyan-300">Date:</span> {interview.interviewDate}</p>
+          <p><span className="font-semibold text-cyan-300">Time:</span> {interview.interviewTime}</p>
+          <p><span className="font-semibold text-cyan-300">Type:</span> {interview.interviewType}</p>
+          <p><span className="font-semibold text-cyan-300">Status:</span> <span className={`px-3 py-1 rounded-full text-xs font-semibold ${interview.status === 'Scheduled' ? 'bg-emerald-900/30 text-emerald-300' : interview.status === 'Completed' ? 'bg-blue-900/30 text-cyan-300' : 'bg-rose-900/30 text-rose-300'}`}>{interview.status}</span></p>
+          <p><span className="font-semibold text-cyan-300">Panel Members:</span> {interview.panelMembers.join(', ')}</p>
+          <p><span className="font-semibold text-cyan-300">Location:</span> {interview.location}</p>
+          <p><span className="font-semibold text-cyan-300">Duration:</span> {interview.duration}</p>
+          <p><span className="font-semibold text-cyan-300">Notes:</span> {interview.notes || 'N/A'}</p>
+        </div>
       </div>
-      {/* Add more details or actions here */}
     </div>
   );
-} 
+}

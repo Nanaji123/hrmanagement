@@ -312,110 +312,112 @@ export default function InterviewerDashboard() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Interviewer Dashboard</h1>
-        <p className="text-sm text-gray-600 mt-1">Welcome to your interviewer dashboard</p>
-      </div>
-
-      <ErrorBoundary>
-        <div className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard
-              title="Total Interviews"
-              value={stats.totalInterviews}
-              icon={Calendar}
-              change={`${stats.upcomingInterviews} upcoming`}
-              isPositive={true}
-            />
-            <StatCard
-              title="Completed Interviews"
-              value={stats.completedInterviews}
-              icon={Users}
-              change={`${stats.completedInterviews} total`}
-              isPositive={true}
-            />
-            <StatCard
-              title="Feedback Pending"
-              value={pendingFeedbacks.length}
-              icon={FileText}
-              change={`${pendingFeedbacks.length} remaining`}
-              isPositive={pendingFeedbacks.length === 0}
-            />
-            <StatCard
-              title="Average Rating"
-              value={stats.averageRating.toFixed(1)}
-              icon={Clock}
-              change="out of 5.0"
-              isPositive={stats.averageRating >= 3.5}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Feedback</h2>
-              {recentFeedback.length === 0 ? (
-                <p className="text-gray-500">No recent feedback submitted</p>
-              ) : (
-                <div className="space-y-4">
-                  {recentFeedback.map((feedback) => (
-                    <div key={feedback.id} className="border border-gray-200 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-medium text-gray-900">{feedback.candidateName}</h3>
-                          <p className="text-sm text-gray-500">{feedback.position}</p>
-                        </div>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          feedback.recommendation === 'Strong Hire' ? 'bg-emerald-100 text-emerald-800' :
-                          feedback.recommendation === 'Hire' ? 'bg-green-100 text-green-800' :
-                          feedback.recommendation === 'No Hire' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {feedback.recommendation}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Pending Feedback</h2>
-              {pendingFeedbacks.length === 0 ? (
-                <p className="text-gray-500">No pending feedback</p>
-              ) : (
-                <div className="space-y-4">
-                  {pendingFeedbacks.map(feedback => (
-                    <div key={feedback.id} className="p-4 rounded-md bg-emerald-50 text-emerald-700 flex justify-between items-center">
-                      <div>
-                        <p className="text-sm font-medium">{feedback.candidate}</p>
-                        <p className="text-xs mt-1">Due: {feedback.deadline}</p>
-                      </div>
-                      <button
-                        onClick={() => router.push(`/dashboard/interviewer/interviews/${feedback.id}/feedback`)}
-                        className="text-emerald-700 hover:text-emerald-800 focus:outline-none text-sm"
-                        aria-label={`Submit feedback for ${feedback.candidate}`}
-                      >
-                        Submit <span aria-hidden="true">&rarr;</span>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-6 py-10 text-white flex items-center justify-center">
+      <div className="max-w-7xl w-full mx-auto bg-[#0e101c] rounded-3xl shadow-[0_0_40px_#00f7ff30] border border-[#2e314d] p-8 md:p-12">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900">Interviewer Dashboard</h1>
+          <p className="text-sm text-gray-600 mt-1">Welcome to your interviewer dashboard</p>
         </div>
-      </ErrorBoundary>
 
-      {selectedCandidate && (
-        <CandidateDetailModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          candidate={selectedCandidate}
-          onSubmitFeedback={handleSubmitFeedback}
-        />
-      )}
+        <ErrorBoundary>
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <StatCard
+                title="Total Interviews"
+                value={stats.totalInterviews}
+                icon={Calendar}
+                change={`${stats.upcomingInterviews} upcoming`}
+                isPositive={true}
+              />
+              <StatCard
+                title="Completed Interviews"
+                value={stats.completedInterviews}
+                icon={Users}
+                change={`${stats.completedInterviews} total`}
+                isPositive={true}
+              />
+              <StatCard
+                title="Feedback Pending"
+                value={pendingFeedbacks.length}
+                icon={FileText}
+                change={`${pendingFeedbacks.length} remaining`}
+                isPositive={pendingFeedbacks.length === 0}
+              />
+              <StatCard
+                title="Average Rating"
+                value={stats.averageRating.toFixed(1)}
+                icon={Clock}
+                change="out of 5.0"
+                isPositive={stats.averageRating >= 3.5}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Feedback</h2>
+                {recentFeedback.length === 0 ? (
+                  <p className="text-gray-500">No recent feedback submitted</p>
+                ) : (
+                  <div className="space-y-4">
+                    {recentFeedback.map((feedback) => (
+                      <div key={feedback.id} className="border border-gray-200 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-medium text-gray-900">{feedback.candidateName}</h3>
+                            <p className="text-sm text-gray-500">{feedback.position}</p>
+                          </div>
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                            feedback.recommendation === 'Strong Hire' ? 'bg-emerald-100 text-emerald-800' :
+                            feedback.recommendation === 'Hire' ? 'bg-green-100 text-green-800' :
+                            feedback.recommendation === 'No Hire' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {feedback.recommendation}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Pending Feedback</h2>
+                {pendingFeedbacks.length === 0 ? (
+                  <p className="text-gray-500">No pending feedback</p>
+                ) : (
+                  <div className="space-y-4">
+                    {pendingFeedbacks.map(feedback => (
+                      <div key={feedback.id} className="p-4 rounded-md bg-emerald-50 text-emerald-700 flex justify-between items-center">
+                        <div>
+                          <p className="text-sm font-medium">{feedback.candidate}</p>
+                          <p className="text-xs mt-1">Due: {feedback.deadline}</p>
+                        </div>
+                        <button
+                          onClick={() => router.push(`/dashboard/interviewer/interviews/${feedback.id}/feedback`)}
+                          className="text-emerald-700 hover:text-emerald-800 focus:outline-none text-sm"
+                          aria-label={`Submit feedback for ${feedback.candidate}`}
+                        >
+                          Submit <span aria-hidden="true">&rarr;</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </ErrorBoundary>
+
+        {selectedCandidate && (
+          <CandidateDetailModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            candidate={selectedCandidate}
+            onSubmitFeedback={handleSubmitFeedback}
+          />
+        )}
+      </div>
     </div>
   );
 }

@@ -28,12 +28,12 @@ const Header: React.FC<HeaderProps> = ({ isNavExpanded }) => {
   };
 
   return (
-    <header className={`h-16 bg-white border-b border-gray-100 fixed top-0 right-0 z-10 shadow-sm transition-all duration-300 ${
+    <header className={`h-16 bg-[#0e101c] border-b border-[#2e314d] fixed top-0 right-0 z-10 shadow-[0_0_20px_#00f7ff40] transition-all duration-300 ${
       isNavExpanded ? 'left-64' : 'left-20'
     }`}>
       <div className="flex items-center justify-end h-full px-6">
         {/* Right section - Search, Notifications and Profile */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 text-white">
           {/* Search Bar */}
           <div className="relative">
             <input

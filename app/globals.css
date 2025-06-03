@@ -107,6 +107,9 @@ body {
   color: var(--foreground);
   font-family: var(--font-main);
 }
+.neon-logo {
+  filter: drop-shadow(0 0 6px #00f0ff) drop-shadow(0 0 10px #00f0ff);
+}
 
 @keyframes spin {
   to {

@@ -17,7 +17,6 @@ interface RecentActivity {
   timestamp: string;
 }
 
-// Initial data for first-time users
 const initialStats: DashboardStats = {
   totalCandidates: 45,
   activeJobs: 12,
@@ -51,60 +50,41 @@ const initialActivities: RecentActivity[] = [
     id: '4',
     type: 'feedback',
     action: 'Feedback Submitted',
-    details: 'Michael Brown\'s interview feedback submitted',
+    details: "Michael Brown's interview feedback submitted",
     timestamp: '2024-03-19 11:20 AM'
   }
 ];
 
-interface StatCardProps {
-  title: string;
-  value: string | number;
-  change: string;
-  isPositive: boolean;
-}
-
-const StatCard = ({ title, value, change, isPositive }: StatCardProps) => (
-  <div className="bg-white rounded-xl shadow-sm border border-hero-border p-6 hover:shadow-md transition-shadow duration-200">
-    <h3 className="text-sm font-medium text-hero-subtext">{title}</h3>
-    <p className="mt-2 text-3xl font-bold text-hero-text">{value}</p>
-    <div className="mt-2 flex items-center">
-      <span className={`text-sm font-medium ${isPositive ? 'text-hero-primary' : 'text-rose-600'}`}>
-        {change}
-      </span>
-    </div>
+const StatCard = ({ title, value, change, isPositive }: { title: string, value: string | number, change: string, isPositive: boolean }) => (
+  <div className="bg-[#0e101c] text-white rounded-xl p-6 shadow-[0_0_20px_#00f7ff40] border border-[#2e314d] hover:shadow-[0_0_30px_#00f7ff60] transition duration-300">
+    <h3 className="text-sm text-[#9aa0b4]">{title}</h3>
+    <p className="mt-2 text-3xl font-bold">{value}</p>
+    <p className={`mt-1 text-sm ${isPositive ? 'text-cyan-400' : 'text-rose-400'}`}>{change}</p>
   </div>
 );
 
-interface JobCardProps {
-  title: string;
-  department: string;
-  applicants: number;
-  status: 'Open' | 'Closed' | 'Draft';
-}
-
-const JobCard = ({ title, department, applicants, status }: JobCardProps) => (
-  <div className="bg-white rounded-xl shadow-sm border border-hero-border p-4 hover:shadow-md transition-shadow duration-200">
+const JobCard = ({ title, department, applicants, status }: { title: string, department: string, applicants: number, status: 'Open' | 'Closed' | 'Draft' }) => (
+  <div className="bg-[#0e101c] text-white rounded-xl p-4 shadow-[0_0_15px_#00f7ff20] border border-[#2e314d] hover:shadow-[0_0_25px_#00f7ff50] transition duration-300">
     <div className="flex justify-between items-start">
       <div>
-        <h3 className="text-lg font-semibold text-hero-text">{title}</h3>
-        <p className="text-sm text-hero-subtext">{department}</p>
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <p className="text-sm text-[#9aa0b4]">{department}</p>
       </div>
       <span className={`px-3 py-1 text-xs font-medium rounded-full ${
-        status === 'Open' ? 'bg-hero-primary-light text-hero-primary' :
-        status === 'Closed' ? 'bg-rose-50 text-rose-700' :
-        'bg-hero-muted text-hero-subtext'
+        status === 'Open' ? 'bg-cyan-900 text-cyan-300' :
+        status === 'Closed' ? 'bg-red-900 text-red-300' :
+        'bg-gray-800 text-gray-300'
       }`}>
         {status}
       </span>
     </div>
     <div className="mt-4">
-      <p className="text-sm font-medium text-hero-subtext">{applicants} applicants</p>
+      <p className="text-sm text-[#9aa0b4]">{applicants} applicants</p>
     </div>
   </div>
 );
 
 export default function DashboardPage() {
-  // Load stats from localStorage or use initial data
   const [stats, setStats] = useState<DashboardStats>(() => {
     if (typeof window !== 'undefined') {
       const savedStats = localStorage.getItem('dashboardStats');
@@ -113,7 +93,6 @@ export default function DashboardPage() {
     return initialStats;
   });
 
-  // Load activities from localStorage or use initial data
   const [activities, setActivities] = useState<RecentActivity[]>(() => {
     if (typeof window !== 'undefined') {
       const savedActivities = localStorage.getItem('dashboardActivities');
@@ -122,142 +101,75 @@ export default function DashboardPage() {
     return initialActivities;
   });
 
-  // Save stats to localStorage whenever they change
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('dashboardStats', JSON.stringify(stats));
-    }
+    localStorage.setItem('dashboardStats', JSON.stringify(stats));
   }, [stats]);
 
-  // Save activities to localStorage whenever they change
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('dashboardActivities', JSON.stringify(activities));
-    }
+    localStorage.setItem('dashboardActivities', JSON.stringify(activities));
   }, [activities]);
 
   const getActivityIcon = (type: RecentActivity['type']) => {
+    const baseClass = "h-4 w-4";
     switch (type) {
       case 'candidate':
-        return (
-          <div className="h-8 w-8 rounded-full bg-blue-50 flex items-center justify-center">
-            <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </div>
-        );
+        return <svg className={`${baseClass} text-blue-400`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>;
       case 'job':
-        return (
-          <div className="h-8 w-8 rounded-full bg-emerald-50 flex items-center justify-center">
-            <svg className="h-4 w-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-          </div>
-        );
+        return <svg className={`${baseClass} text-green-400`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m2 4H7m2-8h6m2-4H7" />
+        </svg>;
       case 'interview':
-        return (
-          <div className="h-8 w-8 rounded-full bg-purple-50 flex items-center justify-center">
-            <svg className="h-4 w-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </div>
-        );
+        return <svg className={`${baseClass} text-yellow-400`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z" />
+        </svg>;
       case 'feedback':
-        return (
-          <div className="h-8 w-8 rounded-full bg-amber-50 flex items-center justify-center">
-            <svg className="h-4 w-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-        );
+        return <svg className={`${baseClass} text-pink-400`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h6m-6 4h10M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>;
     }
   };
 
-  const [recentJobs] = useState<JobCardProps[]>([
-    {
-      title: 'Senior Software Engineer',
-      department: 'Engineering',
-      applicants: 45,
-      status: 'Open'
-    },
-    {
-      title: 'Product Manager',
-      department: 'Product',
-      applicants: 32,
-      status: 'Open'
-    },
-    {
-      title: 'UX Designer',
-      department: 'Design',
-      applicants: 28,
-      status: 'Closed'
-    }
-  ]);
-
   return (
-    <div className="space-y-8 p-6 bg-hero-muted min-h-screen">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          title="Active Job Postings"
-          value={stats.activeJobs}
-          change="+2 from last month"
-          isPositive={true}
-        />
-        <StatCard
-          title="Total Applicants"
-          value={stats.totalCandidates}
-          change="+15% from last month"
-          isPositive={true}
-        />
-        <StatCard
-          title="Interviews Scheduled"
-          value={stats.upcomingInterviews}
-          change="-3 from last week"
-          isPositive={false}
-        />
-        <StatCard
-          title="Positions Filled"
-          value={stats.activeJobs}
-          change="+4 from last month"
-          isPositive={true}
-        />
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-6 py-10 text-white">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6 text-center text-cyan-300 drop-shadow-[0_0_10px_#00f7ff]">HR Dashboard</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-hero-border p-6">
-          <h2 className="text-xl font-semibold text-hero-text mb-6">Recent Job Postings</h2>
-          <div className="space-y-4">
-            {recentJobs.map((job, index) => (
-              <JobCard key={index} {...job} />
-            ))}
-          </div>
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <StatCard title="Total Candidates" value={stats.totalCandidates} change="+5%" isPositive />
+          <StatCard title="Active Jobs" value={stats.activeJobs} change="+3%" isPositive />
+          <StatCard title="Upcoming Interviews" value={stats.upcomingInterviews} change="0%" isPositive />
+          <StatCard title="Pending Feedback" value={stats.pendingFeedback} change="-2%" isPositive={false} />
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-hero-border p-6">
-          <h2 className="text-xl font-semibold text-hero-text mb-6">Upcoming Interviews</h2>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-hero-muted rounded-lg border border-hero-border">
-              <div>
-                <h3 className="font-semibold text-hero-text">John Smith</h3>
-                <p className="text-sm text-hero-subtext">Senior Software Engineer</p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm font-medium text-hero-text">Today, 2:00 PM</p>
-                <p className="text-xs text-hero-subtext">Technical Round</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-hero-muted rounded-lg border border-hero-border">
-              <div>
-                <h3 className="font-semibold text-hero-text">Sarah Johnson</h3>
-                <p className="text-sm text-hero-subtext">Product Manager</p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm font-medium text-hero-text">Tomorrow, 11:00 AM</p>
-                <p className="text-xs text-hero-subtext">HR Round</p>
-              </div>
-            </div>
-          </div>
+        {/* Job Cards */}
+        <h2 className="text-2xl font-semibold mb-4 text-cyan-200">Active Job Posts</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          <JobCard title="Frontend Developer" department="Engineering" applicants={12} status="Open" />
+          <JobCard title="UX Designer" department="Design" applicants={8} status="Draft" />
+          <JobCard title="HR Executive" department="HR" applicants={5} status="Closed" />
         </div>
+
+        {/* Activities */}
+        <h2 className="text-2xl font-semibold mb-4 text-cyan-200">Recent Activity</h2>
+        <ul className="space-y-4">
+          {activities.map(activity => (
+            <li key={activity.id} className="bg-[#11131f] border border-[#2e314d] rounded-lg p-4 flex items-start shadow-[0_0_15px_#00f7ff30] hover:shadow-[0_0_25px_#00f7ff50] transition">
+              <div className="mr-4">
+                <div className="h-10 w-10 rounded-full bg-[#1f2238] flex items-center justify-center">
+                  {getActivityIcon(activity.type)}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-white">{activity.action}</p>
+                <p className="text-xs text-[#9aa0b4]">{activity.details}</p>
+                <p className="text-xs text-[#5f6b8b] mt-1">{activity.timestamp}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

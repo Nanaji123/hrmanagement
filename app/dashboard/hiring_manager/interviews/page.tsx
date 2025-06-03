@@ -163,321 +163,323 @@ export default function InterviewsPage() {
   };
 
   return (
-    <div className="space-y-8 p-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Interviews</h1>
-        <button
-          onClick={() => setShowNewInterviewForm(true)}
-          className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 font-medium"
-        >
-          Schedule Interview
-        </button>
-      </div>
-
-      {showNewInterviewForm && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Schedule New Interview</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Candidate Name</label>
-              <input
-                type="text"
-                value={newInterview.candidateName}
-                onChange={(e) => setNewInterview({ ...newInterview, candidateName: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Position</label>
-              <input
-                type="text"
-                value={newInterview.position}
-                onChange={(e) => setNewInterview({ ...newInterview, position: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Interviewer</label>
-              <input
-                type="text"
-                value={newInterview.interviewer}
-                onChange={(e) => setNewInterview({ ...newInterview, interviewer: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Interview Type</label>
-              <select
-                value={newInterview.type}
-                onChange={(e) => setNewInterview({ ...newInterview, type: e.target.value as 'Technical' | 'HR' | 'Final' })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-              >
-                <option value="Technical">Technical</option>
-                <option value="HR">HR</option>
-                <option value="Final">Final</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
-              <input
-                type="date"
-                value={newInterview.date}
-                onChange={(e) => setNewInterview({ ...newInterview, date: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Time</label>
-              <input
-                type="time"
-                value={newInterview.time}
-                onChange={(e) => setNewInterview({ ...newInterview, time: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-              />
-            </div>
-          </div>
-          <div className="mt-6 flex justify-end space-x-3">
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-6 py-10 text-white flex items-center justify-center">
+      <div className="w-full p-8 md:p-12">
+        <div className="space-y-8">
+          <div className="flex justify-between items-center">
+            <h1 className="text-3xl font-bold text-cyan-200 drop-shadow-[0_0_10px_#00f7ff]">Interviews</h1>
             <button
-              onClick={() => setShowNewInterviewForm(false)}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 font-medium"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleCreateInterview}
-              className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 font-medium"
+              onClick={() => setShowNewInterviewForm(true)}
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-[0_0_15px_#00f7ff80] hover:opacity-90 transition text-base"
             >
               Schedule Interview
             </button>
           </div>
-        </div>
-      )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Candidate</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Position</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Interviewer</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Date & Time</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {interviews.map((interview) => (
-              <tr key={interview.id} className="hover:bg-gray-50 transition-colors duration-150">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-semibold text-gray-900">{interview.candidateName}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{interview.position}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{interview.interviewer}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{interview.date}</div>
-                  <div className="text-sm text-gray-600">{interview.time}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-3 py-1 text-xs font-medium rounded-full ${getTypeColor(interview.type)}`}>
-                    {interview.type}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(interview.status)}`}>
-                    {interview.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  {interview.status === 'Scheduled' && (
-                    <>
-                      <button 
-                        onClick={() => {
-                          setSelectedInterview(interview);
-                          setShowViewModal(true);
-                        }}
-                        className="text-emerald-600 hover:text-emerald-900 font-medium mr-3"
-                      >
-                        View
-                      </button>
-                      <button 
-                        onClick={() => {
-                          setSelectedInterview(interview);
-                          setRescheduleData({ date: interview.date, time: interview.time });
-                          setShowRescheduleModal(true);
-                        }}
-                        className="text-emerald-600 hover:text-emerald-900 font-medium mr-3"
-                      >
-                        Reschedule
-                      </button>
-                      <button 
-                        onClick={() => {
-                          setSelectedInterview(interview);
-                          setShowCancelModal(true);
-                        }}
-                        className="text-rose-600 hover:text-rose-900 font-medium"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  )}
-                  {interview.status === 'Cancelled' && (
-                    <>
-                      <button 
-                        onClick={() => {
-                          setSelectedInterview(interview);
-                          setShowViewModal(true);
-                        }}
-                        className="text-emerald-600 hover:text-emerald-900 font-medium mr-3"
-                      >
-                        View
-                      </button>
-                      <button 
-                        onClick={() => {
-                          setSelectedInterview(interview);
-                          setRescheduleData({ date: interview.date, time: interview.time });
-                          setShowRescheduleModal(true);
-                        }}
-                        className="text-emerald-600 hover:text-emerald-900 font-medium"
-                      >
-                        Reschedule Interview
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          {showNewInterviewForm && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+              <div className="bg-[#181b2e] rounded-2xl p-8 w-full max-w-lg shadow-[0_0_40px_#00f7ff80] border border-cyan-400">
+                <h2 className="text-2xl font-bold text-cyan-200 mb-6">Schedule New Interview</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-cyan-100 mb-2">Candidate Name</label>
+                    <input
+                      type="text"
+                      value={newInterview.candidateName}
+                      onChange={(e) => setNewInterview({ ...newInterview, candidateName: e.target.value })}
+                      className="block w-full rounded-lg border border-cyan-400 bg-[#23264a] px-4 py-2 text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-cyan-100 mb-2">Position</label>
+                    <input
+                      type="text"
+                      value={newInterview.position}
+                      onChange={(e) => setNewInterview({ ...newInterview, position: e.target.value })}
+                      className="block w-full rounded-lg border border-cyan-400 bg-[#23264a] px-4 py-2 text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-cyan-100 mb-2">Interviewer</label>
+                    <input
+                      type="text"
+                      value={newInterview.interviewer}
+                      onChange={(e) => setNewInterview({ ...newInterview, interviewer: e.target.value })}
+                      className="block w-full rounded-lg border border-cyan-400 bg-[#23264a] px-4 py-2 text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-cyan-100 mb-2">Interview Type</label>
+                    <select
+                      value={newInterview.type}
+                      onChange={(e) => setNewInterview({ ...newInterview, type: e.target.value as 'Technical' | 'HR' | 'Final' })}
+                      className="block w-full rounded-lg border border-cyan-400 bg-[#23264a] px-4 py-2 text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    >
+                      <option value="Technical">Technical</option>
+                      <option value="HR">HR</option>
+                      <option value="Final">Final</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-cyan-100 mb-2">Date</label>
+                    <input
+                      type="date"
+                      value={newInterview.date}
+                      onChange={(e) => setNewInterview({ ...newInterview, date: e.target.value })}
+                      className="block w-full rounded-lg border border-cyan-400 bg-[#23264a] px-4 py-2 text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-cyan-100 mb-2">Time</label>
+                    <input
+                      type="time"
+                      value={newInterview.time}
+                      onChange={(e) => setNewInterview({ ...newInterview, time: e.target.value })}
+                      className="block w-full rounded-lg border border-cyan-400 bg-[#23264a] px-4 py-2 text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    />
+                  </div>
+                </div>
+                <div className="mt-8 flex justify-end gap-4">
+                  <button
+                    onClick={() => setShowNewInterviewForm(false)}
+                    className="px-5 py-2 rounded-lg bg-gray-700 text-white font-semibold hover:bg-gray-600 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCreateInterview}
+                    className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-[0_0_10px_#00f7ff80] hover:opacity-90 transition"
+                  >
+                    Schedule Interview
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="rounded-2xl bg-[#0e101c] shadow-[0_0_30px_#00f7ff30] border border-[#2e314d] overflow-hidden">
+            <table className="min-w-full divide-y divide-[#23264a]">
+              <thead className="bg-[#181b2e] text-cyan-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Candidate</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Position</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Interviewer</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Date & Time</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Type</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-[#101325] divide-y divide-[#23264a] text-cyan-100">
+                {interviews.map((interview) => (
+                  <tr key={interview.id} className="hover:bg-[#181b2e] transition-colors duration-150">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-semibold text-cyan-100">{interview.candidateName}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-cyan-200">{interview.position}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-cyan-200">{interview.interviewer}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-cyan-100">{interview.date}</div>
+                      <div className="text-sm text-cyan-200">{interview.time}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${getTypeColor(interview.type)}`}>{interview.type}</span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(interview.status)}`}>{interview.status}</span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-200">
+                      {interview.status === 'Scheduled' && (
+                        <>
+                          <button 
+                            onClick={() => {
+                              setSelectedInterview(interview);
+                              setShowViewModal(true);
+                            }}
+                            className="text-cyan-400 hover:text-cyan-200 font-medium mr-3 underline"
+                          >
+                            View
+                          </button>
+                          <button 
+                            onClick={() => {
+                              setSelectedInterview(interview);
+                              setRescheduleData({ date: interview.date, time: interview.time });
+                              setShowRescheduleModal(true);
+                            }}
+                            className="text-cyan-400 hover:text-cyan-200 font-medium mr-3 underline"
+                          >
+                            Reschedule
+                          </button>
+                          <button 
+                            onClick={() => {
+                              setSelectedInterview(interview);
+                              setShowCancelModal(true);
+                            }}
+                            className="text-rose-400 hover:text-rose-300 font-medium underline"
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      )}
+                      {interview.status === 'Cancelled' && (
+                        <>
+                          <button 
+                            onClick={() => {
+                              setSelectedInterview(interview);
+                              setShowViewModal(true);
+                            }}
+                            className="text-cyan-400 hover:text-cyan-200 font-medium mr-3 underline"
+                          >
+                            View
+                          </button>
+                          <button 
+                            onClick={() => {
+                              setSelectedInterview(interview);
+                              setRescheduleData({ date: interview.date, time: interview.time });
+                              setShowRescheduleModal(true);
+                            }}
+                            className="text-cyan-400 hover:text-cyan-200 font-medium underline"
+                          >
+                            Reschedule Interview
+                          </button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* View Interview Modal */}
+          {showViewModal && selectedInterview && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+              <div className="bg-[#181b2e] rounded-2xl p-8 w-full max-w-md shadow-[0_0_40px_#00f7ff80] border border-cyan-400">
+                <h3 className="text-2xl font-bold text-cyan-200 mb-6">Interview Details</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-cyan-100">Candidate</label>
+                    <p className="text-sm text-cyan-100">{selectedInterview.candidateName}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-cyan-100">Position</label>
+                    <p className="text-sm text-cyan-100">{selectedInterview.position}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-cyan-100">Interviewer</label>
+                    <p className="text-sm text-cyan-100">{selectedInterview.interviewer}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-cyan-100">Date & Time</label>
+                    <p className="text-sm text-cyan-100">{selectedInterview.date} at {selectedInterview.time}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-cyan-100">Type</label>
+                    <p className="text-sm text-cyan-100">{selectedInterview.type}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-cyan-100">Notes</label>
+                    <p className="text-sm text-cyan-100">{selectedInterview.notes || 'No notes available'}</p>
+                  </div>
+                </div>
+                <div className="mt-8 flex justify-end gap-4">
+                  <button
+                    onClick={() => {
+                      setShowViewModal(false);
+                      setSelectedInterview(null);
+                    }}
+                    className="px-5 py-2 rounded-lg bg-gray-700 text-white font-semibold hover:bg-gray-600 transition"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Reschedule Interview Modal */}
+          {showRescheduleModal && selectedInterview && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+              <div className="bg-[#181b2e] rounded-2xl p-8 w-full max-w-md shadow-[0_0_40px_#00f7ff80] border border-cyan-400">
+                <h3 className="text-2xl font-bold text-cyan-200 mb-6">
+                  {selectedInterview.status === 'Cancelled' ? 'Reschedule Cancelled Interview' : 'Reschedule Interview'}
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-cyan-100 mb-2">New Date</label>
+                    <input
+                      type="date"
+                      value={rescheduleData.date}
+                      onChange={(e) => setRescheduleData({ ...rescheduleData, date: e.target.value })}
+                      className="block w-full rounded-lg border border-cyan-400 bg-[#23264a] px-4 py-2 text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-cyan-100 mb-2">New Time</label>
+                    <input
+                      type="time"
+                      value={rescheduleData.time}
+                      onChange={(e) => setRescheduleData({ ...rescheduleData, time: e.target.value })}
+                      className="block w-full rounded-lg border border-cyan-400 bg-[#23264a] px-4 py-2 text-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                    />
+                  </div>
+                </div>
+                <div className="mt-8 flex justify-end gap-4">
+                  <button
+                    onClick={() => {
+                      setShowRescheduleModal(false);
+                      setSelectedInterview(null);
+                      setRescheduleData({ date: '', time: '' });
+                    }}
+                    className="px-5 py-2 rounded-lg bg-gray-700 text-white font-semibold hover:bg-gray-600 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleReschedule}
+                    className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-[0_0_10px_#00f7ff80] hover:opacity-90 transition"
+                  >
+                    {selectedInterview.status === 'Cancelled' ? 'Reschedule Interview' : 'Reschedule'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Cancel Interview Modal */}
+          {showCancelModal && selectedInterview && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+              <div className="bg-[#181b2e] rounded-2xl p-8 w-full max-w-md shadow-[0_0_40px_#00f7ff80] border border-rose-400">
+                <h3 className="text-2xl font-bold text-rose-200 mb-6">Cancel Interview</h3>
+                <p className="text-cyan-100 mb-6">
+                  Are you sure you want to cancel the interview with <span className="font-semibold text-rose-300">{selectedInterview.candidateName}</span>?
+                </p>
+                <div className="flex justify-end gap-4 mt-8">
+                  <button
+                    onClick={() => {
+                      setShowCancelModal(false);
+                      setSelectedInterview(null);
+                    }}
+                    className="px-5 py-2 rounded-lg bg-gray-700 text-white font-semibold hover:bg-gray-600 transition"
+                  >
+                    No, Keep Scheduled
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="px-5 py-2 rounded-lg bg-gradient-to-r from-rose-500 to-rose-700 text-white font-semibold shadow-[0_0_10px_#ff005580] hover:opacity-90 transition"
+                  >
+                    Yes, Cancel Interview
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-
-      {/* View Interview Modal */}
-      {showViewModal && selectedInterview && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Interview Details</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-gray-700">Candidate</label>
-                <p className="text-sm text-gray-900">{selectedInterview.candidateName}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Position</label>
-                <p className="text-sm text-gray-900">{selectedInterview.position}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Interviewer</label>
-                <p className="text-sm text-gray-900">{selectedInterview.interviewer}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Date & Time</label>
-                <p className="text-sm text-gray-900">{selectedInterview.date} at {selectedInterview.time}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Type</label>
-                <p className="text-sm text-gray-900">{selectedInterview.type}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700">Notes</label>
-                <p className="text-sm text-gray-900">{selectedInterview.notes || 'No notes available'}</p>
-              </div>
-            </div>
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={() => {
-                  setShowViewModal(false);
-                  setSelectedInterview(null);
-                }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Reschedule Interview Modal */}
-      {showRescheduleModal && selectedInterview && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              {selectedInterview.status === 'Cancelled' ? 'Reschedule Cancelled Interview' : 'Reschedule Interview'}
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">New Date</label>
-                <input
-                  type="date"
-                  value={rescheduleData.date}
-                  onChange={(e) => setRescheduleData({ ...rescheduleData, date: e.target.value })}
-                  className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">New Time</label>
-                <input
-                  type="time"
-                  value={rescheduleData.time}
-                  onChange={(e) => setRescheduleData({ ...rescheduleData, time: e.target.value })}
-                  className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                />
-              </div>
-            </div>
-            <div className="mt-6 flex justify-end space-x-3">
-              <button
-                onClick={() => {
-                  setShowRescheduleModal(false);
-                  setSelectedInterview(null);
-                  setRescheduleData({ date: '', time: '' });
-                }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleReschedule}
-                className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors duration-200"
-              >
-                {selectedInterview.status === 'Cancelled' ? 'Reschedule Interview' : 'Reschedule'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Cancel Interview Modal */}
-      {showCancelModal && selectedInterview && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Cancel Interview</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Are you sure you want to cancel the interview with {selectedInterview.candidateName}?
-            </p>
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => {
-                  setShowCancelModal(false);
-                  setSelectedInterview(null);
-                }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
-              >
-                No, Keep Scheduled
-              </button>
-              <button
-                onClick={handleCancel}
-                className="px-4 py-2 text-sm font-medium text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors duration-200"
-              >
-                Yes, Cancel Interview
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
-} 
+}

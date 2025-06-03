@@ -55,4 +55,30 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-} 
+}
+
+model Feedback {
+  id            String   @id @default(cuid())
+  content       String
+  interviewerId String
+  candidateId   String
+  createdAt     DateTime @default(now())
+}
+
+model Interview {
+  id            String   @id @default(cuid())
+  interviewerId String
+  candidateId   String
+  date          DateTime
+  status        String
+}
+
+model InterviewFeedback {
+  id              String   @id @default(cuid())
+  interviewerId   String
+  interviewId     String
+  technicalSkills Int
+  problemSolving  Int
+  communication   Int
+  cultureFit      Int
+}

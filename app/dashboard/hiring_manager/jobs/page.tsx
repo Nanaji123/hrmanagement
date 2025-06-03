@@ -154,165 +154,154 @@ export default function JobsPage() {
   };
 
   return (
-    <div className="space-y-8 p-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Job Postings</h1>
-        <div className="flex space-x-4">
-          <input
-            type="text"
-            placeholder="Search jobs..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white text-black"
-          />
-          <button
-            onClick={() => setShowNewJobForm(true)}
-            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 font-medium"
-          >
-            Create New Job
-          </button>
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-4 py-10 flex items-center justify-center">
+      <div className="w-full p-8 md:p-12">
+        <div className="rounded-3xl bg-[#0e101c] p-8 md:p-12 flex flex-col gap-8 shadow-[0_0_40px_#00f7ff30] border border-[#2e314d]">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+            <h1 className="text-3xl font-bold text-cyan-200 drop-shadow-[0_0_10px_#00f7ff]">Job Postings</h1>
+            <div className="flex gap-3">
+              <input
+                type="text"
+                placeholder="Search jobs..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="px-4 py-2 rounded-xl border border-cyan-400 bg-[#181b2e] text-cyan-100 placeholder-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 shadow-[0_0_10px_#00f7ff30]"
+              />
+              <button
+                onClick={() => setShowNewJobForm(true)}
+                className="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-[0_0_15px_#00f7ff80] hover:opacity-90 transition text-base"
+              >
+                Create New Job
+              </button>
+            </div>
+          </div>
+          <div>
+            <table className="min-w-full rounded-xl overflow-hidden shadow-[0_0_20px_#00f7ff20]">
+              <thead className="bg-[#181b2e] text-cyan-200">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Job Title</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Department</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Location</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Type</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Applicants</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Posted Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-[#101325] divide-y divide-[#23264a] text-cyan-100">
+                {filteredJobs.map((job) => (
+                  <tr key={job.id} className="hover:bg-[#181b2e] transition-colors duration-150">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-semibold text-cyan-100">{job.title}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-cyan-200">{job.department}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-cyan-200">{job.location}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-cyan-200">{job.type}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(job.status)}`}>
+                        {job.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-cyan-200">{job.applicants}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-cyan-200">{job.postedDate}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-rose-400">
+                      <button 
+                        onClick={() => {
+                          setSelectedJob(job);
+                          setShowDeleteModal(true);
+                        }}
+                        className="hover:underline hover:text-rose-300 font-medium"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
+      {/* New Job Modal */}
       {showNewJobForm && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-semibold text-black mb-6">Create New Job</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-black mb-2">Job Title</label>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+          <div className="bg-[#181b2e] rounded-2xl p-8 w-full max-w-md shadow-[0_0_40px_#00f7ff80] border border-cyan-400">
+            <h2 className="text-2xl font-bold text-cyan-200 mb-6">Create New Job</h2>
+            <div className="space-y-4">
               <input
-                type="text"
+                className="w-full px-4 py-2 rounded-lg bg-[#23264a] text-cyan-100 border border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                placeholder="Job Title"
                 value={newJob.title}
-                onChange={(e) => setNewJob({ ...newJob, title: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
+                onChange={e => setNewJob({ ...newJob, title: e.target.value })}
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-black mb-2">Department</label>
               <input
-                type="text"
+                className="w-full px-4 py-2 rounded-lg bg-[#23264a] text-cyan-100 border border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                placeholder="Department"
                 value={newJob.department}
-                onChange={(e) => setNewJob({ ...newJob, department: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
+                onChange={e => setNewJob({ ...newJob, department: e.target.value })}
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-black mb-2">Location</label>
               <input
-                type="text"
+                className="w-full px-4 py-2 rounded-lg bg-[#23264a] text-cyan-100 border border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                placeholder="Location"
                 value={newJob.location}
-                onChange={(e) => setNewJob({ ...newJob, location: e.target.value })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
+                onChange={e => setNewJob({ ...newJob, location: e.target.value })}
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-black mb-2">Job Type</label>
               <select
+                className="w-full px-4 py-2 rounded-lg bg-[#23264a] text-cyan-100 border border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 value={newJob.type}
-                onChange={(e) => setNewJob({ ...newJob, type: e.target.value as 'Full-time' | 'Part-time' | 'Contract' })}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-black"
+                onChange={e => setNewJob({ ...newJob, type: e.target.value as Job['type'] })}
               >
                 <option value="Full-time">Full-time</option>
                 <option value="Part-time">Part-time</option>
                 <option value="Contract">Contract</option>
               </select>
             </div>
-          </div>
-          <div className="mt-6 flex justify-end space-x-3">
-            <button
-              onClick={() => setShowNewJobForm(false)}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-black hover:bg-gray-50 transition-colors duration-200 font-medium"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleCreateJob}
-              className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 font-medium"
-            >
-              Create Job
-            </button>
+            <div className="flex justify-end gap-4 mt-8">
+              <button
+                onClick={() => setShowNewJobForm(false)}
+                className="px-5 py-2 rounded-lg bg-gray-700 text-white font-semibold hover:bg-gray-600 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateJob}
+                className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-[0_0_10px_#00f7ff80] hover:opacity-90 transition"
+              >
+                Create
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Job Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Department</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Location</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Applicants</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Posted Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredJobs.map((job) => (
-              <tr key={job.id} className="hover:bg-gray-50 transition-colors duration-150">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-semibold text-gray-900">{job.title}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{job.department}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{job.location}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{job.type}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-3 py-1 text-xs font-medium rounded-full ${getStatusColor(job.status)}`}>
-                    {job.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{job.applicants}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-600">{job.postedDate}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  <button 
-                    onClick={() => {
-                      setSelectedJob(job);
-                      setShowDeleteModal(true);
-                    }}
-                    className="text-rose-600 hover:text-rose-900 font-medium"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
       {/* Delete Confirmation Modal */}
       {showDeleteModal && selectedJob && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Delete Job</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Are you sure you want to delete the job posting for {selectedJob.title}?
-            </p>
-            <div className="flex justify-end space-x-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+          <div className="bg-[#181b2e] rounded-2xl p-8 w-full max-w-md shadow-[0_0_40px_#00f7ff80] border border-rose-400">
+            <h2 className="text-2xl font-bold text-rose-200 mb-6">Delete Job</h2>
+            <p className="text-cyan-100 mb-6">Are you sure you want to delete the job <span className="font-semibold text-rose-300">{selectedJob.title}</span>?</p>
+            <div className="flex justify-end gap-4 mt-8">
               <button
-                onClick={() => {
-                  setShowDeleteModal(false);
-                  setSelectedJob(null);
-                }}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                onClick={() => setShowDeleteModal(false)}
+                className="px-5 py-2 rounded-lg bg-gray-700 text-white font-semibold hover:bg-gray-600 transition"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteJob}
-                className="px-4 py-2 text-sm font-medium text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors duration-200"
+                className="px-5 py-2 rounded-lg bg-gradient-to-r from-rose-500 to-rose-700 text-white font-semibold shadow-[0_0_10px_#ff005580] hover:opacity-90 transition"
               >
                 Delete
               </button>
@@ -320,19 +309,6 @@ export default function JobsPage() {
           </div>
         </div>
       )}
-
-      {/* Undo Snackbar */}
-      {showUndo && lastDeletedJob && (
-        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-4 z-50">
-          <span>Job "{lastDeletedJob.title}" deleted.</span>
-          <button
-            onClick={handleUndoDelete}
-            className="underline text-emerald-400 hover:text-emerald-200 font-semibold"
-          >
-            Undo
-          </button>
-        </div>
-      )}
     </div>
   );
-} 
+}

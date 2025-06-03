@@ -101,6 +101,7 @@ const navItems: NavItem[] = [
     icon: UserGroupIcon,
     role: 'hr_recruiter'
   },
+  
   // Interviewer items
   {
     name: 'Dashboard',
@@ -118,6 +119,12 @@ const navItems: NavItem[] = [
     name: 'Feedback',
     href: '/dashboard/interviewer/feedback',
     icon: FileText,
+    role: 'interviewer'
+  },
+  {
+    name: 'Profile',
+    href: '/dashboard/interviewer/profile',
+    icon: UserCircle,
     role: 'interviewer'
   }
 ];
@@ -184,30 +191,28 @@ const DynamicNav: React.FC<DynamicNavProps> = ({
 
   return (
     <div
-      className={`fixed left-0 top-0 h-screen bg-white border-r border-gray-100 transition-all duration-300 ease-in-out z-50  ${
+      className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] border-r border-[#2e314d] transition-all duration-300 ease-in-out z-50 shadow-[0_0_40px_#00f7ff30] ${
         isExpanded ? 'w-64' : 'w-20'
       }`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{ height: '100vh' }}
     >
-      <div className="p-4 h-full overflow-y-auto">
+      <div className="p-4 h-full overflow-y-auto flex flex-col">
         <div className="flex items-center justify-center mb-8 pt-4">
-          <h1 className={`text-xl font-bold ${isExpanded ? 'block' : 'hidden'}`}>
-            {getRoleTitle()}
-          </h1>
+          <h1 className={`text-xl font-bold text-cyan-300 drop-shadow-[0_0_10px_#00f7ff] ${isExpanded ? 'block' : 'hidden'}`}>{getRoleTitle()}</h1>
         </div>
-        <nav className="space-y-2">
+        <nav className="space-y-2 flex-1">
           {filteredNavItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+                className={`flex items-center px-4 py-2 rounded-xl transition-all duration-200 font-medium text-base gap-3 ${
                   isActive
-                    ? 'bg-primary-100 text-primary-600'
-                    : 'text-gray-600 hover:bg-gray-50'
+                    ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-200 shadow-[0_0_15px_#00f7ff80] scale-105 border-l-4 border-cyan-400' 
+                    : 'text-[#9aa0b4] hover:bg-[#181b2e] hover:text-cyan-200'
                 }`}
               >
                 <item.icon className="w-6 h-6" />
@@ -219,7 +224,7 @@ const DynamicNav: React.FC<DynamicNavProps> = ({
           })}
           <button
             onClick={handleLogout}
-            className="flex items-center w-full px-4 py-2 mt-4 text-gray-600 rounded-lg hover:bg-gray-50"
+            className="flex items-center w-full px-4 py-2 mt-4 text-[#9aa0b4] rounded-xl hover:bg-[#181b2e] hover:text-cyan-200 transition-all duration-200 gap-3"
           >
             <LogOut className="w-6 h-6" />
             {isExpanded && (
@@ -227,9 +232,12 @@ const DynamicNav: React.FC<DynamicNavProps> = ({
             )}
           </button>
         </nav>
+        <div className="mt-auto text-center text-xs text-[#5f6b8b] pt-6 opacity-70 select-none">
+          HR Management System
+        </div>
       </div>
     </div>
   );
 };
 
-export default DynamicNav; 
+export default DynamicNav;

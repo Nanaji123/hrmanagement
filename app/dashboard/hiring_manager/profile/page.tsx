@@ -78,169 +78,143 @@ export default function HiringManagerProfilePage() {
   };
 
   return (
-    <div className="space-y-8 p-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
-        {!isEditing && (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 font-medium"
-          >
-            Edit Profile
-          </button>
-        )}
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-start space-x-6">
-          <div className="flex-shrink-0">
-            {isEditing ? (
-              <div className="relative">
-                <div 
-                  className="h-24 w-24 rounded-full bg-emerald-50 flex items-center justify-center cursor-pointer overflow-hidden"
-                  onClick={triggerFileInput}
-                >
-                  {previewImage || profile.avatar ? (
-                    <Image
-                      src={previewImage || profile.avatar}
-                      alt="Profile"
-                      width={96}
-                      height={96}
-                      className="object-cover w-full h-full"
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-4 py-10 flex items-center justify-center">
+      <div className="w-full max-w-3xl mx-auto rounded-3xl p-1 bg-gradient-to-br from-cyan-400/40 via-blue-700/30 to-transparent shadow-[0_0_60px_#00f7ff50]">
+        <div className="rounded-3xl bg-[#0e101c] p-8 md:p-12 flex flex-col gap-8 shadow-[0_0_40px_#00f7ff30] border border-[#2e314d]">
+          {isEditing ? (
+            <>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+                <div className="flex items-center gap-6">
+                  <div className="h-28 w-28 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-4xl font-bold text-white shadow-[0_0_30px_#00f7ff80] border-4 border-[#101325]">
+                    {editedProfile.name
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')
+                      .toUpperCase()}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <input
+                      className="text-3xl md:text-4xl font-extrabold text-cyan-200 bg-transparent border-b border-cyan-400 focus:outline-none mb-1"
+                      value={editedProfile.name}
+                      onChange={e => setEditedProfile({ ...editedProfile, name: e.target.value })}
                     />
-                  ) : (
-                    <span className="text-2xl text-emerald-700 font-semibold">
-                      {profile.name.split(' ').map(n => n[0]).join('')}
-                    </span>
-                  )}
-                </div>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleImageUpload}
-                  accept="image/*"
-                  className="hidden"
-                />
-                <div className="absolute bottom-0 right-0 bg-emerald-600 text-white p-1 rounded-full cursor-pointer hover:bg-emerald-700">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                  </svg>
+                    <input
+                      className="text-base text-[#9aa0b4] font-medium bg-transparent border-b border-cyan-400 focus:outline-none mb-1"
+                      value={editedProfile.role}
+                      onChange={e => setEditedProfile({ ...editedProfile, role: e.target.value })}
+                    />
+                    <input
+                      className="text-sm text-[#5f6b8b] bg-transparent border-b border-cyan-400 focus:outline-none"
+                      value={editedProfile.department}
+                      onChange={e => setEditedProfile({ ...editedProfile, department: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
-            ) : (
-              <div className="h-24 w-24 rounded-full bg-emerald-50 flex items-center justify-center overflow-hidden">
-                {profile.avatar ? (
-                  <Image
-                    src={profile.avatar}
-                    alt="Profile"
-                    width={96}
-                    height={96}
-                    className="object-cover w-full h-full"
-                  />
-                ) : (
-                  <span className="text-2xl text-emerald-700 font-semibold">
-                    {profile.name.split(' ').map(n => n[0]).join('')}
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="flex-1">
-            {isEditing ? (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input
-                    type="text"
-                    value={editedProfile.name}
-                    onChange={(e) => setEditedProfile({ ...editedProfile, name: e.target.value })}
-                    className="block w-full rounded-lg border border-gray-200 px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={editedProfile.email}
-                    onChange={(e) => setEditedProfile({ ...editedProfile, email: e.target.value })}
-                    className="block w-full rounded-lg border border-gray-200 px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input
-                    type="tel"
-                    value={editedProfile.phone}
-                    onChange={(e) => setEditedProfile({ ...editedProfile, phone: e.target.value })}
-                    className="block w-full rounded-lg border border-gray-200 px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                  <input
-                    type="text"
-                    value={editedProfile.location}
-                    onChange={(e) => setEditedProfile({ ...editedProfile, location: e.target.value })}
-                    className="block w-full rounded-lg border border-gray-200 px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
-                  <textarea
-                    value={editedProfile.bio}
-                    onChange={(e) => setEditedProfile({ ...editedProfile, bio: e.target.value })}
-                    rows={3}
-                    className="block w-full rounded-lg border border-gray-200 px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  />
-                </div>
-                <div className="flex justify-end space-x-3">
-                  <button
-                    onClick={handleCancel}
-                    className="px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200 font-medium"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleSave}
-                    className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 font-medium"
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900">{profile.name}</h2>
-                  <p className="text-sm text-gray-600">{profile.role}</p>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-white mt-6">
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">Email</p>
-                    <p className="text-sm text-gray-600">{profile.email}</p>
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-cyan-300 mb-1">Email:</span>
+                    <input
+                      className="text-[#9aa0b4] bg-transparent border-b border-cyan-400 focus:outline-none"
+                      value={editedProfile.email}
+                      onChange={e => setEditedProfile({ ...editedProfile, email: e.target.value })}
+                    />
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">Phone</p>
-                    <p className="text-sm text-gray-600">{profile.phone}</p>
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-cyan-300 mb-1">Phone:</span>
+                    <input
+                      className="text-[#9aa0b4] bg-transparent border-b border-cyan-400 focus:outline-none"
+                      value={editedProfile.phone}
+                      onChange={e => setEditedProfile({ ...editedProfile, phone: e.target.value })}
+                    />
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">Department</p>
-                    <p className="text-sm text-gray-600">{profile.department}</p>
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-cyan-300 mb-1">Department:</span>
+                    <input
+                      className="text-[#9aa0b4] bg-transparent border-b border-cyan-400 focus:outline-none"
+                      value={editedProfile.department}
+                      onChange={e => setEditedProfile({ ...editedProfile, department: e.target.value })}
+                    />
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">Location</p>
-                    <p className="text-sm text-gray-600">{profile.location}</p>
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-cyan-300 mb-1">Location:</span>
+                    <input
+                      className="text-[#9aa0b4] bg-transparent border-b border-cyan-400 focus:outline-none"
+                      value={editedProfile.location}
+                      onChange={e => setEditedProfile({ ...editedProfile, location: e.target.value })}
+                    />
                   </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-700">Bio</p>
-                  <p className="text-sm text-gray-600 mt-1">{profile.bio}</p>
+                <div className="space-y-4">
+                  <div>
+                    <span className="font-semibold text-cyan-300">Bio:</span>
+                    <textarea
+                      className="ml-2 text-[#9aa0b4] bg-transparent border-b border-cyan-400 focus:outline-none w-full"
+                      value={editedProfile.bio}
+                      onChange={e => setEditedProfile({ ...editedProfile, bio: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
-            )}
-          </div>
+              <div className="flex gap-6 justify-end mt-6">
+                <button
+                  onClick={handleSave}
+                  className="px-6 py-3 gap-6 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-xl shadow-[0_0_15px_#00f7ff80] hover:opacity-90 transition text-lg"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleCancel}
+                  className="px-6 py-3 gap-6 bg-gray-700 text-white font-semibold rounded-xl hover:bg-gray-600 transition text-lg"
+                >
+                  Cancel
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+                <div className="flex items-center gap-6">
+                  <div className="h-28 w-28 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-4xl font-bold text-white shadow-[0_0_30px_#00f7ff80] border-4 border-[#101325]">
+                    {profile.name
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')
+                      .toUpperCase()}
+                  </div>
+                  <div>
+                    <h1 className="text-3xl md:text-4xl font-extrabold text-cyan-200 drop-shadow-[0_0_10px_#00f7ff]">{profile.name}</h1>
+                    <p className="text-base text-[#9aa0b4] font-medium">{profile.role}</p>
+                    <p className="text-sm text-[#5f6b8b]">{profile.department}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setEditedProfile(profile);
+                    setIsEditing(true);
+                  }}
+                  className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-xl shadow-[0_0_15px_#00f7ff80] hover:opacity-90 transition text-lg"
+                >
+                  Edit Profile
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-white">
+                <div className="space-y-4">
+                  <p><span className="font-semibold text-cyan-300">Email:</span> <span className="text-[#9aa0b4]">{profile.email}</span></p>
+                  <p><span className="font-semibold text-cyan-300">Phone:</span> <span className="text-[#9aa0b4]">{profile.phone || '-'}</span></p>
+                  <p><span className="font-semibold text-cyan-300">Department:</span> <span className="text-[#9aa0b4]">{profile.department}</span></p>
+                  <p><span className="font-semibold text-cyan-300">Location:</span> <span className="text-[#9aa0b4]">{profile.location || '-'}</span></p>
+                </div>
+                <div className="space-y-4">
+                  <p><span className="font-semibold text-cyan-300">Bio:</span> <span className="text-[#9aa0b4]">{profile.bio}</span></p>
+                  {/* Add more fields as needed */}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
   );
-} 
+}

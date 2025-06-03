@@ -180,28 +180,23 @@ export default function EditInterview({ params }: { params: { id: string } }) {
    }
 
   return (
-    <div className="p-6">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Edit Interview</h1>
-        
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-6 py-10 text-white flex items-center justify-center">
+      <div className="max-w-2xl w-full mx-auto bg-gradient-to-br from-cyan-400/40 via-blue-700/30 to-transparent rounded-3xl shadow-[0_0_40px_#00f7ff30] border border-[#2e314d] p-8 md:p-12">
+        <h1 className="text-3xl font-bold text-cyan-200 drop-shadow-[0_0_10px_#00f7ff] mb-6">Edit Interview</h1>
         {saveError && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          <div className="mb-6 bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded">
             {saveError}
           </div>
         )}
-
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
             <div>
-              <label htmlFor="candidateId" className="block text-sm font-medium text-gray-700">Candidate</label>
+              <label htmlFor="candidateId" className="block text-sm font-medium text-cyan-100">Candidate</label>
               <select
                 id="candidateId"
                 name="candidateId"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.candidateId ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`mt-1 block w-full rounded-xl border-cyan-400 bg-[#23264a] text-cyan-100 shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 ${errors.candidateId ? 'border-rose-300' : ''}`}
                 value={formData.candidateId}
                 onChange={handleInputChange}
               >
@@ -211,91 +206,76 @@ export default function EditInterview({ params }: { params: { id: string } }) {
                  ))}
               </select>
               {errors.candidateId && (
-                 <p className="mt-1 text-sm text-red-600">{errors.candidateId}</p>
+                 <p className="mt-1 text-sm text-rose-400">{errors.candidateId}</p>
               )}
             </div>
-
             <div>
-              <label htmlFor="interviewer" className="block text-sm font-medium text-gray-700">Interviewer(s)</label>
+              <label htmlFor="interviewer" className="block text-sm font-medium text-cyan-100">Interviewer(s)</label>
               <input
                 type="text"
                 id="interviewer"
                 name="interviewer"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.interviewer ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`mt-1 block w-full rounded-xl border-cyan-400 bg-[#23264a] text-cyan-100 shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 ${errors.interviewer ? 'border-rose-300' : ''}`}
                 value={formData.interviewer}
                 onChange={handleInputChange}
               />
               {errors.interviewer && (
-                <p className="mt-1 text-sm text-red-600">{errors.interviewer}</p>
+                <p className="mt-1 text-sm text-rose-400">{errors.interviewer}</p>
               )}
             </div>
-
             <div>
-              <label htmlFor="date" className="block text-sm font-medium text-gray-700">Date</label>
+              <label htmlFor="date" className="block text-sm font-medium text-cyan-100">Date</label>
               <input
                 type="date"
                 id="date"
                 name="date"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.date ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`mt-1 block w-full rounded-xl border-cyan-400 bg-[#23264a] text-cyan-100 shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 ${errors.date ? 'border-rose-300' : ''}`}
                 value={formData.date}
                 onChange={handleInputChange}
               />
                {errors.date && (
-                <p className="mt-1 text-sm text-red-600">{errors.date}</p>
+                <p className="mt-1 text-sm text-rose-400">{errors.date}</p>
               )}
             </div>
-
             <div>
-              <label htmlFor="time" className="block text-sm font-medium text-gray-700">Time</label>
+              <label htmlFor="time" className="block text-sm font-medium text-cyan-100">Time</label>
               <input
                 type="time"
                 id="time"
                 name="time"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.time ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`mt-1 block w-full rounded-xl border-cyan-400 bg-[#23264a] text-cyan-100 shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 ${errors.time ? 'border-rose-300' : ''}`}
                 value={formData.time}
                 onChange={handleInputChange}
               />
                {errors.time && (
-                <p className="mt-1 text-sm text-red-600">{errors.time}</p>
+                <p className="mt-1 text-sm text-rose-400">{errors.time}</p>
               )}
             </div>
-
             <div>
-              <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
+              <label htmlFor="location" className="block text-sm font-medium text-cyan-100">Location</label>
               <input
                 type="text"
                 id="location"
                 name="location"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.location ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`mt-1 block w-full rounded-xl border-cyan-400 bg-[#23264a] text-cyan-100 shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 ${errors.location ? 'border-rose-300' : ''}`}
                 value={formData.location}
                 onChange={handleInputChange}
               />
               {errors.location && (
-                <p className="mt-1 text-sm text-red-600">{errors.location}</p>
+                <p className="mt-1 text-sm text-rose-400">{errors.location}</p>
               )}
             </div>
-
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status</label>
+              <label htmlFor="status" className="block text-sm font-medium text-cyan-100">Status</label>
               <select
                 id="status"
                 name="status"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-                  errors.status ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`mt-1 block w-full rounded-xl border-cyan-400 bg-[#23264a] text-cyan-100 shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 ${errors.status ? 'border-rose-300' : ''}`}
                 value={formData.status}
                 onChange={handleInputChange}
               >
@@ -304,24 +284,22 @@ export default function EditInterview({ params }: { params: { id: string } }) {
                  <option value="Canceled">Canceled</option>
               </select>
               {errors.status && (
-                 <p className="mt-1 text-sm text-red-600">{errors.status}</p>
+                 <p className="mt-1 text-sm text-rose-400">{errors.status}</p>
               )}
             </div>
-
           </div>
-
-          <div className="flex justify-end space-x-4">
+          <div className="flex justify-end gap-4">
             <button
               type="button"
               onClick={() => router.back()}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              className="px-5 py-2 rounded-lg bg-gray-700 text-white font-semibold hover:bg-gray-600 transition"
               disabled={isSaving}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-[0_0_10px_#00f7ff80] hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSaving}
             >
               {isSaving ? 'Saving...' : 'Save Changes'}
@@ -331,4 +309,4 @@ export default function EditInterview({ params }: { params: { id: string } }) {
       </div>
     </div>
   );
-} 
+}

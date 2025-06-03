@@ -25,7 +25,7 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#050d25]">
       <DynamicNav onExpandChange={setIsNavExpanded} userRole={getUserRole()} />
       <div 
         className={`transition-all duration-300 ease-in-out ${
@@ -33,11 +33,11 @@ export default function DashboardLayout({
         }`}
       >
         <main className="p-8">
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+          <div className="bg-transparent rounded-xl p-0 border-0 shadow-none">
             {children}
           </div>
         </main>
       </div>
     </div>
   );
-} 
+}

@@ -72,78 +72,78 @@ export default function InterviewSchedulingPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-semibold text-gray-900">Interview Scheduling</h1>
-        <Link
-          href="/dashboard/HR_RECRUiTER/interview_sch/new"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Schedule New Interview
-        </Link>
-      </div>
-
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Candidate</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interviewer</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {interviews.map((interview) => (
-              <tr key={interview.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {/* Display candidate name if available, otherwise just ID */}
-                  {interview.candidateName || interview.candidateId}
-                  </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{interview.interviewer}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(interview.date).toLocaleDateString()}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{interview.time}</td>
-                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{interview.location}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                    ${interview.status === 'Scheduled' ? 'bg-blue-100 text-blue-800' :
-                      interview.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                      'bg-red-100 text-red-800'}`}>
-                    {interview.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <Link
-                    href={`/dashboard/HR_RECRUiTER/interview_sch/${interview.id}`}
-                    className="text-blue-600 hover:text-blue-900 mr-4"
-                  >
-                    View
-                  </Link>
-                   <Link
-                    href={`/dashboard/HR_RECRUiTER/interview_sch/edit/${interview.id}`}
-                    className="text-indigo-600 hover:text-indigo-900 mr-4"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    className="text-red-600 hover:text-red-900"
-                    onClick={() => handleDelete(interview.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-10 py-10 text-white flex items-center justify-center">
+      <div className="max-w-7xl w-full mx-auto bg-gradient-to-br from-cyan-400/40 via-blue-700/30 to-transparent rounded-3xl shadow-[0_0_40px_#00f7ff30] border border-[#2e314d] p-8 md:p-23">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-cyan-200 drop-shadow-[0_0_10px_#00f7ff]">Interview Scheduling</h1>
+          <Link
+            href="/dashboard/HR_RECRUiTER/interview_sch/new"
+            className="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold shadow-[0_0_15px_#00f7ff80] hover:opacity-90 transition text-base"
+          >
+            Schedule New Interview
+          </Link>
+        </div>
+        <div className="bg-[#0e101c] rounded-2xl shadow-[0_0_30px_#00f7ff30] border border-[#2e314d] overflow-hidden">
+          <table className="min-w-full">
+            <thead className="bg-[#181b2e] text-cyan-200">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Candidate</th>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Interviewer</th>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Time</th>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Location</th>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {interviews.length === 0 && !loading && !error && (
-          <div className="text-center py-8 text-gray-500">
-            No interviews scheduled.
-          </div>
-        )}
+            </thead>
+            <tbody className="bg-[#101325] divide-y divide-[#23264a] text-cyan-100">
+              {interviews.map((interview) => (
+                <tr key={interview.id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-cyan-100">
+                    {interview.candidateName || interview.candidateId}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300">{interview.interviewer}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300">{new Date(interview.date).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300">{interview.time}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300">{interview.location}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                      ${interview.status === 'Scheduled' ? 'bg-emerald-900/30 text-emerald-300' :
+                        interview.status === 'Completed' ? 'bg-blue-900/30 text-cyan-300' :
+                        'bg-rose-900/30 text-rose-300'}`}>
+                      {interview.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Link
+                      href={`/dashboard/HR_RECRUiTER/interview_sch/${interview.id}`}
+                      className="text-cyan-400 hover:text-cyan-200 font-medium mr-4 underline"
+                    >
+                      View
+                    </Link>
+                    <Link
+                      href={`/dashboard/HR_RECRUiTER/interview_sch/edit/${interview.id}`}
+                      className="text-blue-400 hover:text-blue-200 font-medium mr-4 underline"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      className="text-rose-400 hover:text-rose-300 font-medium underline"
+                      onClick={() => handleDelete(interview.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {interviews.length === 0 && !loading && !error && (
+            <div className="text-center py-8 text-cyan-300">
+              No interviews scheduled.
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

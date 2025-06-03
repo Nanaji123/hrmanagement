@@ -108,100 +108,102 @@ export default function ProfilePage() {
     );
 
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-md mt-10">
-      <div className="flex items-center space-x-6 mb-6">
-        <div className="h-24 w-24 rounded-full bg-gray-300 flex items-center justify-center text-4xl font-bold text-gray-700">
-          {profile.name
-            .split(" ")
-            .map((n) => n[0])
-            .join("")
-            .toUpperCase()}
-        </div>
-        <div>
-          {isEditing ? (
-            <input
-              className="text-4xl font-bold text-gray-900 border-b border-gray-400 focus:outline-none focus:border-gray-400"
-              value={editName}
-              onChange={(e) => setEditName(e.target.value)}
-            />
-          ) : (
-            <h1 className="text-4xl font-bold text-gray-900">{profile.name}</h1>
-          )}
-          <p className="text-gray-600">{profile.role}</p>
-          <p className="text-gray-600">{profile.department}</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
-        <div className="space-y-4">
-          <p>
-            <strong>Email:</strong> {profile.email}
-          </p>
-          <p>
-            <strong>Expertise:</strong> {profile.expertise.join(", ")}
-          </p>
-          <p>
-            <strong>Join Date:</strong> {profile.joinDate}
-          </p>
-          <p>
-            <strong>Bio:</strong>{" "}
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-6 py-10 text-white flex items-center justify-center">
+      <div className="max-w-7xl w-full mx-auto bg-[#0e101c] rounded-3xl shadow-[0_0_40px_#00f7ff30] border border-[#2e314d] p-8 md:p-12">
+        <div className="flex items-center space-x-6 mb-6">
+          <div className="h-24 w-24 rounded-full bg-gray-300 flex items-center justify-center text-4xl font-bold text-gray-700">
+            {profile.name
+              .split(" ")
+              .map((n) => n[0])
+              .join("")
+              .toUpperCase()}
+          </div>
+          <div>
             {isEditing ? (
-              <textarea
-                className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:border-gray-300"
-                rows={4}
-                value={editBio}
-                onChange={(e) => setEditBio(e.target.value)}
+              <input
+                className="text-4xl font-bold text-gray-900 border-b border-gray-400 focus:outline-none focus:border-gray-400"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
               />
             ) : (
-              profile.bio
+              <h1 className="text-4xl font-bold text-gray-900">{profile.name}</h1>
             )}
-          </p>
+            <p className="text-gray-600">{profile.role}</p>
+            <p className="text-gray-600">{profile.department}</p>
+          </div>
         </div>
-        <div className="space-y-4">
-          <p>
-            <strong>Total Interviews:</strong> {profile.totalInterviews}
-          </p>
-          <p>
-            <strong>Completed Interviews:</strong> {profile.completedInterviews}
-          </p>
-          <p>
-            <strong>Upcoming Interviews:</strong> {profile.upcomingInterviews}
-          </p>
-          <p>
-            <strong>Average Rating:</strong> {profile.averageRating.toFixed(1)}
-          </p>
-        </div>
-      </div>
 
-      <div className="mt-8 flex space-x-4">
-        {isEditing ? (
-          <>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
+          <div className="space-y-4">
+            <p>
+              <strong>Email:</strong> {profile.email}
+            </p>
+            <p>
+              <strong>Expertise:</strong> {profile.expertise.join(", ")}
+            </p>
+            <p>
+              <strong>Join Date:</strong> {profile.joinDate}
+            </p>
+            <p>
+              <strong>Bio:</strong>{" "}
+              {isEditing ? (
+                <textarea
+                  className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:outline-none focus:border-gray-300"
+                  rows={4}
+                  value={editBio}
+                  onChange={(e) => setEditBio(e.target.value)}
+                />
+              ) : (
+                profile.bio
+              )}
+            </p>
+          </div>
+          <div className="space-y-4">
+            <p>
+              <strong>Total Interviews:</strong> {profile.totalInterviews}
+            </p>
+            <p>
+              <strong>Completed Interviews:</strong> {profile.completedInterviews}
+            </p>
+            <p>
+              <strong>Upcoming Interviews:</strong> {profile.upcomingInterviews}
+            </p>
+            <p>
+              <strong>Average Rating:</strong> {profile.averageRating.toFixed(1)}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 flex space-x-4">
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSave}
+                className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => {
+                  setIsEditing(false);
+                  setEditName(profile.name);
+                  setEditBio(profile.bio);
+                }}
+                className="px-6 py-3 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
             <button
-              onClick={handleSave}
-              className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              onClick={() => setIsEditing(true)}
+              className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              Save
+              Edit Profile
             </button>
-            <button
-              onClick={() => {
-                setIsEditing(false);
-                setEditName(profile.name);
-                setEditBio(profile.bio);
-              }}
-              className="px-6 py-3 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
-            >
-              Cancel
-            </button>
-          </>
-        ) : (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Edit Profile
-          </button>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
-} 
+}
