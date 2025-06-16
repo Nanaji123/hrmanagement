@@ -1,29 +1,35 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-// Mock database query (replace with your real DB queries)
-const feedbacks = [
-  { interviewId: '1', candidateName: 'Alice Johnson', deadline: '2025-06-01', status: 'Pending', interviewerId: 'int1' },
-  { interviewId: '2', candidateName: 'Bob Smith', deadline: '2025-06-05', status: 'Submitted', interviewerId: 'int1' },
-  { interviewId: '3', candidateName: 'Carol Davis', deadline: '2025-05-28', status: 'Pending', interviewerId: 'int2' },
-];
-
-// Middleware to get logged-in user (simplified)
-function getLoggedInUser() {
-  // Implement your auth logic here, e.g., via JWT or session
-  return { id: 'int1', name: 'Interviewer One' };
-}
-
-export async function GET() {
-  const user = getLoggedInUser();
-
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+export async function GET(req: NextRequest) {
+  try {
+    const token = await getToken({ req });
+    const userId = token?.id;
+    const jwt = token?.accessToken || token?.token || token?.jwt; // try common token fields
+    if (!userId || !jwt) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    // Fetch all feedbacks for this interviewer, passing the JWT
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_MS2_API}/feedback/interviewer/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Failed to fetch feedbacks from ms2 backend' }, { status: res.status });
+    }
+    const feedbacks = await res.json();
+    // Filter for pending feedbacks
+    const pendingFeedbacks = feedbacks.filter((f: any) => f.status === 'Pending');
+    return NextResponse.json(pendingFeedbacks);
+  } catch (error) {
+    console.error('Error fetching pending feedbacks:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch pending feedbacks' },
+      { status: 500 }
+    );
   }
-
-  // Filter feedbacks for this interviewer and pending status only
-  const pendingFeedbacks = feedbacks.filter(
-    (fb) => fb.interviewerId === user.id && fb.status === 'Pending'
-  );
-
-  return NextResponse.json(pendingFeedbacks);
-} 
+}

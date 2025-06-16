@@ -1,73 +1,55 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-
-interface Feedback {
-  technicalSkills: number;
-  problemSolving: number;
-  communication: number;
-  cultureFit: number;
-}
 
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-
-    if (!session?.user?.id) {
+    const user = session?.user as any;
+    if (!user?.jwt) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
       );
     }
 
-    const userId = session.user.id;
+    const userId = user.id;
+    const jwt = user.jwt;
 
-    // Get total interviews
-    const totalInterviews = await prisma.interview.count({
-      where: {
-        interviewerId: userId,
+    // Fetch stats from ms2 backend
+    const ms2Url = `http://localhost:5000/api/interviews?interviewerId=${userId}`;
+    const res = await fetch(ms2Url, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
       },
     });
 
-    // Get completed interviews
-    const completedInterviews = await prisma.interview.count({
-      where: {
-        interviewerId: userId,
-        status: 'COMPLETED',
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Failed to fetch from ms2 backend' }, { status: res.status });
+    }
+
+    const interviews = await res.json();
+
+    // Calculate stats from ms2 data
+    const totalInterviews = interviews.length;
+    const completedInterviews = interviews.filter((i: any) => i.status === 'COMPLETED').length;
+    const upcomingInterviews = interviews.filter((i: any) => i.status === 'SCHEDULED' && new Date(i.date) >= new Date()).length;
+
+    // Fetch feedbacks from ms2 backend for average rating
+    const feedbackUrl = `http://localhost:5000/api/feedback/interviewer/${userId}`;
+    const feedbackRes = await fetch(feedbackUrl, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
       },
     });
-
-    // Get upcoming interviews
-    const upcomingInterviews = await prisma.interview.count({
-      where: {
-        interviewerId: userId,
-        status: 'SCHEDULED',
-        date: {
-          gte: new Date(),
-        },
-      },
-    });
-
-    // Calculate average rating
-    const feedbacks = await prisma.interviewFeedback.findMany({
-      where: {
-        interviewerId: userId,
-      },
-      select: {
-        technicalSkills: true,
-        problemSolving: true,
-        communication: true,
-        cultureFit: true,
-      },
-    });
-
-    const averageRating = feedbacks.length > 0
-      ? feedbacks.reduce((acc: number, curr: Feedback) => {
-          const avg = (curr.technicalSkills + curr.problemSolving + curr.communication + curr.cultureFit) / 4;
-          return acc + avg;
-        }, 0) / feedbacks.length
-      : 0;
+    let averageRating = 0;
+    if (feedbackRes.ok) {
+      const feedbacks = await feedbackRes.json();
+      if (feedbacks.length > 0) {
+        const total = feedbacks.reduce((acc: number, f: any) => acc + (f.rating || 0), 0);
+        averageRating = total / feedbacks.length;
+      }
+    }
 
     return NextResponse.json({
       totalInterviews,
@@ -82,4 +64,4 @@ export async function GET() {
       { status: 500 }
     );
   }
-} 
+}

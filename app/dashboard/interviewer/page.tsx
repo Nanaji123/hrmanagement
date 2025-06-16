@@ -7,6 +7,8 @@ import { CandidateDetailModal } from '@/components/CandidateDetailModal';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { validateFeedback, type FeedbackFormData } from '@/lib/validations';
+import { useSession } from 'next-auth/react';
+
 
 interface StatCardProps {
   title: string;
@@ -291,7 +293,7 @@ export default function InterviewerDashboard() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="flex items-center justify-center mix-h-screen bg-gray-50">
         <div className="text-center">
           <div className="text-rose-500 mb-4">
             <svg className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -312,103 +314,97 @@ export default function InterviewerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-6 py-10 text-white flex items-center justify-center">
-      <div className="max-w-7xl w-full mx-auto bg-[#0e101c] rounded-3xl shadow-[0_0_40px_#00f7ff30] border border-[#2e314d] p-8 md:p-12">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Interviewer Dashboard</h1>
-          <p className="text-sm text-gray-600 mt-1">Welcome to your interviewer dashboard</p>
+    <div className="min-h-screen bg-gradient-to-b from-[#050d25] to-[#0d1021] px-4 py-8 text-white flex items-center justify-center">
+      <div className="max-w-7xl w-full mx-auto bg-[#181c2f] rounded-3xl shadow-[0_0_40px_#00f7ff30] border border-[#2e314d] p-8 md:p-12">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-extrabold text-white drop-shadow-lg mb-2">Interviewer Dashboard</h1>
+          <p className="text-lg text-gray-300 mt-1">Welcome! Here you can view your stats, manage interviews, and submit feedback.</p>
         </div>
-
-        <ErrorBoundary>
-          <div className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <StatCard
-                title="Total Interviews"
-                value={stats.totalInterviews}
-                icon={Calendar}
-                change={`${stats.upcomingInterviews} upcoming`}
-                isPositive={true}
-              />
-              <StatCard
-                title="Completed Interviews"
-                value={stats.completedInterviews}
-                icon={Users}
-                change={`${stats.completedInterviews} total`}
-                isPositive={true}
-              />
-              <StatCard
-                title="Feedback Pending"
-                value={pendingFeedbacks.length}
-                icon={FileText}
-                change={`${pendingFeedbacks.length} remaining`}
-                isPositive={pendingFeedbacks.length === 0}
-              />
-              <StatCard
-                title="Average Rating"
-                value={stats.averageRating.toFixed(1)}
-                icon={Clock}
-                change="out of 5.0"
-                isPositive={stats.averageRating >= 3.5}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Feedback</h2>
-                {recentFeedback.length === 0 ? (
-                  <p className="text-gray-500">No recent feedback submitted</p>
-                ) : (
-                  <div className="space-y-4">
-                    {recentFeedback.map((feedback) => (
-                      <div key={feedback.id} className="border border-gray-200 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="font-medium text-gray-900">{feedback.candidateName}</h3>
-                            <p className="text-sm text-gray-500">{feedback.position}</p>
-                          </div>
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            feedback.recommendation === 'Strong Hire' ? 'bg-emerald-100 text-emerald-800' :
-                            feedback.recommendation === 'Hire' ? 'bg-green-100 text-green-800' :
-                            feedback.recommendation === 'No Hire' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {feedback.recommendation}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Pending Feedback</h2>
-                {pendingFeedbacks.length === 0 ? (
-                  <p className="text-gray-500">No pending feedback</p>
-                ) : (
-                  <div className="space-y-4">
-                    {pendingFeedbacks.map(feedback => (
-                      <div key={feedback.id} className="p-4 rounded-md bg-emerald-50 text-emerald-700 flex justify-between items-center">
+        <div className="space-y-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <StatCard
+              title="Total Interviews"
+              value={stats.totalInterviews}
+              icon={Calendar}
+              change={`${stats.upcomingInterviews} upcoming`}
+              isPositive={true}
+            />
+            <StatCard
+              title="Completed Interviews"
+              value={stats.completedInterviews}
+              icon={Users}
+              change={`${stats.completedInterviews} total`}
+              isPositive={true}
+            />
+            <StatCard
+              title="Feedback Pending"
+              value={pendingFeedbacks.length}
+              icon={FileText}
+              change={`${pendingFeedbacks.length} remaining`}
+              isPositive={pendingFeedbacks.length === 0}
+            />
+            <StatCard
+              title="Average Rating"
+              value={stats.averageRating.toFixed(1)}
+              icon={Clock}
+              change="out of 5.0"
+              isPositive={stats.averageRating >= 3.5}
+            />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-[#23284a] rounded-2xl shadow p-6 border border-[#2e314d]">
+              <h2 className="text-2xl font-bold text-white mb-4">Recent Feedback</h2>
+              {recentFeedback.length === 0 ? (
+                <p className="text-gray-400">No recent feedback submitted</p>
+              ) : (
+                <div className="space-y-4">
+                  {recentFeedback.map((feedback) => (
+                    <div key={feedback.id} className="border border-[#2e314d] rounded-lg p-4 bg-[#23284a] hover:bg-[#2e314d] transition-colors">
+                      <div className="flex justify-between items-start">
                         <div>
-                          <p className="text-sm font-medium">{feedback.candidate}</p>
-                          <p className="text-xs mt-1">Due: {feedback.deadline}</p>
+                          <h3 className="font-semibold text-white">{feedback.candidateName}</h3>
+                          <p className="text-sm text-gray-400">{feedback.position}</p>
                         </div>
-                        <button
-                          onClick={() => router.push(`/dashboard/interviewer/interviews/${feedback.id}/feedback`)}
-                          className="text-emerald-700 hover:text-emerald-800 focus:outline-none text-sm"
-                          aria-label={`Submit feedback for ${feedback.candidate}`}
-                        >
-                          Submit <span aria-hidden="true">&rarr;</span>
-                        </button>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          feedback.recommendation === 'Strong Hire' ? 'bg-emerald-200 text-emerald-900' :
+                          feedback.recommendation === 'Hire' ? 'bg-green-200 text-green-900' :
+                          feedback.recommendation === 'No Hire' ? 'bg-yellow-200 text-yellow-900' :
+                          'bg-red-200 text-red-900'
+                        }`}>
+                          {feedback.recommendation}
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="bg-[#23284a] rounded-2xl shadow p-6 border border-[#2e314d]">
+              <h2 className="text-2xl font-bold text-white mb-4">Pending Feedback</h2>
+              {pendingFeedbacks.length === 0 ? (
+                <p className="text-gray-400">No pending feedback</p>
+              ) : (
+                <div className="space-y-4">
+                  {pendingFeedbacks.map(feedback => (
+                    <div key={feedback.id} className="p-4 rounded-md bg-emerald-100 text-emerald-900 flex justify-between items-center">
+                      <div>
+                        <p className="text-sm font-semibold">{feedback.candidate}</p>
+                        <p className="text-xs mt-1">Due: {feedback.deadline}</p>
+                      </div>
+                      <button
+                        onClick={() => router.push(`/dashboard/interviewer/interviews/${feedback.id}/feedback`)}
+                        className="text-emerald-900 hover:text-emerald-700 focus:outline-none text-sm font-bold"
+                        aria-label={`Submit feedback for ${feedback.candidate}`}
+                      >
+                        Submit <span aria-hidden="true">&rarr;</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
-        </ErrorBoundary>
-
+        </div>
         {selectedCandidate && (
           <CandidateDetailModal
             isOpen={isModalOpen}

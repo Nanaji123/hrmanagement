@@ -1,68 +1,40 @@
 import { NextResponse } from 'next/server';
-
-// Mock data for demonstration
-const mockProfile = {
-  id: '1',
-  name: 'John Doe',
-  email: 'john.doe@company.com',
-  role: 'Senior Software Engineer',
-  department: 'Engineering',
-  expertise: [
-    'System Design',
-    'Backend Development',
-    'Database Architecture',
-    'API Design',
-    'Performance Optimization'
-  ],
-  totalInterviews: 45,
-  averageRating: 4.2,
-  completedInterviews: 42,
-  upcomingInterviews: 3,
-  joinDate: 'January 2023',
-  bio: 'Experienced software engineer with a passion for building scalable systems and mentoring junior developers. Specialized in backend development and system architecture.'
-};
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export async function GET() {
   try {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    return NextResponse.json(mockProfile);
+    const session = await getServerSession(authOptions);
+    const user = session?.user as any;
+    if (!user?.jwt) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const userId = user.id;
+    const jwt = user.jwt;
+
+    // Fetch profile from ms2 backend
+    const ms2Url = `http://localhost:5000/api/interviewer/${userId}`;
+    const res = await fetch(ms2Url, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Failed to fetch profile from ms2 backend' }, { status: res.status });
+    }
+
+    const profile = await res.json();
+    return NextResponse.json(profile);
   } catch (error) {
-    console.error('Error fetching profile:', error);
+    console.error('Error fetching interviewer profile:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch profile' },
+      { error: 'Failed to fetch interviewer profile' },
       { status: 500 }
     );
   }
 }
-
-export async function PATCH(request: Request) {
-  try {
-    const body = await request.json();
-    const { name, bio } = body;
-
-    // Validate input
-    if (!name || !bio) {
-      return NextResponse.json(
-        { error: 'Name and bio are required' },
-        { status: 400 }
-      );
-    }
-
-    // Update mock profile (in a real app, this would update the database)
-    mockProfile.name = name;
-    mockProfile.bio = bio;
-
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    return NextResponse.json(mockProfile);
-  } catch (error) {
-    console.error('Error updating profile:', error);
-    return NextResponse.json(
-      { error: 'Failed to update profile' },
-      { status: 500 }
-    );
-  }
-} 

@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server';
 
-// Example mock data for recent feedbacks
-const recentFeedback = [
-  { id: '1', candidate: 'Jane Doe', feedback: 'Great communicator', date: '2024-05-01' },
-  { id: '2', candidate: 'John Smith', feedback: 'Strong technical skills', date: '2024-05-02' }
-];
-
 export async function GET() {
   try {
+    // Fetch recent feedbacks from ms2 backend (update endpoint if needed)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_MS2_API}/feedback/recent`);
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Failed to fetch recent feedbacks from ms2 backend' }, { status: res.status });
+    }
+    const recentFeedback = await res.json();
     return NextResponse.json(recentFeedback);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 });
   }
-} 
+}

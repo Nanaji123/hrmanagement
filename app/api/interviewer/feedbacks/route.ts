@@ -1,64 +1,29 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
-// Mock function to get logged in user
-const getLoggedInUser = () => {
-  return {
-    id: '1',
-    name: 'John Doe',
-    role: 'interviewer'
-  };
-};
-
-// Mock database query
-const getFeedbacks = () => {
-  return [
-    {
-      id: '1',
-      interviewId: '1',
-      candidateName: 'Jane Smith',
-      position: 'Senior Software Engineer',
-      date: '2024-03-15',
-      technicalSkills: 4,
-      communication: 5,
-      problemSolving: 4,
-      culturalFit: 5,
-      overallRating: 4.5,
-      recommendation: 'Strong Hire',
-      strengths: 'Excellent technical knowledge and communication skills. Strong problem-solving abilities.',
-      weaknesses: 'Could improve on system design knowledge.',
-      comments: 'Great candidate overall. Would be a strong addition to the team.'
-    },
-    {
-      id: '2',
-      interviewId: '2',
-      candidateName: 'Mike Johnson',
-      position: 'Frontend Developer',
-      date: '2024-03-14',
-      technicalSkills: 3,
-      communication: 4,
-      problemSolving: 3,
-      culturalFit: 4,
-      overallRating: 3.5,
-      recommendation: 'Hire',
-      strengths: 'Good frontend skills and team player.',
-      weaknesses: 'Needs improvement in advanced JavaScript concepts.',
-      comments: 'Solid candidate with good potential for growth.'
-    }
-  ];
-};
-
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const user = getLoggedInUser();
-    
-    if (!user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+    const token = await getToken({ req });
+    console.log('TOKEN DEBUG', token); // Debug log to inspect token
+    const userId = token?.id;
+    const jwt = token?.jwt || token?.token || token?.accessToken; // try all possible fields
+    console.log('JWT DEBUG', jwt); // Debug log to inspect jwt value
+    if (!userId || !jwt) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const feedbacks = getFeedbacks();
+    // Fetch feedbacks for this interviewer from ms2 backend, passing the JWT
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_MS2_API}/feedback/interviewer/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Failed to fetch feedbacks from ms2 backend' }, { status: res.status });
+    }
+    const feedbacks = await res.json();
     return NextResponse.json(feedbacks);
   } catch (error) {
     console.error('Error fetching feedbacks:', error);
@@ -67,4 +32,4 @@ export async function GET() {
       { status: 500 }
     );
   }
-} 
+}

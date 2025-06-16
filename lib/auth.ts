@@ -1,6 +1,5 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { prisma } from './prisma';
 import { compare } from 'bcryptjs';
 
 // Define valid roles
@@ -17,41 +16,28 @@ export const authOptions: NextAuthOptions = {
         role: { label: "Role", type: "text" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password || !credentials?.role) {
+        if (!credentials?.email || !credentials?.password) {
           throw new Error('Please enter all required fields');
         }
-
-        // Validate role
-        if (!VALID_ROLES.includes(credentials.role as UserRole)) {
-          throw new Error('Invalid role');
-        }
-
-        const user = await prisma.user.findUnique({
-          where: {
+        // Call backend login endpoint to get JWT and user info
+        const response = await fetch('http://localhost:5000/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
             email: credentials.email,
-          },
+            password: credentials.password,
+            role: credentials.role,
+          }),
         });
-
-        if (!user) {
-          throw new Error('No user found with this email');
-        }
-
-        // Verify role matches
-        if (user.role !== credentials.role) {
-          throw new Error('Invalid role for this user');
-        }
-
-        const isPasswordValid = await compare(credentials.password, user.password);
-
-        if (!isPasswordValid) {
-          throw new Error('Invalid password');
-        }
-
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Login failed');
+        // data.token or data.jwt should be the JWT string returned by your backend
         return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.name,
+          role: data.user.role,
+          jwt: data.token, // always use data.token as backend returns JWT as 'token'
         };
       }
     })
@@ -59,11 +45,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        return {
-          ...token,
-          role: user.role,
-          id: user.id,
-        };
+        token.jwt = (user as any).jwt; // store JWT in token, cast as any
+        token.id = user.id;
+        token.role = user.role;
       }
       return token;
     },
@@ -75,6 +59,7 @@ export const authOptions: NextAuthOptions = {
             ...session.user,
             role: token.role,
             id: token.id,
+            jwt: token.jwt, // expose JWT to session if needed
           },
         };
       }
@@ -89,5 +74,5 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  debug: process.env.NODE_ENV === 'development',
-}; 
+  debug: false,
+};

@@ -6,12 +6,14 @@ declare module 'next-auth' {
     id: string;
     role: UserRole;
     accessToken?: string;
+    jwt?: string; // Add jwt property
   }
 
   interface Session {
     user: User & {
       role: UserRole;
       accessToken?: string;
+      jwt?: string; // Add jwt property
     };
   }
 }
@@ -21,5 +23,6 @@ declare module 'next-auth/jwt' {
     role: UserRole;
     id: string;
     accessToken?: string;
+    jwt?: string; // Add jwt property
   }
-} 
+}

@@ -1,18 +1,21 @@
 import { NextResponse } from 'next/server';
-import { Candidate } from '@/app/dashboard/interviewer/types';
-import { candidates } from '@/app/dashboard/interviewer/data/mockData'; // Import mock data
-
-// Mock candidates database - replace with actual database in production
-// const candidates: Candidate[] = [ ... ]; // Remove hardcoded data
 
 export async function GET() {
   try {
+    // Fetch candidates from ms2 backend (update endpoint if needed)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_MS2_API}/candidates`);
+    if (!res.ok) {
+      return NextResponse.json(
+        { error: 'Failed to fetch candidates from ms2 backend' },
+        { status: res.status }
+      );
+    }
+    const candidates = await res.json();
     return NextResponse.json(candidates);
   } catch (error) {
-    console.error('Error fetching candidates:', error);
     return NextResponse.json(
       { error: 'Failed to fetch candidates' },
       { status: 500 }
     );
   }
-} 
+}

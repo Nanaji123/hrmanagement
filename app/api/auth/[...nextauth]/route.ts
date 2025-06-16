@@ -16,42 +16,47 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          console.log('DEBUG authorize: credentials', credentials);
           if (!credentials?.email || !credentials?.password || !credentials?.role) {
-            console.log('DEBUG authorize: missing fields');
             return null;
           }
           const validRoles = ['interviewer', 'hr_recruiter', 'hr_manager'];
           if (!validRoles.includes(credentials.role)) {
-            console.log('DEBUG authorize: invalid role', credentials.role);
             return null;
           }
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
           });
-          console.log('DEBUG authorize: user from db', user);
           if (!user) {
-            console.log('DEBUG authorize: no user found');
             return null;
           }
           if (user.role !== credentials.role) {
-            console.log('DEBUG authorize: role mismatch', user.role, credentials.role);
             return null;
           }
           const isPasswordValid = await compare(credentials.password, user.password);
-          console.log('DEBUG authorize: password valid?', isPasswordValid);
           if (!isPasswordValid) {
-            console.log('DEBUG authorize: invalid password');
             return null;
           }
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
+          // Call backend login endpoint to get JWT and user info
+          const response = await fetch('http://localhost:5000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+              role: credentials.role,
+            }),
+          });
+          const data = await response.json();
+          if (!response.ok) return null;
+          const result = {
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.name,
+            role: data.user.role,
+            jwt: data.token || data.jwt,
           };
+          return result;
         } catch (error) {
-          console.error('Authorize error:', error);
           return null;
         }
       },
@@ -67,6 +72,7 @@ const handler = NextAuth({
       if (user) {
         token.role = user.role;
         token.id = user.id;
+        if (user.jwt) token.jwt = user.jwt;
       }
       if (account?.provider === 'google') {
         const existingUser = await prisma.user.findUnique({
@@ -90,11 +96,11 @@ const handler = NextAuth({
       }
       return token;
     },
-
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id;
-        session.user.role = token.role;
+        (session.user as any).id = token.id;
+        (session.user as any).role = token.role;
+        if (token.jwt) (session.user as any).jwt = token.jwt;
       }
       return session;
     },
